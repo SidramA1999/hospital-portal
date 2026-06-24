@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin:0;
+  font-family:'Poppins', sans-serif;
+  background: linear-gradient(135deg, #e9f5ec, #f4f8f4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.card {
+  background:white;
+  padding:30px;
+  border-radius:14px;
+  text-align:center;
+  width:320px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+h2 {
+  color:#2d6a4f;
+  font-family:'Playfair Display';
+}
+
+.btn {
+  background:#40916c;
+  color:white;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  width:100%;
+  margin-top:15px;
+}
+
+.btn:hover {
+  background:#2d6a4f;
+}
+
+.loader {
+  display:none;
+}
+
+.loader div {
+  width:30px;
+  height:30px;
+  border:4px solid #ccc;
+  border-top:4px solid #2d6a4f;
+  border-radius:50%;
+  animation: spin 1s linear infinite;
+  margin:auto;
+}
+
+@keyframes spin {
+  from {transform:rotate(0);}
+  to {transform:rotate(360deg);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>🌿 Complete Payment</h2>
+  <p>Pay ₹1000 to confirm your internship</p>
+
+  <button class="btn" onclick="payNow()">Pay Now</button>
+
+  <div class="loader" id="loader">
+    <div></div>
+    <p>Processing...</p>
+  </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+
+// ✅ GET STUDENT ID (ONLY ONCE)
+const urlParams = new URLSearchParams(window.location.search);
+const studentId = urlParams.get("student_id");
+
+console.log("Student ID:", studentId);
+
+async function payNow() {
+
+  document.getElementById("loader").style.display = "block";
+
+  try {
+    const res = await fetch("/create_order");
+    const order = await res.json();
+
+    var options = {
+      key: "YOUR_KEY_ID",
+      amount: order.amount,
+      currency: "INR",
+      order_id: order.id,
+
+      name: "Amrutha Aarogya Ayurvedic Hospital",
+      description: "Internship Fee",
+
+      handler: function(response) {
+
+        fetch("/verify_payment", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({
+            order_id: response.razorpay_order_id,
+            payment_id: response.razorpay_payment_id,
+            signature: response.razorpay_signature,
+            student_id: studentId
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+
+          if(data.status === "verified" || data.status === "success") {
+            alert("✅ Payment Successful");
+
+            // ✅ REDIRECT
+            window.location.href = "/receipt/" + studentId;
+          } else {
+            alert("❌ Verification failed");
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Error verifying payment");
+        });
+
+      }
+    };  // ✅ IMPORTANT COMMA FIX
+
+    var rzp = new Razorpay(options);
+    rzp.open();
+
+  } catch (error) {
+    console.error(error);
+    alert("Error creating order");
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trainee/ Practitiner Registration</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&display=swap" rel="stylesheet">
+
+<!-- ✅ SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+body {
+  margin:0;
+  font-family:'Poppins', sans-serif;
+  background:#f4f8f4;
+}
+
+/* NAVBAR */
+.navbar {
+  display:flex;
+  justify-content:space-between;
+  padding:15px 30px;
+  background:#2d6a4f;
+  color:white;
+}
+
+/* CONTAINER */
+.container {
+  max-width:400px;
+  margin:50px auto;
+}
+
+/* CARD */
+.card {
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.1);
+}
+
+/* INPUT */
+input, select {
+  width:100%;
+  padding:10px;
+  margin-bottom:12px;
+  border:1px solid #ccc;
+  border-radius:6px;
+}
+
+/* BUTTON */
+.btn {
+  width:100%;
+  background:#40916c;
+  color:white;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.btn:disabled {
+  background:gray;
+}
+
+/* SPINNER */
+.spinner {
+  display:none;
+  text-align:center;
+}
+
+.spinner div {
+  width:30px;
+  height:30px;
+  border:4px solid #ccc;
+  border-top:4px solid #2d6a4f;
+  border-radius:50%;
+  animation: spin 1s linear infinite;
+  margin:auto;
+}
+
+.form-container {
+  max-width:450px;
+  margin:40px auto;
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+}
+
+h2 {
+  text-align:center;
+  color:#2d6a4f;
+  margin-bottom:20px;
+}
+
+/* FIELD */
+.field {
+  margin-bottom:15px;
+}
+
+.field label {
+  display:block;
+  font-size:14px;
+  margin-bottom:5px;
+  color:#333;
+}
+
+.field input,
+.field select {
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  transition:0.3s;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color:#40916c;
+  outline:none;
+}
+
+/* ROW (STATE + DISTRICT) */
+.row {
+  display:flex;
+  gap:10px;
+}
+
+.row .field {
+  flex:1;
+}
+
+/* BUTTON */
+.submit-btn {
+  width:100%;
+  background:#40916c;
+  color:white;
+  padding:12px;
+  border:none;
+  border-radius:6px;
+  font-size:15px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.submit-btn:hover {
+  background:#2d6a4f;
+}
+
+.fancy-form {
+  max-width:450px;
+  margin:auto;
+  padding:30px;
+  border-radius:14px;
+  background:white;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+.title {
+  text-align:center;
+  color:#2d6a4f;
+  margin-bottom:20px;
+}
+
+/* FIELD */
+.field {
+  margin-bottom:15px;
+}
+
+.field label {
+  font-size:14px;
+  color:#333;
+  margin-bottom:5px;
+  display:block;
+}
+
+.field input,
+.field select {
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  transition:0.3s;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color:#40916c;
+  outline:none;
+}
+
+/* ROW */
+.row {
+  display:flex;
+  gap:10px;
+}
+
+.row .field {
+  flex:1;
+}
+
+/* BUTTON */
+.submit-btn {
+  width:100%;
+  background:#40916c;
+  color:white;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.submit-btn:hover {
+  background:#2d6a4f;
+  transform:scale(1.02);
+}
+
+/* SEAT INFO */
+.seat-info {
+  margin-top:10px;
+  font-weight:bold;
+  color:#2d6a4f;
+  text-align:center;
+}
+
+
+
+@keyframes spin {
+  to { transform:rotate(360deg);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <h2 style="color:white;">
+    🌿 Amrutha Aarogya Multispeciality Hospital
+  </h2>
+  <a href="/" style="color:white;">Home</a>
+</div>
+
+<div class="container">
+<div class="card fancy-form">
+
+<h2 class="title">📝 Trainee Registration</h2>
+
+{% if error %}
+<script>
+Swal.fire({
+  icon:'error',
+  title:'Error',
+  text:'{{ error }}'
+});
+</script>
+{% endif %}
+
+<form id="regForm" method="POST">
+
+<!-- 👤 NAME -->
+<div class="field">
+  <label>👤 Name</label>
+  <input name="name" placeholder="Enter Your Full Name" required>
+</div>
+<div class="field">
+  <label>🎂 Age</label>
+  <input type="number" name="age" placeholder="Enter your age" required>
+</div>
+
+<!-- 📧 EMAIL -->
+<div class="field">
+  <label>📧 Email</label>
+  <input type="email" id="email" name="email" placeholder="example@gmail.com" required>
+</div>
+
+<!-- 📱 PHONE -->
+<div class="field">
+  <label>📱 WhatsApp Number</label>
+  <input type="tel" id="phone" name="phone" placeholder="10-digit number" maxlength="10" required>
+</div>
+
+<!-- 🎓 COLLEGE -->
+<div class="field">
+  <label>🎓 College</label>
+  <input name="college" placeholder="College with address" required>
+</div>
+
+<!-- ⚧ GENDER -->
+<div class="field">
+  <label>⚧ Gender</label>
+  <select name="gender" required>
+    <option value="">Select Gender</option>
+    <option value="Male">Male</option>
+    <option value="Female">Female</option>
+  </select>
+</div>
+
+<!-- 📍 PINCODE -->
+<div class="field">
+  <label>📍 Pincode</label>
+  <input type="text" id="pincode" name="pincode" placeholder="Enter pincode" required>
+</div>
+
+<!-- 🗺️ STATE + DISTRICT -->
+<div class="row">
+  <div class="field">
+    <label>State</label>
+    <input type="text" id="state" name="state" readonly>
+  </div>
+
+  <div class="field">
+    <label>District</label>
+    <input type="text" id="district" name="district" readonly>
+  </div>
+</div>
+
+<!-- 🏡 PLACE -->
+<div class="field">
+  <label>🏡 Place</label>
+  <input type="text" name="place" placeholder="Village / Town" required>
+</div>
+
+<!-- 📅 BATCH -->
+<div class="field">
+  <label>📅 Select Batch</label>
+  <select name="batch_id" id="batchSelect" onchange="updateSeats()" required>
+    <option value="">Select Batch</option>
+    {% for b in batches %}
+    <option value="{{b.id}}"
+            data-male="{{b.male_left}}"
+            data-female="{{b.female_left}}">
+      {{b.label}}
+    </option>
+    {% endfor %}
+  </select>
+</div>
+
+<!-- ✅ SEAT INFO -->
+<p id="seatInfo" class="seat-info"></p>
+
+<!-- ✅ SUBMIT -->
+<button id="submitBtn" class="submit-btn" type="button" onclick="payNow()">
+  Register & Pay 💳
+</button>
+
+</form>
+
+<div class="spinner" id="loader">
+  <p>Processing...</p>
+  <div></div>
+</div>
+
+</div>
+</div>
+
+<!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>  -->
+
+<script>
+let currentFormData = {};
+
+/* ✅ UPDATE SEATS */
+function updateSeats() {
+  let select = document.getElementById("batchSelect");
+  let option = select.options[select.selectedIndex];
+
+  let male = option.getAttribute("data-male");
+  let female = option.getAttribute("data-female");
+
+  let info = document.getElementById("seatInfo");
+  let btn = document.getElementById("submitBtn");
+
+  if (!male) return;
+
+  info.innerHTML = `👨 Male: ${male} | 👩 Female: ${female}`;
+
+  if (male <= 0 && female <= 0) {
+    btn.disabled = true;
+    btn.innerText = "Full ❌";
+  } else {
+    btn.disabled = false;
+    btn.innerText = "Register & Pay";
+  }
+}
+
+/* ✅ PAYMENT */
+
+
+  // ✅ collect form data
+  let formData = new FormData(form);
+
+  // ✅ first save student (POST)
+  let res1 = await fetch("/register", {
+    method:"POST",
+    body: formData
+  });
+
+  let url = res1.url;
+
+  // ✅ extract student_id
+  if (!url.includes("student_id")) {
+    location.reload();
+    return;
+  }
+
+  let studentId = url.split("student_id=")[1];
+
+  // ✅ create order
+  let res = await fetch("/create_order");
+  let order = await res.json();
+
+  var options = {
+    key: "rzp_test_T4zOfEFxtW3PGC",
+    amount: order.amount,
+    currency: "INR",
+    order_id: order.id,
+
+    handler: function (response) {
+
+      fetch("/verify_payment", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+          order_id: response.razorpay_order_id,
+          payment_id: response.razorpay_payment_id,
+          signature: response.razorpay_signature,
+          student_id: studentId
+        })
+      }).then(()=>{
+
+        Swal.fire({
+          icon:'success',
+          title:'Registration Successful ✅',
+          text:'Payment completed'
+        }).then(()=>{
+          window.location="/receipt/"+studentId;
+        });
+
+      });
+    }
+  };
+
+  var rzp = new Razorpay(options);
+  rzp.open();
+}
+</script>
+
+<script>
+
+async function refreshSeats() {
+
+    let res = await fetch("/seat_status");
+    let data = await res.json();
+
+    let select = document.getElementById("batchSelect");
+
+    // update options data
+    for (let i = 0; i < select.options.length; i++) {
+
+        let opt = select.options[i];
+        let batchId = opt.value;
+
+        if (data[batchId]) {
+            opt.setAttribute("data-male", data[batchId].male_left);
+            opt.setAttribute("data-female", data[batchId].female_left);
+        }
+    }
+
+    // ✅ refresh displayed seat info
+    updateSeats();
+}
+
+// ✅ run every 5 seconds
+setInterval(refreshSeats, 5000);
+</script>
+
+<script>
+
+async function payNow() {
+
+  let form = document.getElementById("regForm");
+
+  // ✅ Validate form
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // ✅ Show loader
+  document.getElementById("loader").style.display = "block";
+
+  try {
+
+    // ✅ ✅ STEP 1 — Collect form data (NOT FormData)
+    let data = {
+      name: form.name.value,
+      email: form.email.value,
+      phone: form.phone.value,
+      age: form.age.value,
+      college: form.college.value,
+      pincode: form.pincode.value,
+      state: form.state.value,
+      district: form.district.value,
+      place: form.place.value,
+      gender: form.gender.value,
+      batch_id: form.batch_id.value
+    };
+
+    // ✅ ✅ STEP 2 — Create Razorpay order FIRST
+    let res = await fetch("/create_order");
+    let order = await res.json();
+
+    // ✅ ✅ STEP 3 — Open Razorpay popup
+    let options = {
+      key: "rzp_test_T4zOfEFxtW3PGC",   // ✅ your key ID
+
+      amount: order.amount,
+      currency: "INR",
+      order_id: order.id,
+
+      handler: async function (response) {
+
+        // ✅ Step 4 — VERIFY payment
+        let verify = await fetch("/verify_payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+
+          body: JSON.stringify({
+            order_id: response.razorpay_order_id,
+            payment_id: response.razorpay_payment_id,
+            signature: response.razorpay_signature
+          })
+        });
+
+        let result = await verify.json();
+
+        if (result.status === "verified") {
+
+          // ✅ ✅ STEP 5 — Save student AFTER payment
+          let save = await fetch("/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+          });
+
+          let student = await save.json();
+
+          if (student.status === "success") {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Registration Successful ✅'
+            }).then(() => {
+              window.location = "/receipt/" + student.student_id;
+            });
+
+          } else {
+            Swal.fire(student.message);
+          }
+
+        } else {
+          Swal.fire("Payment verification failed ❌");
+        }
+
+      },
+
+      prefill: {
+        name: form.name.value,
+        email: form.email.value,
+        contact: form.phone.value
+      },
+
+      theme: {
+        color: "#2d6a4f"
+      }
+    };
+
+    let rzp = new Razorpay(options);
+    rzp.open();
+
+  } catch (error) {
+    console.error(error);
+
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Payment initialization failed ❌"
+    });
+  }
+
+  // ✅ Hide loader
+  document.getElementById("loader").style.display = "none";
+}
+
+</script>
+
+
+
+<!--// auto fetching Location  -->
+<script>
+document.getElementById("pincode").addEventListener("blur", function () {
+
+  let pin = this.value;
+
+  if (pin.length !== 6) {
+    alert("Enter valid 6-digit pincode");
+    return;
+  }
+
+  fetch("https://api.postalpincode.in/pincode/" + pin)
+    .then(res => res.json())
+    .then(data => {
+
+      if (data[0].Status === "Success") {
+
+        let post = data[0].PostOffice[0];
+
+        document.getElementById("state").value = post.State;
+        document.getElementById("district").value = post.District;
+
+      } else {
+        alert("Invalid pincode");
+      }
+
+    })
+    .catch(() => alert("Error fetching location"));
+});
+
+
+
+</script>
+<!--/// Mobile number validation  --->
+<script>
+document.getElementById("phone").addEventListener("input", function () {
+  this.value = this.value.replace(/[^0-9]/g, "");
+
+  if (this.value.length > 10) {
+    this.value = this.value.slice(0, 10);
+  }
+});
+</script>
+<script>
+document.getElementById("phone").addEventListener("blur", function () {
+  if (this.value.length !== 10) {
+    alert("Enter valid 10-digit mobile number");
+  }
+});
+</script>
+
+<!--/// ------Email   --->
+<script>
+document.getElementById("email").addEventListener("blur", function () {
+
+  let email = this.value;
+
+  if (!email.includes("@") || !email.includes(".")) {
+    alert("Please enter a valid email address");
+  }
+
+});
+</script>
+
+<!---/////
+Auto Lower toLowerCase  -->
+<script>
+document.getElementById("email").addEventListener("input", function () {
+  this.value = this.value.toLowerCase();
+});
+</script>
+<!----////Auto trim Soaces -->
+<script>
+document.querySelectorAll("input").forEach(input => {
+  input.addEventListener("blur", function () {
+    this.value = this.value.trim();
+  });
+});
+</script>
+
+<!------ like gogle Email Domain   -->
+<script>
+document.getElementById("email").addEventListener("input", function () {
+  let value = this.value;
+
+  
+// ✅ if user types @g automatically complete
+  if (value.endsWith("@g")) {
+    this.value = value + "mail.com";
+  }
+
+  else if (value.endsWith("@y")) {
+    this.value = value + "ahoo.com";
+  }
+
+  else if (value.endsWith("@o")) {
+    this.value = value + "utlook.com";
+  }
+
+});
+</script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<style>
+
+/* BODY */
+body {
+  font-family: 'Poppins', sans-serif;
+  background:#f6f9f6;
+  margin:0;
+}
+
+/* NAVBAR */
+.navbar {
+  padding:15px 30px;
+  background:#2d6a4f;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-weight:500;
+}
+
+/* CONTAINER */
+.container {
+  max-width:1100px;
+  margin:30px auto;
+}
+
+/* CARDS GRID */
+.cards {
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+
+/* CARD */
+.card {
+  background:white;
+  padding:20px;
+  border-radius:14px;
+  width:240px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* STATUS BADGES */
+.open {
+  background:#d8f3dc;
+  color:#2d6a4f;
+  padding:4px 10px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+.full {
+  background:#ffe5e5;
+  color:#b00020;
+  padding:4px 10px;
+  border-radius:10px;
+  font-size:12px;
+}
+
+/* BUTTONS */
+.btn {
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.btn-green {
+  background:#40916c;
+  color:white;
+}
+.btn-green:hover {
+  background:#2d6a4f;
+}
+
+.btn-red {
+  background:#e63946;
+  color:white;
+}
+
+.btn-blue {
+  background:#0077b6;
+  color:white;
+}
+
+/* FORM BOX */
+.form-box {
+  background:white;
+  padding:20px;
+  margin-bottom:20px;
+  border-radius:12px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* INPUTS */
+input, select {
+  padding:10px;
+  margin:5px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  width:180px;
+}
+
+/* SEARCH */
+.search {
+  padding:10px;
+  width:260px;
+  border-radius:6px;
+  border:1px solid #ccc;
+  margin-bottom:10px;
+}
+
+/* TABLE */
+table {
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+th {
+  background:#2d6a4f;
+  color:white;
+  padding:12px;
+  text-align:left;
+}
+
+td {
+  padding:12px;
+  border-bottom:1px solid #eee;
+}
+
+tr:hover {
+  background:#f9f9f9;
+}
+
+/* SECTION SPACING */
+.section {
+  margin-top:25px;
+}
+
+/*---- To Glove low seats*/
+.card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<!-- ✅ NAVBAR (TOP ALWAYS) -->
+<div class="navbar">
+  <h3>🌿 Admin Dashboard</h3>
+  <a href="/logout" style="color:white;">Logout</a>
+</div>
+
+
+<div class="container">
+
+<!-- ACTION BUTTONS -->
+<div style="margin-bottom:15px;">
+  <a href="/auto_batches" class="btn btn-green">Auto Generate</a>
+  <a href="/export_excel" class="btn btn-blue">Export Excel</a>
+</div>
+
+<!-- SEARCH -->
+<input type="text" id="search" class="search" placeholder="Search student...">
+
+<!-- ANALYTICS -->
+<h2>Analytics</h2>
+<canvas id="chart"></canvas>
+
+<script>
+new Chart(document.getElementById("chart"), {
+  type: 'bar',
+  data: {
+    labels: ["Total", "Paid", "Pending"],
+    datasets: [{
+      data: [
+        {{ students|length }},
+        {{ students|selectattr('payment_status','equalto','Paid')|list|length }},
+        {{ students|selectattr('payment_status','equalto','Pending')|list|length }}
+      ],
+      backgroundColor: ["#40916c","green","red"]
+    }]
+  }
+});
+</script>
+
+<!-- CREATE BATCH -->
+
+<!-- ✅ CREATE BATCH CARD -->
+  <div class="form-box">
+    <h2>➕ Create Batch</h2>
+
+    <form action="/add_batch" method="POST">
+      <input type="date" name="start_date" required>
+      <input type="date" name="end_date" required>
+      <input type="number" name="capacity" placeholder="Capacity" required>
+
+      <button class="btn btn-blue">Add Batch</button>
+    </form>
+  </div>
+
+</div>
+
+
+<!-- BULK UPLOAD -->
+<h2>Bulk Upload</h2>
+
+<form action="/upload_csv" method="POST" enctype="multipart/form-data" class="form-box">
+  <input type="file" name="file" required>
+  <button class="btn">Upload CSV</button>
+</form>
+
+<!-- BATCHES -->
+<h2 style="margin-bottom:15px;">📅 Batches</h2>
+
+<div class="cards">
+{% for b in batches %}
+<div class="card" style="width:260px;">
+
+  <!-- ✅ DATE -->
+  <h3 style="margin-bottom:5px;">
+    {{ b.start_date }} → {{ b.end_date }}
+  </h3>
+
+  <!-- ✅ SLOTS -->
+  <p style="margin:5px 0;">
+    Slots: <b>{{ b.filled_slots }}</b> / {{ b.capacity }}
+  </p>
+
+  <!-- ✅ STATUS -->
+  {% if b.filled_slots < b.capacity %}
+    <span class="open">✅ Open</span>
+
+    {% if b.capacity - b.filled_slots <= 1 %}
+      <span style="color:#e67e22; font-weight:bold;">⚠ Few seats left</span>
+    {% endif %}
+
+{% else %}
+    <span class="full">❌ Full</span>
+{% endif %}
+
+
+  <!-- ✅ ACTIONS -->
+  <div style="margin-top:12px;">
+    <button onclick="editBatch({{b.id}})" class="btn btn-blue">✏ Edit</button>
+    <button onclick="deleteBatch({{b.id}})" class="btn btn-red">🗑 Delete</button>
+  </div>
+
+</div>
+{% endfor %}
+</div>
+
+<!-- STUDENTS -->
+<h2 style="margin-top:20px;">👨‍🎓 Students</h2>
+
+<input type="text" id="search" placeholder="🔍 Search student..." 
+       style="padding:10px; width:260px; border-radius:6px; border:1px solid #ccc; margin-bottom:10px;">
+
+<table id="table">
+
+<tr>
+  <th>Name</th>
+  <th>Batch</th>
+  <th>Gender</th>
+  <th>Status</th>
+  <th>Actions</th>
+</tr>
+
+{% for s in students %}
+<tr>
+
+  <!-- ✅ NAME -->
+  <td><b>{{ s.name }}</b></td>
+
+  <!-- ✅ BATCH -->
+  <td>{{ s.batch_id }}</td>
+
+  <!-- ✅ GENDER -->
+  <td>
+    {% if s.gender == "Male" %}
+      👨 Male
+    {% else %}
+      👩 Female
+    {% endif %}
+  </td>
+
+  <!-- ✅ STATUS -->
+  <td>
+    {% if s.payment_status == "Paid" %}
+      <span class="open">✅ Paid</span>
+    {% else %}
+      <span class="full">⏳ Pending</span>
+    {% endif %}
+  </td>
+
+  <!-- ✅ ACTION BUTTONS -->
+  <td>
+    <button onclick="markPaid({{s.id}})" class="btn btn-green">💳 Pay</button>
+    <button onclick="deleteStudent({{s.id}})" class="btn btn-red">🗑 Delete</button>
+    <button onclick="window.location='/certificate/{{s.id}}'" class="btn btn-blue">📄 Cert</button>
+  </td>
+
+</tr>
+{% endfor %}
+</table>
+
+
+<script>
+
+/* 🔍 SEARCH */
+document.getElementById("search").addEventListener("keyup", function () {
+  let value = this.value.toLowerCase();
+  let rows = document.querySelectorAll("#table tr");
+
+  rows.forEach((row, index) => {
+    if (index === 0) return; // skip header
+
+    row.style.display = row.innerText.toLowerCase().includes(value)
+      ? ""
+      : "none";
+  });
+});
+
+
+/* ✅ MARK PAYMENT */
+function markPaid(id) {
+  if (!confirm("Mark this student as PAID?")) return;
+
+  fetch(`/mark_paid/${id}`)
+    .then(() => {
+      showAlert("✅ Payment marked successfully", "success");
+      setTimeout(() => location.reload(), 800);
+    });
+}
+
+
+/* 🗑 DELETE STUDENT */
+function deleteStudent(id){
+
+  Swal.fire({
+    title: 'Delete this student?',
+    text: "This action cannot be undone!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#aaa',
+    confirmButtonText: 'Yes, delete'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      fetch(`/delete_student/${id}`)
+        .then(() => {
+          Swal.fire(
+            'Deleted!',
+            'Student has been removed.',
+            'success'
+          ).then(() => location.reload());
+        });
+
+    }
+
+  });
+
+}
+
+
+/* 🗑 DELETE BATCH */
+function deleteBatch(id){
+
+  Swal.fire({
+    title: 'Delete this batch?',
+    text: "All students in this batch may be affected!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    confirmButtonText: 'Delete'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      fetch(`/delete_batch/${id}`)
+        .then(() => {
+          Swal.fire(
+            'Deleted!',
+            'Batch removed successfully.',
+            'success'
+          ).then(() => location.reload());
+        });
+
+    }
+
+  });
+
+}
+
+/**-------Alert-----*/
+function markPaid(id){
+
+  Swal.fire({
+    title: 'Mark as Paid?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      fetch(`/mark_paid/${id}`)
+        .then(() => {
+          Swal.fire(
+            'Success!',
+            'Payment updated.',
+            'success'
+          ).then(() => location.reload());
+        });
+
+    }
+
+  });
+
+}
+
+
+/* ✏ EDIT BATCH */
+function editBatch(id) {
+
+  let start = prompt("Enter Start Date (YYYY-MM-DD):");
+  if (!start) return;
+
+  let end = prompt("Enter End Date (YYYY-MM-DD):");
+  if (!end) return;
+
+  let capacity = prompt("Enter Capacity:");
+  if (!capacity) return;
+
+  fetch(`/edit_batch/${id}/${start}/${end}/${capacity}`)
+    .then(() => {
+      showAlert("✅ Batch updated successfully", "success");
+      setTimeout(() => location.reload(), 800);
+    });
+}
+
+
+/* ✅ SIMPLE ALERT HELPER */
+function showAlert(msg, type) {
+
+  let div = document.createElement("div");
+
+  div.innerText = msg;
+  div.style.position = "fixed";
+  div.style.top = "20px";
+  div.style.right = "20px";
+  div.style.padding = "12px 18px";
+  div.style.borderRadius = "8px";
+  div.style.color = "white";
+  div.style.fontWeight = "bold";
+  div.style.zIndex = "9999";
+
+  // ✅ color by type
+  if (type === "success") {
+    div.style.background = "#2d6a4f";
+  } else {
+    div.style.background = "#b00020";
+  }
+
+  document.body.appendChild(div);
+
+  setTimeout(() => {
+    div.remove();
+  }, 2000);
+}
+
+</script>
+
+
+
+
+</body>
+</html>
