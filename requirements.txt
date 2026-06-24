@@ -1,3 +1,4 @@
 flask
 gunicorn
 razorpay
+flask_sqlalchemy
