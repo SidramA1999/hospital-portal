@@ -3,3 +3,6 @@ gunicorn
 razorpay
 flask_sqlalchemy
 pandas
+reportlab
+requests
+razorpay
