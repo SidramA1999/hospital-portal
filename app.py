@@ -584,8 +584,8 @@ def prepare_batches():
         female_left = max(0, 3 - female_count)
 
         # ✅ ✅ FIXED LABEL (THIS WAS YOUR MAIN BUG)
-        #label = f"{start.strftime('%B %Y')} ({start.day} – {end.day}) (👨 {male_left} | 👩 {female_left} left)"
-        label = f"{data['start'].strftime('%B %Y')} ({data['start'].day} – {data['end'].day}) (👨 {male_left} | 👩 {female_left} left)"
+       
+        label = f"{start.strftime('%B %Y')} ({start.day} – {end.day}) (👨 {male_left} | 👩 {female_left} left)"
 
         result.append({
             "id": b.id,
