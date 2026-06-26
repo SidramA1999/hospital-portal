@@ -605,6 +605,7 @@ def prepare_batches():
 # ✅ ✅ MOVE DB INIT HERE (IMPORTANT)
 with app.app_context():
     db.create_all()
+    create_initial_batches()
 
 import os
 
