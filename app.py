@@ -7,9 +7,7 @@ import pandas as pd
 from reportlab.pdfgen import canvas
 from datetime import datetime
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+
 
 app = Flask(__name__)
 app.secret_key = "secret123"
@@ -17,6 +15,11 @@ app.secret_key = "secret123"
 # ---------------- DATABASE ----------------
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
+
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # ---------------- MODELS ----------------
 class Batch(db.Model):
