@@ -157,45 +157,44 @@ from datetime import datetime
 @app.route('/register', methods=['GET','POST'])
 def register():
 
-    
-# ✅ load page
+    # ✅ GET request
     if request.method == 'GET':
         return render_template("register.html", batches=prepare_batches())
 
+    # ✅ POST request
+    data = request.form
+    file = request.files.get('payment_proof')
 
-    #data = request.form   # ✅ read JSON (NOT form anymore)*/
-    data = request.form           # ✅ form data
-    file = request.files.get('payment_proof')   # ✅ file (safe way)
+    # ✅ handle upload
+    filename = None
+    if file:
+        filename = file.filename
+        file.save(f"static/uploads/{filename}")
 
-# ✅ handle file safely
-filename = None
-if file:
-    filename = file.filename
-    file.save(f"static/uploads/{filename}")
-
+    # ✅ get batch
     batch_id = int(data.get('batch_id'))
     gender = data.get('gender')
 
     batch = db.session.get(Batch, batch_id)
 
     if not batch:
-        return {"status": "error", "message": "Invalid batch"}
+        return "Invalid batch"
 
     # ✅ capacity check
     if batch.filled_slots >= batch.capacity:
-        return {"status": "error", "message": "Batch is full"}
+        return "Batch is full"
 
     # ✅ gender seat check
     male_count = Student.query.filter_by(batch_id=batch.id, gender="Male").count()
     female_count = Student.query.filter_by(batch_id=batch.id, gender="Female").count()
 
     if gender == "Male" and male_count >= 3:
-        return {"status": "error", "message": "No seats for Male"}
+        return "No seats for Male"
 
     if gender == "Female" and female_count >= 3:
-        return {"status": "error", "message": "No seats for Female"}
+        return "No seats for Female"
 
-    # ✅ NOW SAVE STUDENT (AFTER PAYMENT SUCCESS)
+    # ✅ save student
     student = Student(
         name=data.get('name'),
         email=data.get('email'),
@@ -208,6 +207,8 @@ if file:
         place=data.get('place'),
         batch_id=batch.id,
         gender=gender,
+        transaction_id=data.get('transaction_id'),  # ✅ IMPORTANT
+        payment_proof=filename,                    # ✅ IMPORTANT
         payment_status="Pending"
     )
 
@@ -216,7 +217,10 @@ if file:
     db.session.add(student)
     db.session.commit()
 
-    return {"status": "success", "student_id": student.id}
+    return redirect('/success')
+
+
+    #return {"status": "success", "student_id": student.id}
 
 
 ##----------------------Batches------------------------------------------------------ 
