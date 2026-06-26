@@ -163,7 +163,15 @@ def register():
         return render_template("register.html", batches=prepare_batches())
 
 
-    data = request.form   # ✅ read JSON (NOT form anymore)
+    /*data = request.form   # ✅ read JSON (NOT form anymore)*/
+    data = request.form           # ✅ form data
+file = request.files.get('payment_proof')   # ✅ file (safe way)
+
+# ✅ handle file safely
+filename = None
+if file:
+    filename = file.filename
+    file.save(f"static/uploads/{filename}")
 
     batch_id = int(data.get('batch_id'))
     gender = data.get('gender')
