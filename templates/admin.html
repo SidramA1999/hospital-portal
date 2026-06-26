@@ -296,7 +296,11 @@ new Chart(document.getElementById("chart"), {
 <tr>
 
   <!-- ✅ NAME -->
-  <td><b>{{ s.name }}</b></td>
+  <td>
+  <a href="/student/{{ s.id }}">
+    {{ s.name }}
+  </a>
+</td>
 
   <!-- ✅ BATCH -->
   <td>{{ s.batch_id }}</td>
