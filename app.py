@@ -163,7 +163,7 @@ def register():
         return render_template("register.html", batches=prepare_batches())
 
 
-    /*data = request.form   # ✅ read JSON (NOT form anymore)*/
+    #data = request.form   # ✅ read JSON (NOT form anymore)*/
     data = request.form           # ✅ form data
 file = request.files.get('payment_proof')   # ✅ file (safe way)
 
