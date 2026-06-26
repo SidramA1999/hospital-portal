@@ -80,19 +80,28 @@ input, select {
   margin:auto;
 }
 
+/*Totle Registration*/
 .form-container {
-  max-width:450px;
-  margin:40px auto;
-  background:white;
-  padding:25px;
-  border-radius:12px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.1);
+  max-width: 450px;
+  margin: 40px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #00695c;
+  margin-bottom: 15px;
+}
+
 
 h2 {
   text-align:center;
   color:#2d6a4f;
-  margin-bottom:20px;
+  margin-bottom:25px;
 }
 
 /* FIELD */
@@ -219,6 +228,60 @@ h2 {
   transform:scale(1.02);
 }
 
+/*Logo + name info design*/
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #004d40, #009688);
+  padding: 12px 25px;
+}
+
+/* logo + title */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo {
+  height: 115px;
+  width: 115px;
+  border-radius: 50%;
+}
+
+/* text styling */
+.title {
+  color: white;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.title span {
+  display: block;
+  font-size: 20px;
+  font-weight: bold;
+  opacity: 0.9;
+}
+
+/* home button */
+.home-btn {
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.2);
+  transition: 0.3s;
+}
+
+.home-btn:hover {
+  background: white;
+  color: #ccdad8;
+}
+
+
+
 /* SEAT INFO */
 .seat-info {
   margin-top:10px;
@@ -239,16 +302,25 @@ h2 {
 
 <!-- NAVBAR -->
 <div class="navbar">
-  <h2 style="color:white;">
-    🌿 Amrutha Aarogya Multispeciality Hospital
-  </h2>
-  <a href="/" style="color:white;">Home</a>
+
+  <div class="logo-area">
+    <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+    
+    <div class="title">
+      Amrutha Aarogya Kendra
+      <span>MultiSpeciality Hospital</span>
+    </div>
+  </div>
+
+  <a href="/" class="home-btn">Home</a>
+
 </div>
+
 
 <div class="container">
 <div class="card fancy-form">
 
-<h2 class="title">📝 Trainee Registration</h2>
+<h2 class="form-title">📝 Trainee Registration</h2>
 
 {% if error %}
 <script>
