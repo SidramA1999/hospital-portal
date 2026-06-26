@@ -50,9 +50,9 @@ class Student(db.Model):
 
 
 # ---------------- ADMIN LOGIN ----------------
-ADMIN_USER = "admin"
+ADMIN_USER = "Tukaram"
 #ADMIN_PASS_HASH = "PASTE_YOUR_HASH_HERE"
-ADMIN_PASS = "admin123"
+ADMIN_PASS = "#Samhita@1414"
 
 
 @app.route('/login', methods=['GET','POST'])
