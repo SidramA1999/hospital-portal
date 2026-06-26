@@ -165,7 +165,7 @@ def register():
 
     #data = request.form   # ✅ read JSON (NOT form anymore)*/
     data = request.form           # ✅ form data
-file = request.files.get('payment_proof')   # ✅ file (safe way)
+    file = request.files.get('payment_proof')   # ✅ file (safe way)
 
 # ✅ handle file safely
 filename = None
