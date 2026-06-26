@@ -194,7 +194,99 @@ body {
   background:#40916c;
   transition:width 1s ease;
 }
+/* logo and design */
+  .navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #00695c, #00a896);
+  padding: 12px 25px;
+  color: white;
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #004d40, #009688);
+  padding: 14px 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
 
+/* logo + title */
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo {
+  height: 120px;
+  width: 120px;
+  border-radius: 80%;
+  border: 2px solid white;
+}
+
+/* title styles */
+.title {
+  color:white;
+  font-size: 40px;
+ 
+  font-weight: bold;
+}
+
+.title span {
+  display: block;
+  font-size: 20px;
+  font-weight: normal;
+  opacity: 0.8;
+  color: white;
+}
+
+/* buttons */
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+/* trainee button */
+.register-btn {
+  background: white;
+  color: #00796b;
+}
+
+.register-btn:hover {
+  background: #c8f7f0;
+  transform: translateY(-2px);
+}
+
+/* admin button */
+.admin-btn {
+  background: #c8f7f0;
+  color: white;
+}
+
+.admin-btn:hover {
+  background: #e64a19;
+  transform: translateY(-2px);
+}
+
+/* responsive (important 🔥) */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+  
 /* ✨ Button Effect */
 .fancy-btn {
   background: linear-gradient(45deg, #2d6a4f, #40916c);
@@ -218,10 +310,18 @@ body {
 
 <!-- NAVBAR -->
 <div class="navbar">
-  <h2>🌿 Amrutha Aarogya MultiSpeciality Hospital</h2>
-  <div>
-    <a href="/register">Trainee Registration</a>
-    <a href="/login">Admin</a>
+
+  <div class="logo-area">
+    <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+    <div class="title">
+      Amruta Aarogya Kendra
+      <span>MultiSpeciality Ayurvedic Hospital</span>
+    </div>
+  </div>
+
+  <div class="nav-links">
+    <a href="/register" class="btn register-btn">Trainee Registration</a>
+    <a href="/login" class="btn admin-btn">Admin</a>
   </div>
 </div>
 
