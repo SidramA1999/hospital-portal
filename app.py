@@ -211,7 +211,6 @@ def register():
 
 ##----------------------Batches------------------------------------------------------ 
 def prepare_batches():
-    #batches = Batch.query.all()
     batches = Batch.query.order_by(Batch.start_date).all()
     grouped = {}
 
@@ -220,9 +219,7 @@ def prepare_batches():
             start = datetime.strptime(b.start_date, "%Y-%m-%d")
             end = datetime.strptime(b.end_date, "%Y-%m-%d")
         except:
-            
-            print("Skipping invalid batch:", b.start_date, b.end_date)
-            continue 
+            continue
 
         month = start.strftime('%B')
 
@@ -251,17 +248,18 @@ def prepare_batches():
         male_left = max(0, 6 - data["male"])
         female_left = max(0, 6 - data["female"])
 
-     
-        label = f"{start.strftime('%B %Y')} ({start.day} – {end.day}) (👨 {male_left} | 👩 {female_left} left)"
+        # ✅ CORRECT LINE
+        
 
         result.append({
-            "id": data["ids"][0],   # pick first batch id
+            "id": data["ids"][0],
             "label": label,
             "male_left": male_left,
             "female_left": female_left
         })
 
     return result
+
 
 
 
