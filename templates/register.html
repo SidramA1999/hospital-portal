@@ -480,21 +480,14 @@ function updateSeats() {
     btn.innerText = "Full ❌";
   } else {
     btn.disabled = false;
-    btn.innerText = "Register & Pay";
+    btn.innerText = "Register";
   }
 }
 
 /* ✅ PAYMENT */
 
 
-  // ✅ collect form data
-  let formData = new FormData(form);
-
-  // ✅ first save student (POST)
-  let res1 = await fetch("/register", {
-    method:"POST",
-    body: formData
-  });
+  
 
   let url = res1.url;
 
@@ -576,124 +569,6 @@ setInterval(refreshSeats, 5000);
 </script>
 
 <script>
-
-async function payNow() {
-
-  let form = document.getElementById("regForm");
-
-  // ✅ Validate form
-  if (!form.checkValidity()) {
-    form.reportValidity();
-    return;
-  }
-
-  // ✅ Show loader
-  document.getElementById("loader").style.display = "block";
-
-  try {
-
-    // ✅ ✅ STEP 1 — Collect form data (NOT FormData)
-    let data = {
-      name: form.name.value,
-      email: form.email.value,
-      phone: form.phone.value,
-      age: form.age.value,
-      college: form.college.value,
-      pincode: form.pincode.value,
-      state: form.state.value,
-      district: form.district.value,
-      place: form.place.value,
-      gender: form.gender.value,
-      batch_id: form.batch_id.value
-    };
-
-    // ✅ ✅ STEP 2 — Create Razorpay order FIRST
-    let res = await fetch("/create_order");
-    let order = await res.json();
-
-    // ✅ ✅ STEP 3 — Open Razorpay popup
-    let options = {
-      key: "rzp_test_T4zOfEFxtW3PGC",   // ✅ your key ID
-
-      amount: order.amount,
-      currency: "INR",
-      order_id: order.id,
-
-      handler: async function (response) {
-
-        // ✅ Step 4 — VERIFY payment
-        let verify = await fetch("/verify_payment", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-
-          body: JSON.stringify({
-            order_id: response.razorpay_order_id,
-            payment_id: response.razorpay_payment_id,
-            signature: response.razorpay_signature
-          })
-        });
-
-        let result = await verify.json();
-
-        if (result.status === "verified") {
-
-          // ✅ ✅ STEP 5 — Save student AFTER payment
-          let save = await fetch("/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-          });
-
-          let student = await save.json();
-
-          if (student.status === "success") {
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Registration Successful ✅'
-            }).then(() => {
-              window.location = "/receipt/" + student.student_id;
-            });
-
-          } else {
-            Swal.fire(student.message);
-          }
-
-        } else {
-          Swal.fire("Payment verification failed ❌");
-        }
-
-      },
-
-      prefill: {
-        name: form.name.value,
-        email: form.email.value,
-        contact: form.phone.value
-      },
-
-      theme: {
-        color: "#2d6a4f"
-      }
-    };
-
-    let rzp = new Razorpay(options);
-    rzp.open();
-
-  } catch (error) {
-    console.error(error);
-
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Payment initialization failed ❌"
-    });
-  }
-
-  // ✅ Hide loader
-  document.getElementById("loader").style.display = "none";
-}
-
-</script>
 
 
 
@@ -798,8 +673,8 @@ document.getElementById("email").addEventListener("input", function () {
 
 });
 </script>
-
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!--
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>   -->
 
 </body>
 </html>
