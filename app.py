@@ -13,13 +13,12 @@ app = Flask(__name__)
 app.secret_key = "secret123"
 
 # ---------------- DATABASE ----------------
+
+# ✅ DATABASE CONFIG ONCE
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'
+
 db = SQLAlchemy(app)
-
-
-@app.route('/')
-def home():
-    return render_template('index.html')
 
 # ---------------- MODELS ----------------
 class Batch(db.Model):
@@ -600,18 +599,7 @@ def prepare_batches():
     return result
 
 
-# ✅ ✅ ✅ PROPER APP START (FINAL)
-import os
-    
-app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-
-# your config here...
-
-db = SQLAlchemy(app)
 
 # ✅ ✅ MOVE DB INIT HERE (IMPORTANT)
 with app.app_context():
