@@ -198,7 +198,7 @@ def register():
         place=data.get('place'),
         batch_id=batch.id,
         gender=gender,
-        payment_status="Paid"
+        payment_status="Pending"
     )
 
     batch.filled_slots += 1
