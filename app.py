@@ -251,10 +251,8 @@ def prepare_batches():
         male_left = max(0, 6 - data["male"])
         female_left = max(0, 6 - data["female"])
 
-        #label = f"{month} ({data['start'].day} – {data['end'].day}) (👨 {male_left} | 👩 {female_left} left)"
-        #label = f"{start.strftime('%B %Y')} ({start.day} – {end.day}) (👨 {male_left} | 👩 {female_left} left)"
-        label = f"{data['start'].strftime('%B %Y')} ({data['start'].day} – {data['end'].day}) (👨 {male_left} | 👩 {female_left} left)"
-
+     
+        label = f"{start.strftime('%B %Y')} ({start.day} – {end.day}) (👨 {male_left} | 👩 {female_left} left)"
 
         result.append({
             "id": data["ids"][0],   # pick first batch id
