@@ -82,7 +82,7 @@ h2 {
   </div>
 </div>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script>  -->
 
 <script>
 
@@ -92,63 +92,6 @@ const studentId = urlParams.get("student_id");
 
 console.log("Student ID:", studentId);
 
-async function payNow() {
-
-  document.getElementById("loader").style.display = "block";
-
-  try {
-    const res = await fetch("/create_order");
-    const order = await res.json();
-
-    var options = {
-      key: "YOUR_KEY_ID",
-      amount: order.amount,
-      currency: "INR",
-      order_id: order.id,
-
-      name: "Amrutha Aarogya Ayurvedic Hospital",
-      description: "Internship Fee",
-
-      handler: function(response) {
-
-        fetch("/verify_payment", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify({
-            order_id: response.razorpay_order_id,
-            payment_id: response.razorpay_payment_id,
-            signature: response.razorpay_signature,
-            student_id: studentId
-          })
-        })
-        .then(res => res.json())
-        .then(data => {
-
-          if(data.status === "verified" || data.status === "success") {
-            alert("✅ Payment Successful");
-
-            // ✅ REDIRECT
-            window.location.href = "/receipt/" + studentId;
-          } else {
-            alert("❌ Verification failed");
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Error verifying payment");
-        });
-
-      }
-    };  // ✅ IMPORTANT COMMA FIX
-
-    var rzp = new Razorpay(options);
-    rzp.open();
-
-  } catch (error) {
-    console.error(error);
-    alert("Error creating order");
-  }
-}
 </script>
 
 </body>
