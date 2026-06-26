@@ -212,8 +212,10 @@ def register():
 ##----------------------Batches------------------------------------------------------ 
 def prepare_batches():
     batches = Batch.query.order_by(Batch.start_date).all()
-    grouped = {}
-
+    #grouped = {}
+    result = []
+    today = datetime.today().date()
+    
     for b in batches:
         try:
             start = datetime.strptime(b.start_date, "%Y-%m-%d")
@@ -221,7 +223,11 @@ def prepare_batches():
         except:
             continue
 
-        month = start.strftime('%B')
+        # ✅ skip past batches
+        if end.date() < today:
+            continue
+
+        """month = start.strftime('%B')
 
         if month not in grouped:
             grouped[month] = {
@@ -233,7 +239,7 @@ def prepare_batches():
             }
         else:
             grouped[month]["end"] = max(grouped[month]["end"], end)
-            grouped[month]["ids"].append(b.id)
+            grouped[month]["ids"].append(b.id)"""
 
         male_count = Student.query.filter_by(batch_id=b.id, gender="Male").count()
         female_count = Student.query.filter_by(batch_id=b.id, gender="Female").count()
@@ -537,25 +543,45 @@ import calendar
 
 # ✅ AUTO CREATE INITIAL BATCHES (RUN ONLY ONCE)
 def create_initial_batches():
-    if Batch.query.count() == 0:
 
-        year = datetime.now().year
+    year = datetime.now().year
 
-        for month in range(1, 13):
+    for month in range(1, 13):
 
-            last_day = calendar.monthrange(year, month)[1]
+        # ✅ FULL MONTH
+        last_day = calendar.monthrange(year, month)[1]
 
-            start_date = f"{year}-{month:02d}-01"
-            end_date = f"{year}-{month:02d}-{last_day}"
+        start1 = f"{year}-{month:02d}-01"
+        end1 = f"{year}-{month:02d}-{last_day}"
 
+        if not Batch.query.filter_by(start_date=start1).first():
             db.session.add(Batch(
-                start_date=start_date,
-                end_date=end_date,
+                start_date=start1,
+                end_date=end1,
                 capacity=6,
                 filled_slots=0
             ))
 
-        db.session.commit()
+        # ✅ MID MONTH (15 → 14 next)
+        if month == 12:
+            next_month = 1
+            next_year = year + 1
+        else:
+            next_month = month + 1
+            next_year = year
+
+        start2 = f"{year}-{month:02d}-15"
+        end2 = f"{next_year}-{next_month:02d}-14"
+
+        if not Batch.query.filter_by(start_date=start2).first():
+            db.session.add(Batch(
+                start_date=start2,
+                end_date=end2,
+                capacity=6,
+                filled_slots=0
+            ))
+
+    db.session.commit()
 
 # ✅ FIXED PREPARE FUNCTION (VERY IMPORTANT)
 from datetime import datetime
