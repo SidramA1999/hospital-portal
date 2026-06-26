@@ -161,7 +161,7 @@ def register():
         return render_template("register.html", batches=prepare_batches())
 
 
-    data = request.json   # ✅ read JSON (NOT form anymore)
+    data = request.form   # ✅ read JSON (NOT form anymore)
 
     batch_id = int(data.get('batch_id'))
     gender = data.get('gender')
