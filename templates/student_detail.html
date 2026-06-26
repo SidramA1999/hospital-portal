@@ -1,0 +1,18 @@
+<h2>Student Details</h2>
+
+<p><b>Name:</b> {{ student.name }}</p>
+<p><b>Email:</b> {{ student.email }}</p>
+<p><b>Phone:</b> {{ student.phone }}</p>
+<p><b>Age:</b> {{ student.age }}</p>
+<p><b>College:</b> {{ student.college }}</p>
+
+<p><b>Address:</b> 
+{{ student.place }}, {{ student.district }}, {{ student.state }} - {{ student.pincode }}
+</p>
+
+<p><b>Batch:</b> {{ batch.start_date }} → {{ batch.end_date }}</p>
+<p><b>Gender:</b> {{ student.gender }}</p>
+<p><b>Status:</b> {{ student.payment_status }}</p>
+
+<br>
+<a href="/admin">⬅ Back to Admin</a>
