@@ -154,7 +154,7 @@ h2 {
   transition:0.3s;
 }
 
-.submit-btn:hover {
+.-btn:hover {
   background:#2d6a4f;
 }
 
@@ -227,7 +227,18 @@ h2 {
   background:#2d6a4f;
   transform:scale(1.02);
 }
+/*---------------QR-----------------*/
+.qr-section {
+  text-align: center;
+  margin-top: 20px;
+}
 
+.qr-img {
+  width: 200px;
+  border-radius: 10px;
+}
+
+  
 /*Logo + name info design*/
 .navbar {
   display: flex;
@@ -415,9 +426,18 @@ Swal.fire({
 <!-- ✅ SEAT INFO -->
 <p id="seatInfo" class="seat-info"></p>
 
+<div class="qr-section">
+  <h3>Scan & Pay</h3>
+  <img src="{{ url_for('static', filename='qr.jpg') }}" class="qr-img">
+
+  <p>After completing payment, click Register</p>
+</div>
+
+
+  
 <!-- ✅ SUBMIT -->
 <button id="submitBtn" class="submit-btn" type="button" onclick="payNow()">
-  Register & Pay 💳
+  Register
 </button>
 
 </form>
