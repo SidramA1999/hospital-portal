@@ -343,7 +343,8 @@ Swal.fire({
 </script>
 {% endif %}
 
-<form id="regForm" method="POST">
+/*<form id="regForm" method="POST">*/
+<form id="regForm" method="POST" enctype="multipart/form-data">
 
 <!-- 👤 NAME -->
 <div class="field">
@@ -433,7 +434,9 @@ Swal.fire({
   <p>After completing payment, click Register</p>
 </div>
 
-
+/*----TXN---*/
+<input type="text" name="transaction_id" placeholder="Enter UPI Transaction ID" required>
+<input type="file" name="payment_proof" accept="image/*" required>
   
 <!-- ✅ SUBMIT -->
 <button id="submitBtn" class="submit-btn" type="submit">
