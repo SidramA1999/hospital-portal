@@ -45,6 +45,8 @@ class Student(db.Model):
 
     batch_id = db.Column(db.Integer)
     gender = db.Column(db.String(10))
+    transaction_id = db.Column(db.String(100))
+    payment_proof = db.Column(db.String(200))
     payment_status = db.Column(db.String(20), default="Pending")
 
 
