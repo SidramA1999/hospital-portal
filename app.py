@@ -7,6 +7,10 @@ import pandas as pd
 from reportlab.pdfgen import canvas
 from datetime import datetime
 
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 app = Flask(__name__)
 app.secret_key = "secret123"
 
