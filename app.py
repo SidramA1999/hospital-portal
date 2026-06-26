@@ -412,6 +412,19 @@ def delete_batch(id):
         db.session.delete(b)
         db.session.commit()
     return "deleted"
+#---------------------------------------students Details CLickable by Admin-----------
+@app.route('/student/<int:id>')
+def student_detail(id):
+
+    if not session.get('admin'):
+        return redirect('/login')
+
+    student = Student.query.get(id)
+
+    batch = Batch.query.get(student.batch_id)
+
+    return render_template('student_detail.html', student=student, batch=batch)
+
 
 # ---------------- STUDENT CONTROL ----------------
 @app.route('/mark_paid/<int:id>')
