@@ -42,19 +42,31 @@
 <!--   search Status --->
 .status-check {
   text-align:center;
-  padding:20px;
+  padding:30px 20px;
+  background:#ffffff;
+  margin:30px auto;
+  max-width:400px;
+  border-radius:10px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.1);
 }
 
 .status-check input {
+  width:80%;
   padding:10px;
-  margin:10px;
+  margin:10px 0;
+  border:1px solid #ccc;
+  border-radius:5px;
 }
 
 .status-check button {
   padding:10px 15px;
   background:#2d6a4f;
   color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
 }
+
 
 /* GRID LAYOUT */
 .contact-grid {
@@ -532,18 +544,7 @@ body {
 
 <!---- UI ChatBot---->
 <div id="chatbotBox" class="chatbot" style="display:none;">
-<!--- saerch status -->
- <div class="status-check">
 
-<h3>Check Application Status</h3>
-
-<input type="text" id="searchInput" placeholder="Enter Name or Mobile">
-
-<button onclick="checkStatus()">Check</button>
-
-<p id="result"></p>
-
-</div> 
   <!-- Chat messages -->
   <div id="chatBox" class="chat-box"></div>
 
@@ -576,6 +577,19 @@ body {
 
   <button onclick="openRules()" class="btn">Apply Now</button>
 </div>
+
+<!--- saerch status -->
+ <div class="status-check">
+
+<h3>Check Application Status</h3>
+
+<input type="text" id="searchInput" placeholder="Enter Name or Mobile">
+
+<button onclick="checkStatus()">Check</button>
+
+<p id="result"></p>
+
+</div>   
 
 <!-- VISION -->
 <div class="section fade">
@@ -1174,24 +1188,28 @@ async function checkStatus() {
   let data = await res.json();
 
   let result = document.getElementById("result");
+  
+result.style.marginTop = "10px";
+result.style.fontWeight = "bold";
+
 
   // ✅ DISPLAY NICE MESSAGE
   if (data.status === "Approved") {
-    result.innerHTML = "✅ You are Eligible for Training 🎉";
-    result.style.color = "green";
-  }
-  else if (data.status === "Pending") {
-    result.innerHTML = "⏳ Your application is still under review";
-    result.style.color = "orange";
-  }
-  else if (data.status === "Rejected") {
-    result.innerHTML = "❌ Not Eligible for Training";
-    result.style.color = "red";
-  }
-  else {
-    result.innerHTML = "❌ No record found";
-    result.style.color = "black";
-  }
+  result.innerHTML = "✅ You are Eligible for Training 🎉";
+  result.style.color = "#2d6a4f";
+}
+else if (data.status === "Pending") {
+  result.innerHTML = "⏳ Your application is under review";
+  result.style.color = "orange";
+}
+else if (data.status === "Rejected") {
+  result.innerHTML = "❌ You are not eligible for training";
+  result.style.color = "red";
+}
+else {
+  result.innerHTML = "❌ No record found";
+  result.style.color = "black";
+}
 }
 </script>  
 
