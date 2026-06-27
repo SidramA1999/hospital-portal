@@ -39,6 +39,23 @@
   padding: 40px 20px;
 }
 
+<!--   search Status --->
+.status-check {
+  text-align:center;
+  padding:20px;
+}
+
+.status-check input {
+  padding:10px;
+  margin:10px;
+}
+
+.status-check button {
+  padding:10px 15px;
+  background:#2d6a4f;
+  color:white;
+}
+
 /* GRID LAYOUT */
 .contact-grid {
   display: flex;
@@ -1137,7 +1154,44 @@ window.addEventListener("DOMContentLoaded", function () {
 });
 
 </script>
+<!---- JSS Saerch Status  -->
+async function checkStatus() {
 
+  let value = document.getElementById("searchInput").value;
+
+  if (!value) {
+    alert("Enter name or mobile ❌");
+    return;
+  }
+
+  let res = await fetch("/check_status", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ query: value })
+  });
+
+  let data = await res.json();
+
+  let result = document.getElementById("result");
+
+  // ✅ DISPLAY NICE MESSAGE
+  if (data.status === "Approved") {
+    result.innerHTML = "✅ You are Eligible for Training 🎉";
+    result.style.color = "green";
+  }
+  else if (data.status === "Pending") {
+    result.innerHTML = "⏳ Your application is still under review";
+    result.style.color = "orange";
+  }
+  else if (data.status === "Rejected") {
+    result.innerHTML = "❌ Not Eligible for Training";
+    result.style.color = "red";
+  }
+  else {
+    result.innerHTML = "❌ No record found";
+    result.style.color = "black";
+  }
+}
 
   
 </body>
