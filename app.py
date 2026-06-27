@@ -291,11 +291,17 @@ def success():
     return render_template("success.html")
 
 ##------AI 
+# ✅ IMPORT
 from openai import OpenAI
+
+# ✅ CLIENT
 client = OpenAI(api_key="YOUR_API_KEY")
 
+
+# ✅ SINGLE CHAT ROUTE (ONLY ONE ✅)
 @app.route("/chat", methods=["POST"])
 def chat():
+
     user_msg = request.json.get("message")
 
     response = client.chat.completions.create(
@@ -303,13 +309,18 @@ def chat():
         messages=[
             {
                 "role": "system",
-                "content": "Answer ONLY based on hospital training rules."
+                "content": "Answer ONLY from hospital training rules. If outside, say: Please contact hospital 📞"
             },
-            {"role": "user", "content": user_msg}
+            {
+                "role": "user",
+                "content": user_msg
+            }
         ]
     )
 
-    return {"reply": response.choices[0].message.content}
+    return {
+        "reply": response.choices[0].message.content
+    }
 
 # ---------------- ADMIN DASHBOARD ----------------
 @app.route('/admin')
