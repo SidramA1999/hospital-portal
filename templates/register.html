@@ -89,6 +89,48 @@ input, select {
   margin:auto;
 }
 
+<!------  BookMy Show Style         -->
+.seat-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.seat {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* ✅ Available */
+.available {
+  background: #90ee90;
+}
+
+/* ❌ Booked */
+.booked {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* ✅ Selected */
+.selected {
+  background: #2d6a4f;
+  color: white;
+}  
+  
+
 /*Totle Registration*/
 .form-container {
   max-width: 450px;
@@ -464,6 +506,33 @@ Swal.fire({
 <!-- ✅ SEAT INFO -->
 <p id="seatInfo" class="seat-info"></p>
 
+<!---- #####$$%%^^&&------->
+<h3>Select Seat</h3>
+
+<div class="seat-section">
+
+  <p><b>👨 Male Seats</b></p>
+  <div class="seat-row" id="maleSeats">
+    <div class="seat available" onclick="selectSeat(this, 'M1')">M1</div>
+    <div class="seat available" onclick="selectSeat(this, 'M2')">M2</div>
+    <div class="seat booked">M3</div>
+  </div>
+
+  <p><b>👩 Female Seats</b></p>
+  <div class="seat-row" id="femaleSeats">
+    <div class="seat available" onclick="selectSeat(this, 'F1')">F1</div>
+    <div class="seat booked">F2</div>
+    <div class="seat booked">F3</div>
+  </div>
+
+</div>
+
+<input type="hidden" name="seat" id="selectedSeat">
+
+<!-----------------------                    -->  
+
+
+  
 <div class="qr-section">
   <h3>Scan & Pay</h3>
 
@@ -733,7 +802,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+<!--- Seat Select Logic --->
+<script>
+function selectSeat(el, seatId) {
 
+  // remove previous selection
+  document.querySelectorAll(".seat").forEach(s => {
+    s.classList.remove("selected");
+  });
+
+  // select new
+  el.classList.add("selected");
+
+  // store value
+  document.getElementById("selectedSeat").value = seatId;
+
+}
+</script>  
   
 </body>
 </html>
