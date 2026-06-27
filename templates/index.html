@@ -515,7 +515,18 @@ body {
 
 <!---- UI ChatBot---->
 <div id="chatbotBox" class="chatbot" style="display:none;">
+<!--- saerch status -->
+ <div class="status-check">
 
+  <h3>Check Application Status</h3>
+
+  <input type="text" id="searchInput" placeholder="Enter Name or Mobile">
+
+  <button onclick="checkStatus()">Check</button>
+
+  <p id="result"></p>
+
+</div> 
   <!-- Chat messages -->
   <div id="chatBox" class="chat-box"></div>
 
