@@ -6,7 +6,10 @@
 <title>Trainee/ Practitiner Registration</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&display=swap" rel="stylesheet">
-
+<!-- Calender --->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  
 <!-- ✅ SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -361,7 +364,8 @@ Swal.fire({
 <!-- ✅ DOB -->
 <div class="field">
   <label>📅 Date of Birth</label>
-  <input type="date" id="dob" required>
+  <input type="text" id="dob" placeholder="Select Date of Birth" required>
+
 </div>
 
 <!-- ✅ Show formatted date -->
@@ -658,48 +662,53 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <!-- DOB ---- Age---->
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
   let dobInput = document.getElementById("dob");
   let ageInput = document.getElementById("age");
   let dobText = document.getElementById("dobText");
 
-  // ✅ prevent future date
-  let today = new Date().toISOString().split("T")[0];
-  dobInput.max = today;
+  // ✅ INIT FLATPICKR
+  flatpickr("#dob", {
+    dateFormat: "d/m/Y",
+    maxDate: "today",
+    allowInput: true,
+    yearSelectorType: "dropdown",
+    monthSelectorType: "dropdown",
 
-  dobInput.addEventListener("change", function () {
+    onChange: function (selectedDates, dateStr) {
 
-    if (!this.value) return;
+      if (!dateStr) return;
 
-    let dob = new Date(this.value);
-    let now = new Date();
+      // ✅ SPLIT DD/MM/YYYY
+      let parts = dateStr.split("/");
+      let day = parseInt(parts[0]);
+      let month = parseInt(parts[1]) - 1;
+      let year = parseInt(parts[2]);
 
-    // ✅ CALCULATE AGE
-    let age = now.getFullYear() - dob.getFullYear();
-    let monthDiff = now.getMonth() - dob.getMonth();
+      let dob = new Date(year, month, day);
+      let today = new Date();
 
-    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate())) {
-      age--;
+      // ✅ AGE CALCULATION
+      let age = today.getFullYear() - dob.getFullYear();
+
+      let m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+      }
+
+      // ✅ DISPLAY DOB (already formatted)
+      dobText.innerText = "Selected: " + dateStr;
+
+      // ✅ DISPLAY AGE
+      ageInput.value = age + " Yrs";
+
     }
-
-    // ✅ FORMAT DOB → DD/MM/YYYY
-    let day = String(dob.getDate()).padStart(2, '0');
-    let month = String(dob.getMonth() + 1).padStart(2, '0');
-    let year = dob.getFullYear();
-
-    let formattedDOB = `${day}/${month}/${year}`;
-
-    // ✅ DISPLAY
-    dobText.innerText = "Selected: " + formattedDOB;
-
-    // ✅ AGE OUTPUT
-    ageInput.value = age + " Yrs";
-
   });
 
 });
 </script>
-</script>
+
+  
 </body>
 </html>
