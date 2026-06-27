@@ -319,7 +319,10 @@ body {
   </div>
 
   <div class="nav-links">
-    <a href="/register" class="btn register-btn">Trainee Registration</a>
+   <!-- <a href="/register" class="btn register-btn">Trainee Registration</a>  -->
+    <button onclick="openRules()" class="btn">
+  Register for Trainee
+</button>
     <a href="/login" class="btn admin-btn">Admin</a>
   </div>
 
@@ -489,5 +492,75 @@ document.addEventListener("DOMContentLoaded", () => {
 
 </script>
 
+<!--- Pop up Rules and Regulations-->
+<script>
+function openRules() {
+
+  Swal.fire({
+    title: "📜 Rules & Regulations",
+
+    html: `
+      <div id="rulesBox" style="
+        max-height: 200px;
+        overflow-y: scroll;
+        text-align:left;
+        border:1px solid #ddd;
+        padding:10px;
+        border-radius:5px;
+      ">
+        <p>1. Candidate must maintain discipline.</p>
+        <p>2. Attendance is compulsory.</p>
+        <p>3. Fees once paid is non-refundable.</p>
+        <p>4. Follow hospital instructions strictly.</p>
+        <p>5. Complete entire internship duration.</p>
+        <p>6. Maintain proper behavior.</p>
+      </div>
+
+      <br>
+
+      <input type="checkbox" id="agree" disabled>
+      <label for="agree"> I have read and agree to all rules ✅</label>
+    `,
+
+    confirmButtonText: "Proceed ➡",
+    showCancelButton: true,
+
+    didOpen: () => {
+
+      const box = document.getElementById("rulesBox");
+      const checkbox = document.getElementById("agree");
+
+      // ✅ enable checkbox only after scroll to bottom
+      box.addEventListener("scroll", () => {
+        if (box.scrollTop + box.clientHeight >= box.scrollHeight) {
+          checkbox.disabled = false;
+        }
+      });
+
+    },
+
+    preConfirm: () => {
+
+      if (!document.getElementById("agree").checked) {
+        Swal.showValidationMessage("Please accept rules to continue ❌");
+        return false;
+      }
+
+      // ✅ SAVE IN SESSION STORAGE
+      sessionStorage.setItem("rulesAccepted", "true");
+
+    }
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+      window.location.href = "/register";
+    }
+
+  });
+
+}
+</script>
+
+  
 </body>
 </html>
