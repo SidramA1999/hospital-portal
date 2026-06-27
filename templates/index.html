@@ -519,39 +519,62 @@ function openRules() {
     showCancelButton: true,
 
     html: `
-    <div id="rulesBox" style="
-      max-height:260px;
-      overflow-y:scroll;
-      text-align:left;
-      border:1px solid #ddd;
-      padding:15px;
-      border-radius:10px;
-      background:#fafafa;
-      font-size:14px;
-      line-height:1.7;
-    ">
+<div id="rulesBox" style="
+  max-height: 270px;
+  overflow-y: scroll;
+  text-align: left;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 1.7;
+  background:#fafafa;
+">
 
-    <h4 style="color:#2d6a4f;">📋 Hospital Training Rules</h4>
+<h3 style="color:#2d6a4f;">📋 Hospital Training Rules & Regulations</h3>
 
-    <ul style="list-style:none; padding-left:0;">
-      <li>✅ UG pursuing students are not eligible</li>
-      <li>🏠 Follow accommodation rules</li>
-      <li>🧑‍⚕️ Attendance compulsory</li>
-      <li>⏰ Maintain discipline & behavior</li>
-      <li>❌ <b style="color:red;">Misconduct = termination</b></li>
-      <li>🔒 No responsibility for belongings</li>
-      <li>🙏 Respect staff & patients</li>
-      <li>🧼 Maintain cleanliness & ethics</li>
-      <li>⚠️ Rules may change anytime</li>
-    </ul>
+<!-- ✅ ELIGIBILITY -->
+<h4 style="color:#2d6a4f; margin-top:10px;">🎓 Eligibility</h4>
+<p>1️⃣ Students who are <b>still pursuing their undergraduate (UG) course</b> are not eligible for training.</p>
 
-    </div>
+<!-- ✅ ACCOMMODATION -->
+<h4 style="color:#2d6a4f;">🏠 Accommodation</h4>
+<p>2️⃣ Students must follow the accommodation arrangements and recommendations provided by the hospital.</p>
 
-    <br>
+<!-- ✅ ATTENDANCE & PARTICIPATION -->
+<h4 style="color:#2d6a4f;">🧑‍⚕️ Attendance & Participation</h4>
+<p>3️⃣ Active participation and regular attendance in all Panchakarma procedures are compulsory.</p>
 
-    <input type="checkbox" id="agree" disabled>
-    <label for="agree"> I agree to all rules ✅</label>
-    `,
+<!-- ✅ DISCIPLINE -->
+<h4 style="color:#2d6a4f;">⏰ Discipline & Conduct</h4>
+<p>4️⃣ Students must follow and comply with all hospital rules and regulations to maintain discipline, punctuality, and professional behavior.</p>
+
+<p>5️⃣ ❌ Any form of misconduct, indiscipline, or inappropriate behavior will result in immediate termination from the Gurukul training program.</p>
+
+<!-- ✅ SAFETY -->
+<h4 style="color:#2d6a4f;">🔒 Safety & Responsibility</h4>
+<p>6️⃣ The hospital management is not responsible for the loss, theft, or damage of any personal belongings.</p>
+
+<!-- ✅ RESPECT -->
+<h4 style="color:#2d6a4f;">🙏 Respect & Behavior</h4>
+<p>7️⃣ Students must show respect to teachers, patients, hospital staff, and fellow students at all times.</p>
+
+<!-- ✅ ETHICS -->
+<h4 style="color:#2d6a4f;">🧼 Cleanliness & Ethics</h4>
+<p>8️⃣ Students are expected to maintain cleanliness, confidentiality, and ethical conduct throughout the training period.</p>
+
+<!-- ✅ POLICY -->
+<h4 style="color:#2d6a4f;">⚠️ Policy Changes</h4>
+<p>9️⃣ The hospital reserves the right to modify or update these rules and regulations whenever necessary.</p>
+
+</div>
+
+<br>
+
+<input type="checkbox" id="agree" disabled>
+<label for="agree"> I have read and agree to all rules ✅</label>
+`,
+    
 
     didOpen: () => {
 
