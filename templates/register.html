@@ -336,7 +336,22 @@ h2 {
 
 </div>
 
+<!-- Rules and Regulations -->
+<script>
+if (sessionStorage.getItem("rulesAccepted") !== "true") {
 
+  Swal.fire({
+    icon: "warning",
+    title: "Access Denied",
+    text: "Please accept rules first ❌",
+  }).then(() => {
+    window.location.href = "/";
+  });
+
+}
+</script>
+<!--########--------->
+  
 <div class="container">
 <div class="card fancy-form">
 
