@@ -406,13 +406,25 @@ body {
 
 <!---- UI ChatBot---->
 <div id="chatbotBox" class="chatbot" style="display:none;">
-  <div id="chatBox"></div>
 
-  <input id="userInput" placeholder="Ask..." />
-  <button onclick="sendMessage()">Send</button>
+  <!-- Chat messages -->
+  <div id="chatBox" class="chat-box"></div>
+
+  <!-- Input area -->
+  <div class="chat-input">
+    <input id="userInput" placeholder="Ask..." />
+
+    <button onclick="sendMessage()">Send</button>
+
+    <!-- ✅ ADD VOICE BUTTON HERE -->
+    <button onclick="startVoice()">🎤</button>
+  </div>
+
 </div>
 
-<div id="chatToggle" onclick="toggleChat()">💬</div>  
+<!-- ✅ Floating button -->
+<div id="chatToggle" onclick="toggleChat()">💬</div>
+
   
 
 <!-- HERO -->
@@ -819,6 +831,47 @@ async function sendMessage() {
 }
 </script>
 
+<script>
+
+// ✅ VOICE INPUT
+function startVoice() {
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Voice not supported in this browser ❌");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "en-IN";   // ✅ change if needed
+  recognition.start();
+
+  recognition.onresult = function(event) {
+
+    let speech = event.results[0][0].transcript;
+
+    document.getElementById("userInput").value = speech;
+
+    sendMessage();  // ✅ auto send
+
+  };
+
+}
+
+// ✅ VOICE OUTPUT
+function speak(text) {
+
+  let speech = new SpeechSynthesisUtterance(text);
+
+  speech.lang = "en-IN";
+
+  speechSynthesis.speak(speech);
+
+}
+
+</script>
 
   
 </body>
