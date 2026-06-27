@@ -714,6 +714,28 @@ def prepare_batches():
 with app.app_context():
     db.create_all()
     create_initial_batches()
+    
+# ------------------Email auto meaasge------------------
+#-@#$$________+--------------------------
+
+import smtplib
+from email.mime.text import MIMEText
+
+def send_email(to_email, subject, message):
+
+    sender = "amarsunadholi1415@gmail.com"
+    password = "#AppA@july2359"   # Gmail app password
+
+    msg = MIMEText(message)
+    msg["Subject"] = subject
+    msg["From"] = sender
+    msg["To"] = to_email
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        server.starttls()
+        server.login(sender, password)
+        server.send_message(msg)
+
 
 import os
 
