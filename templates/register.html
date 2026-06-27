@@ -480,37 +480,58 @@ setInterval(refreshSeats, 5000);
 
 <!--// auto fetching Location  -->
 <script>
-document.getElementById("pincode").addEventListener("blur", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-  let pin = this.value;
+  document.getElementById("pincode").addEventListener("blur", function () {
 
-  if (pin.length !== 6) {
-    alert("Enter valid 6-digit pincode");
-    return;
-  }
+    let pin = this.value.trim();
 
-  fetch("https://api.postalpincode.in/pincode/" + pin)
-    .then(res => res.json())
-    .then(data => {
+    // ✅ validate
+    if (pin.length !== 6 || isNaN(pin)) {
+      alert("Enter valid 6-digit pincode");
+      return;
+    }
 
-      if (data[0].Status === "Success") {
+    // ✅ show loading
+    document.getElementById("state").value = "Loading...";
+    document.getElementById("district").value = "Loading...";
 
-        let post = data[0].PostOffice[0];
+    fetch("https://api.postalpincode.in/pincode/" + pin)
+      .then(res => res.json())
+      .then(data => {
 
-        document.getElementById("state").value = post.State;
-        document.getElementById("district").value = post.District;
+        if (data[0].Status === "Success") {
 
-      } else {
-        alert("Invalid pincode");
-      }
+          let post = data[0].PostOffice[0];
 
-    })
-    .catch(() => alert("Error fetching location"));
+          document.getElementById("state").value = post.State;
+          document.getElementById("district").value = post.District;
+
+        } else {
+
+          alert("Invalid pincode");
+
+          document.getElementById("state").value = "";
+          document.getElementById("district").value = "";
+        }
+
+      })
+      .catch(error => {
+        console.error(error);
+
+        alert("Error fetching location");
+
+        document.getElementById("state").value = "";
+        document.getElementById("district").value = "";
+      });
+
+  });
+
 });
-
-
-
 </script>
+
+
+
 <!--/// Mobile number validation  --->
 <script>
 document.getElementById("phone").addEventListener("input", function () {
