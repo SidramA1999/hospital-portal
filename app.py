@@ -82,15 +82,17 @@ def logout():
 @app.route("/check_status", methods=["POST"])
 def check_status():
 
-    data = request.json
+    data = request.get_json()
     query = data.get("query")
 
+    # ✅ search using phone OR name (case-insensitive)
     student = Student.query.filter(
-        (Student.name == query) | (Student.phone == query)
+        (Student.phone == query) |
+        (Student.name.ilike(f"%{query}%"))
     ).first()
 
     if not student:
-        return {"status": "Not Found ❌"}
+        return {"status": "Not Found"}
 
     return {
         "status": student.application_status
