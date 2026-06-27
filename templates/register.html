@@ -558,36 +558,51 @@ document.getElementById("email").addEventListener("input", function () {
 
 
 
-   <!----- Test--->
-  <script>
-console.log("✅ Script loaded");
-
+<script>
 document.addEventListener("DOMContentLoaded", function () {
 
-  console.log("✅ DOM loaded");
+  let pincode = document.getElementById("pincode");
 
-  let pincodeInput = document.getElementById("pincode");
+  // ✅ ONLY ALLOW NUMBERS + AUTO TRIM LENGTH
+  pincode.addEventListener("input", function () {
 
-  if (!pincodeInput) {
-    console.error("❌ Pincode input NOT found");
-    return;
-  }
+    // remove non-numbers
+    this.value = this.value.replace(/[^0-9]/g, "");
 
-  pincodeInput.addEventListener("blur", function () {
+    // limit to 6 digits
+    if (this.value.length > 6) {
+      this.value = this.value.slice(0, 6);
+    }
+  });
+
+
+  // ✅ VALIDATE + FETCH
+  pincode.addEventListener("blur", function () {
 
     let pin = this.value.trim();
-    console.log("Entered pincode:", pin);
 
     if (pin.length !== 6) {
-      console.error("❌ Invalid length");
+
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Pincode",
+        text: "Please enter a valid 6-digit pincode"
+      });
+
+      // ✅ clear everything
+      this.value = "";
+      document.getElementById("state").value = "";
+      document.getElementById("district").value = "";
       return;
     }
+
+    // ✅ loading text
+    document.getElementById("state").value = "Loading...";
+    document.getElementById("district").value = "Loading...";
 
     fetch("https://api.postalpincode.in/pincode/" + pin)
       .then(res => res.json())
       .then(data => {
-
-        console.log("API Response:", data);
 
         if (data[0].Status === "Success") {
 
@@ -596,15 +611,30 @@ document.addEventListener("DOMContentLoaded", function () {
           document.getElementById("state").value = post.State;
           document.getElementById("district").value = post.District;
 
-          console.log("✅ Filled data");
-
         } else {
-          console.error("❌ Invalid pincode");
+
+          Swal.fire({
+            icon: "error",
+            title: "Invalid Pincode",
+            text: "No data found for this pincode"
+          });
+
+          // ✅ clear values
+          document.getElementById("state").value = "";
+          document.getElementById("district").value = "";
         }
 
       })
-      .catch(err => {
-        console.error("❌ Fetch error:", err);
+      .catch(() => {
+
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Unable to fetch location"
+        });
+
+        document.getElementById("state").value = "";
+        document.getElementById("district").value = "";
       });
 
   });
