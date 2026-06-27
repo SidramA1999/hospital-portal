@@ -49,6 +49,12 @@ input, select {
   border-radius:6px;
 }
 
+#state, #district {
+  background: #e8f5e9;
+  color: #000;
+  font-weight: bold;
+}
+  
 /* BUTTON */
 .btn {
   width:100%;
@@ -445,8 +451,7 @@ Swal.fire({
 
 
 
-
-
+<script>
 async function refreshSeats() {
 
     let res = await fetch("/seat_status");
@@ -454,7 +459,6 @@ async function refreshSeats() {
 
     let select = document.getElementById("batchSelect");
 
-    // update options data
     for (let i = 0; i < select.options.length; i++) {
 
         let opt = select.options[i];
@@ -466,7 +470,6 @@ async function refreshSeats() {
         }
     }
 
-    // ✅ refresh displayed seat info
     updateSeats();
 }
 
@@ -479,60 +482,6 @@ setInterval(refreshSeats, 5000);
 
 
 <!--// auto fetching Location  -->
-<!-- ✅ PINCODE AUTO FETCH -->
-<script>
-window.onload = function () {
-
-  let pincode = document.getElementById("pincode");
-
-  pincode.addEventListener("blur", function () {
-
-    let pin = this.value.trim();
-
-    if (pin.length !== 6 || isNaN(pin)) {
-      Swal.fire("Invalid Pincode ❌");
-      return;
-    }
-
-    // ✅ loading state
-    document.getElementById("state").value = "Loading...";
-    document.getElementById("district").value = "Loading...";
-
-    fetch("https://api.postalpincode.in/pincode/" + pin)
-      .then(res => res.json())
-      .then(data => {
-
-        console.log(data); // ✅ debug
-
-        if (data[0].Status === "Success") {
-
-          let post = data[0].PostOffice[0];
-
-          document.getElementById("state").value = post.State;
-          document.getElementById("district").value = post.District;
-
-        } else {
-
-          Swal.fire("Invalid Pincode ❌");
-
-          document.getElementById("state").value = "";
-          document.getElementById("district").value = "";
-        }
-
-      })
-      .catch(err => {
-        console.error(err);
-
-        Swal.fire("Error fetching location ❌");
-
-        document.getElementById("state").value = "";
-        document.getElementById("district").value = "";
-      });
-
-  });
-
-};
-</script>
 
 
 
