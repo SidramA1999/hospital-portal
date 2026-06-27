@@ -717,7 +717,7 @@ def send_email(to_email, subject, message):
         from email.mime.text import MIMETex
 
         sender = "amarsunadholi1415@gmail.com"       # ✅ your gmail
-        password = "#AppA@july2359"        # ✅ app password (NOT normal password)
+        password = "mgwetuaewypxhemm"        # ✅ app password (NOT normal password)
 
         msg = MIMEText(message)
         msg["Subject"] = subject
