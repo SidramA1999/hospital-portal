@@ -78,7 +78,7 @@ def logout():
     session.clear()
     return redirect('/')
 
-# ---------------- HOME ----------------
+# ---------------- HOME Stsus of Application ----------------
 @app.route("/check_status", methods=["POST"])
 def check_status():
 
@@ -97,79 +97,50 @@ def check_status():
     return {
         "status": student.application_status
     }
+#--------------++++++====___
+###++++++++++++++++++++_------=====-
+@app.route("/update_status/<int:id>")
+def update_status(id):
 
-# ---------------- REGISTER ----------------
-"""
-from datetime import datetime
+    student = Student.query.get(id)
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
+    student.application_status = "Approved"
 
-    if request.method == 'POST':
+    db.session.commit()
 
-        #batch = Batch.query.get(int(request.form['batch_id']))
-        batch = db.session.get(Batch, int(request.form.get('batch_id')))
-        gender = request.form['gender']
+    # ✅ SEND EMAIL AFTER APPROVAL
+    send_email(
+        student.email,
+        "Application Approved ✅",
+        "Congratulations! You are eligible for training 🎉"
+    )
 
-        if not batch:
-            return render_template(
-                "register.html",
-                error="Invalid batch",
-                batches=prepare_batches()
-            )
+    return redirect("/admin")
 
-        # ✅ capacity check
-        if batch.filled_slots >= batch.capacity:
-            return render_template(
-                "register.html",
-                error="Batch is full",
-                batches=prepare_batches()
-            )
+#---------------------------------
+@app.route("/update_status/<int:id>")
+def update_status(id):
 
-        # ✅ count seats
-        male_count = Student.query.filter_by(batch_id=batch.id, gender="Male").count()
-        female_count = Student.query.filter_by(batch_id=batch.id, gender="Female").count()
+    student = Student.query.get(id)
 
-        # ✅ gender slot check
-        if gender == "Male" and male_count >= 3:
-            return render_template(
-                "register.html",
-                error="No seats available for Male",
-                batches=prepare_batches()
-            )
+    student.application_status = "Rejected"
 
-        if gender == "Female" and female_count >= 3:
-            return render_template(
-                "register.html",
-                error="No seats available for Female",
-                batches=prepare_batches()
-            )
+    db.session.commit()
 
-        # ✅ save student
-        student = Student(
-        name=request.form.get('name'),
-        email=request.form.get('email'),
-        phone=request.form.get('phone'),
-        age=request.form.get('age'),
-        college=request.form.get('college'),
-        pincode=request.form.get('pincode'),
-        state=request.form.get('state'),
-        district=request.form.get('district'),
-        place=request.form.get('place'),
-        batch_id=batch.id,
-        gender=gender
+    # ✅ SEND EMAIL AFTER APPROVAL
+    
+    send_email(
+        student.email,
+        "Application Status ❌",
+        "We regret to inform you that you are not eligible for training."
     )
 
 
-        batch.filled_slots += 1
-        db.session.add(student)
-        db.session.commit()
+    return redirect("/admin")
 
-        return redirect(f"/success?student_id={student.id}")
 
-    # ✅ ✅ ✅ THIS LINE FIXES YOUR ERROR
-    return render_template("register.html", batches=prepare_batches())
-"""
+# ---------------- REGISTER ----------------
+
 
 from datetime import datetime
 
@@ -356,6 +327,10 @@ def admin():
     return render_template("admin.html",
                            students=Student.query.all(),
                            batches=Batch.query.all())
+
+###-----------------------===---=
+#=====___---------------+++
+
 
 
 ###########--------------------------- Seat Status--------------------
