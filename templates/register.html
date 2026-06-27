@@ -357,10 +357,20 @@ Swal.fire({
   <label>👤 Name</label>
   <input name="name" placeholder="Enter Your Full Name" required>
 </div>
+<!--- DOB and Age Calculate-->
+<!-- ✅ DATE OF BIRTH -->
+<div class="field">
+  <label>📅 Date of Birth</label>
+  <input type="date" id="dob" required>
+</div>
+
+<!-- ✅ AUTO AGE -->
 <div class="field">
   <label>🎂 Age</label>
-  <input type="number" name="age" placeholder="Enter your age" required>
+  <input type="number" id="age" name="age" readonly>
+  <small id="ageText" style="color:gray;"></small>
 </div>
+  
 
 <!-- 📧 EMAIL -->
 <div class="field">
@@ -638,6 +648,46 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("state").value = "";
         document.getElementById("district").value = "";
       });
+
+  });
+
+});
+</script>
+
+<!-- DOB ---- Age---->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+  let dobInput = document.getElementById("dob");
+  let ageInput = document.getElementById("age");
+  let ageText = document.getElementById("ageText");
+
+  // ✅ prevent future date
+  let today = new Date().toISOString().split("T")[0];
+  dobInput.max = today;
+
+  dobInput.addEventListener("change", function () {
+
+    let dob = new Date(this.value);
+    let now = new Date();
+
+    let age = now.getFullYear() - dob.getFullYear();
+    let monthDiff = now.getMonth() - dob.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < dob.getDate())) {
+      age--;
+    }
+
+    if (age < 0) {
+      ageInput.value = "";
+      ageText.innerText = "";
+      return;
+    }
+
+    ageInput.value = age;
+
+    // ✅ show "years"
+    ageText.innerText = age + " years";
 
   });
 
