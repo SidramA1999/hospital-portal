@@ -234,7 +234,31 @@ body {
   border-radius: 80%;
   border: 2px solid white;
 }
+/*---- AI chatbot ---*/
+.chat-box {
+  height: 250px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
 
+.msg {
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 8px;
+}
+
+.user {
+  background: #2d6a4f;
+  color: white;
+  text-align: right;
+}
+
+.bot {
+  background: #eee;
+}
+  
 /*------- FAQ------*/
 .faq-container {
   max-width: 700px;
@@ -811,23 +835,32 @@ function toggleChat() {
 async function sendMessage() {
 
   let input = document.getElementById("userInput");
-  let msg = input.value;
+  let msg = input.value.trim();
+
+  if (!msg) return; // ✅ prevent empty message
 
   addMessage(msg, "user");
+  input.value = "";
 
   let typing = addMessage("Typing...", "bot");
 
-  let res = await fetch("/chat", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ message: msg })
-  });
+  try {
+    let res = await fetch("/chat", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: msg })
+    });
 
-  let data = await res.json();
+    let data = await res.json();
 
-  typing.innerText = data.reply;
+    typing.innerText = data.reply;
 
-  speak(data.reply);
+    speak(data.reply); // ✅ voice
+
+  } catch (err) {
+    typing.innerText = "Server error ❌";
+  }
+
 }
 </script>
 
@@ -859,19 +892,79 @@ function startVoice() {
   };
 
 }
+<script>
+
+// ✅ VOICE INPUT
+function startVoice() {
+
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert("Voice not supported in this browser ❌");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "en-IN";
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    let speech = event.results[0][0].transcript;
+    document.getElementById("userInput").value = speech;
+    sendMessage();
+  };
+}
+
 
 // ✅ VOICE OUTPUT
 function speak(text) {
 
-  let speech = new SpeechSynthesisUtterance(text);
+  speechSynthesis.cancel();  // ✅ stop previous
 
+  let speech = new SpeechSynthesisUtterance(text);
   speech.lang = "en-IN";
 
   speechSynthesis.speak(speech);
-
 }
 
+
+// ✅ ADD MESSAGE + SAVE HISTORY
+function addMessage(text, type) {
+
+  let chatBox = document.getElementById("chatBox");
+
+  let div = document.createElement("div");
+  div.className = "msg " + type;
+  div.innerText = text;
+
+  chatBox.appendChild(div);
+
+  // ✅ SCROLL DOWN
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  // ✅ SAVE HISTORY
+  let history = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  history.push({ text, type });
+  localStorage.setItem("chatHistory", JSON.stringify(history));
+
+  return div;
+}
+
+
+// ✅ LOAD HISTORY ON PAGE LOAD
+window.addEventListener("DOMContentLoaded", function () {
+
+  let history = JSON.parse(localStorage.getItem("chatHistory")) || [];
+
+  history.forEach(msg => {
+    addMessage(msg.text, msg.type);
+  });
+
+});
+
 </script>
+
 
   
 </body>
