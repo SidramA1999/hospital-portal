@@ -99,42 +99,37 @@ def check_status():
     }
 #--------------++++++====___
 ###++++++++++++++++++++_------=====-
-@app.route("/update_status/<int:id>")
-def update_status(id):
+@app.route("/update_status/<int:id>/<status>")
+def update_status(id, status):
 
     student = Student.query.get(id)
 
-    student.application_status = "Approved"
+    if not student:
+        return "Student not found ❌"
+
+    # ✅ SET STATUS BASED ON PARAM
+    if status == "approve":
+        student.application_status = "Approved"
+
+        send_email(
+            student.email,
+            "Application Approved ✅",
+            "Congratulations! You are eligible for training 🎉"
+        )
+
+    elif status == "reject":
+        student.application_status = "Rejected"
+
+        send_email(
+            student.email,
+            "Application Status ❌",
+            "We regret to inform you that you are not eligible for training."
+        )
+
+    else:
+        return "Invalid action ❌"
 
     db.session.commit()
-
-    # ✅ SEND EMAIL AFTER APPROVAL
-    send_email(
-        student.email,
-        "Application Approved ✅",
-        "Congratulations! You are eligible for training 🎉"
-    )
-
-    return redirect("/admin")
-
-#---------------------------------
-@app.route("/update_status/<int:id>")
-def update_status(id):
-
-    student = Student.query.get(id)
-
-    student.application_status = "Rejected"
-
-    db.session.commit()
-
-    # ✅ SEND EMAIL AFTER APPROVAL
-    
-    send_email(
-        student.email,
-        "Application Status ❌",
-        "We regret to inform you that you are not eligible for training."
-    )
-
 
     return redirect("/admin")
 
