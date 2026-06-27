@@ -99,6 +99,8 @@ def check_status():
     }
 #--------------++++++====___
 ###++++++++++++++++++++_------=====-
+import threading
+
 @app.route("/update_status/<int:id>/<status>")
 def update_status(id, status):
 
@@ -107,24 +109,31 @@ def update_status(id, status):
     if not student:
         return "Student not found ❌"
 
-    # ✅ SET STATUS BASED ON PARAM
+    # ✅ APPROVE
     if status == "approve":
         student.application_status = "Approved"
 
-        send_email(
-            student.email,
-            "Application Approved ✅",
-            "Congratulations! You are eligible for training 🎉"
-        )
+        threading.Thread(
+            target=send_email,
+            args=(
+                student.email,
+                "Application Approved ✅",
+                "Congratulations! You are eligible for training 🎉"
+            )
+        ).start()
 
+    # ✅ REJECT
     elif status == "reject":
         student.application_status = "Rejected"
 
-        send_email(
-            student.email,
-            "Application Status ❌",
-            "We regret to inform you that you are not eligible for training."
-        )
+        threading.Thread(
+            target=send_email,
+            args=(
+                student.email,
+                "Application Status ❌",
+                "We regret to inform you that you are not eligible for training."
+            )
+        ).start()
 
     else:
         return "Invalid action ❌"
@@ -207,6 +216,16 @@ def register():
 
     db.session.add(student)
     db.session.commit()
+
+# ✅ SEND EMAIL AFTER REGISTRATION (BACKGROUND)
+threading.Thread(
+    target=send_email,
+    args=(
+        data.get('email'),
+        "Registration Successful ✅",
+        "Your application has been submitted successfully. You can check your status on the website."
+    )
+).start()
 
     return redirect('/success')
 
@@ -691,20 +710,30 @@ with app.app_context():
 import smtplib
 from email.mime.text import MIMEText
 
+import smtplib
+from email.mime.text import MIMEText
+
 def send_email(to_email, subject, message):
+    try:
+        sender = "amarsunadholi1415@gmail.com"       # ✅ your gmail
+        password = "#AppA@july2359"        # ✅ app password (NOT normal password)
 
-    sender = "amarsunadholi1415@gmail.com"
-    password = "#AppA@july2359"   # Gmail app password
+        msg = MIMEText(message)
+        msg["Subject"] = subject
+        msg["From"] = sender
+        msg["To"] = to_email
 
-    msg = MIMEText(message)
-    msg["Subject"] = subject
-    msg["From"] = sender
-    msg["To"] = to_email
-
-    with smtplib.SMTP("smtp.gmail.com", 587) as server:
+        # ✅ timeout added (important)
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
         server.starttls()
         server.login(sender, password)
         server.send_message(msg)
+        server.quit()
+
+        print("✅ Email sent successfully")
+
+    except Exception as e:
+        print("❌ Email failed:", e)
 
 
 import os
