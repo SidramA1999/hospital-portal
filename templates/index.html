@@ -235,6 +235,52 @@ body {
   border: 2px solid white;
 }
 
+/*------- FAQ------*/
+.faq-container {
+  max-width: 700px;
+  margin: auto;
+}
+
+.faq-item {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  background: #2d6a4f;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.3s;
+  background: #f4f8f4;
+  padding: 0 10px;
+}
+
+.faq-item.active .faq-answer {
+  max-height: 200px;
+  padding: 10px;
+}
+
+.icon {
+  transition: 0.3s;
+}
+
+.faq-item.active .icon {
+  transform: rotate(45deg);
+}
+
+  
+  
 /* title styles */
 .title {
   color:white;
@@ -311,6 +357,25 @@ body {
   box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
 
+<!--- UI ChatBot-->
+  #chatToggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #2d6a4f;
+  color: white;
+  padding: 15px;
+  border-radius: 50%;
+}
+
+.chatbot {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 300px;
+  background: white;
+}
+
 </style>
 
 </head>
@@ -339,6 +404,16 @@ body {
 
 </div>
 
+<!---- UI ChatBot---->
+<div id="chatbotBox" class="chatbot" style="display:none;">
+  <div id="chatBox"></div>
+
+  <input id="userInput" placeholder="Ask..." />
+  <button onclick="sendMessage()">Send</button>
+</div>
+
+<div id="chatToggle" onclick="toggleChat()">💬</div>  
+  
 
 <!-- HERO -->
 <div class="hero">
@@ -421,6 +496,34 @@ body {
 
   <h2>Visit Our Hospital</h2>
 
+<!---   FAQ ----->
+<div class="section">
+  <h2>❓ Frequently Asked Questions</h2>
+
+  <div class="faq-container">
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span>Who is eligible for training?</span>
+        <span class="icon">➕</span>
+      </button>
+      <div class="faq-answer">
+        Students who have completed UG are eligible.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ✅ CONTACT -->
+  <div style="text-align:center; margin-top:20px;">
+    <p><b>Still have questions?</b></p>
+
+    <a href="tel:+919742151414">📞 Call</a>
+    <a href="https://wa.me/919742151414" target="_blank">💬 WhatsApp</a>
+  </div>
+</div>
+
+  
   <!-- ✅ CLEAN MAP -->
   <div class="map">
     <iframe 
@@ -657,6 +760,66 @@ function openRules() {
 }
   
 </script>
+
+<!--- FAQ---->
+<script>
+document.querySelectorAll(".faq-question").forEach(btn => {
+
+  btn.addEventListener("click", () => {
+
+    const item = btn.parentElement;
+
+    document.querySelectorAll(".faq-item").forEach(i => {
+      if (i !== item) {
+        i.classList.remove("active");
+        i.querySelector(".icon").innerText = "➕";
+      }
+    });
+
+    item.classList.toggle("active");
+
+    btn.querySelector(".icon").innerText =
+      item.classList.contains("active") ? "➖" : "➕";
+
+  });
+
+});
+</script>
+
+<!---UI ChatBot-->
+<script>
+function toggleChat() {
+  let box = document.getElementById("chatbotBox");
+  box.style.display = box.style.display === "none" ? "block" : "none";
+}
+</script>
+
+<!--- UI Chat Logiv-->
+<script>
+async function sendMessage() {
+
+  let input = document.getElementById("userInput");
+  let msg = input.value;
+
+  addMessage(msg, "user");
+
+  let typing = addMessage("Typing...", "bot");
+
+  let res = await fetch("/chat", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ message: msg })
+  });
+
+  let data = await res.json();
+
+  typing.innerText = data.reply;
+
+  speak(data.reply);
+}
+</script>
+
+
   
 </body>
 </html>
