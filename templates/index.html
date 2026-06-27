@@ -590,7 +590,7 @@ function openRules() {
 
       // ✅ enable checkbox AFTER scroll
       box.addEventListener("scroll", () => {
-        if (box.scrollTop + box.clientHeight >= box.scrollHeight) {
+        if (box.scrollTop + box.clientHeight >= box.scrollHeight - 10) {
           checkbox.disabled = false;
         }
       });
@@ -655,6 +655,7 @@ function openRules() {
   });
 
 }
+  
 </script>
   
 </body>
