@@ -479,26 +479,30 @@ setInterval(refreshSeats, 5000);
 
 
 <!--// auto fetching Location  -->
+<!-- ✅ PINCODE AUTO FETCH -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+window.onload = function () {
 
-  document.getElementById("pincode").addEventListener("blur", function () {
+  let pincode = document.getElementById("pincode");
+
+  pincode.addEventListener("blur", function () {
 
     let pin = this.value.trim();
 
-    // ✅ validate
     if (pin.length !== 6 || isNaN(pin)) {
-      alert("Enter valid 6-digit pincode");
+      Swal.fire("Invalid Pincode ❌");
       return;
     }
 
-    // ✅ show loading
+    // ✅ loading state
     document.getElementById("state").value = "Loading...";
     document.getElementById("district").value = "Loading...";
 
     fetch("https://api.postalpincode.in/pincode/" + pin)
       .then(res => res.json())
       .then(data => {
+
+        console.log(data); // ✅ debug
 
         if (data[0].Status === "Success") {
 
@@ -509,17 +513,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } else {
 
-          alert("Invalid pincode");
+          Swal.fire("Invalid Pincode ❌");
 
           document.getElementById("state").value = "";
           document.getElementById("district").value = "";
         }
 
       })
-      .catch(error => {
-        console.error(error);
+      .catch(err => {
+        console.error(err);
 
-        alert("Error fetching location");
+        Swal.fire("Error fetching location ❌");
 
         document.getElementById("state").value = "";
         document.getElementById("district").value = "";
@@ -527,7 +531,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
 
-});
+};
 </script>
 
 
