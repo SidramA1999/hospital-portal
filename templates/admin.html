@@ -286,6 +286,7 @@ new Chart(document.getElementById("chart"), {
 
 <tr>
   <th>Name</th>
+  <th>Mobile</th>   <!-- ✅ ADDED -->
   <th>Batch</th>
   <th>Gender</th>
   <th>Status</th>
@@ -297,10 +298,17 @@ new Chart(document.getElementById("chart"), {
 
   <!-- ✅ NAME -->
   <td>
-  <a href="/student/{{ s.id }}">
-    {{ s.name }}
-  </a>
-</td>
+    <a href="/student/{{ s.id }}">
+      {{ s.name }}
+    </a>
+  </td>
+
+  <!-- ✅ MOBILE -->
+  <td>
+    <a href="tel:+91{{ s.phone }}">
+      {{ s.phone }}
+    </a>
+  </td>
 
   <!-- ✅ BATCH -->
   <td>{{ s.batch_id }}</td>
@@ -314,28 +322,51 @@ new Chart(document.getElementById("chart"), {
     {% endif %}
   </td>
 
-  <!-- ✅ STATUS -->
+  <!-- ✅ STATUS (APPLICATION STATUS ✅) -->
   <td>
-    {% if s.payment_status == "Paid" %}
-      <span class="open">✅ Paid</span>
+    {% if s.application_status == "Approved" %}
+      <span style="color:green;">✅ Approved</span>
+    {% elif s.application_status == "Pending" %}
+      <span style="color:orange;">⏳ Pending</span>
     {% else %}
-      <span class="full">⏳ Pending</span>
+      <span style="color:red;">❌ Rejected</span>
     {% endif %}
   </td>
 
-  <!-- ✅ ACTION BUTTONS -->
+  <!-- ✅ ACTIONS -->
   <td>
+
+    {% if s.application_status == "Pending" %}
+
+      <!-- ✅ APPROVE -->
+      <a href="/update_status/{{ s.id }}/approve"
+         style="background:#2d6a4f;color:white;padding:5px 10px;border-radius:5px;text-decoration:none;">
+         ✅ Approve
+      </a>
+
+      <!-- ✅ REJECT -->
+      <a href="/update_status/{{ s.id }}/reject"
+         style="background:#d00000;color:white;padding:5px 10px;border-radius:5px;text-decoration:none;">
+         ❌ Reject
+      </a>
+
+    {% else %}
+      ✅ Done
+    {% endif %}
+
+    <br><br>
+
+    <!-- ✅ OTHER BUTTONS -->
     <button onclick="markPaid({{s.id}})" class="btn btn-green">💳 Pay</button>
     <button onclick="deleteStudent({{s.id}})" class="btn btn-red">🗑 Delete</button>
     <button onclick="window.location='/certificate/{{s.id}}'" class="btn btn-blue">📄 Cert</button>
+
   </td>
 
 </tr>
 {% endfor %}
+
 </table>
-
-
-<script>
 
 /* 🔍 SEARCH */
 document.getElementById("search").addEventListener("keyup", function () {
