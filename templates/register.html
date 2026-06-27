@@ -358,17 +358,19 @@ Swal.fire({
   <input name="name" placeholder="Enter Your Full Name" required>
 </div>
 <!--- DOB and Age Calculate-->
-<!-- ✅ DATE OF BIRTH -->
+<!-- ✅ DOB -->
 <div class="field">
   <label>📅 Date of Birth</label>
   <input type="date" id="dob" required>
 </div>
 
-<!-- ✅ AUTO AGE -->
+<!-- ✅ Show formatted date -->
+<small id="dobText" style="color:gray;"></small>
+
+<!-- ✅ AGE -->
 <div class="field">
   <label>🎂 Age</label>
-  <input type="number" id="age" name="age" readonly>
-  <small id="ageText" style="color:gray;"></small>
+  <input type="text" id="age" name="age" readonly>
 </div>
   
 
@@ -660,7 +662,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   let dobInput = document.getElementById("dob");
   let ageInput = document.getElementById("age");
-  let ageText = document.getElementById("ageText");
+  let dobText = document.getElementById("dobText");
 
   // ✅ prevent future date
   let today = new Date().toISOString().split("T")[0];
@@ -668,9 +670,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
   dobInput.addEventListener("change", function () {
 
+    if (!this.value) return;
+
     let dob = new Date(this.value);
     let now = new Date();
 
+    // ✅ CALCULATE AGE
     let age = now.getFullYear() - dob.getFullYear();
     let monthDiff = now.getMonth() - dob.getMonth();
 
@@ -678,20 +683,23 @@ document.addEventListener("DOMContentLoaded", function() {
       age--;
     }
 
-    if (age < 0) {
-      ageInput.value = "";
-      ageText.innerText = "";
-      return;
-    }
+    // ✅ FORMAT DOB → DD/MM/YYYY
+    let day = String(dob.getDate()).padStart(2, '0');
+    let month = String(dob.getMonth() + 1).padStart(2, '0');
+    let year = dob.getFullYear();
 
-    ageInput.value = age;
+    let formattedDOB = `${day}/${month}/${year}`;
 
-    // ✅ show "years"
-    ageText.innerText = age + " years";
+    // ✅ DISPLAY
+    dobText.innerText = "Selected: " + formattedDOB;
+
+    // ✅ AGE OUTPUT
+    ageInput.value = age + " Yrs";
 
   });
 
 });
+</script>
 </script>
 </body>
 </html>
