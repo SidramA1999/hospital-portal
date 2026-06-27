@@ -49,6 +49,7 @@ class Student(db.Model):
     transaction_id = db.Column(db.String(100))
     payment_proof = db.Column(db.String(200))
     payment_status = db.Column(db.String(20), default="Pending")
+    application_status = db.Column(db.String(20), default="Pending")
 
 
 
@@ -78,7 +79,22 @@ def logout():
     return redirect('/')
 
 # ---------------- HOME ----------------
+@app.route("/check_status", methods=["POST"])
+def check_status():
 
+    data = request.json
+    query = data.get("query")
+
+    student = Student.query.filter(
+        (Student.name == query) | (Student.phone == query)
+    ).first()
+
+    if not student:
+        return {"status": "Not Found ❌"}
+
+    return {
+        "status": student.application_status
+    }
 
 # ---------------- REGISTER ----------------
 """
