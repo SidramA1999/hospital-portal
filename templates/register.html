@@ -607,5 +607,60 @@ document.getElementById("email").addEventListener("input", function () {
 <!--
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>   -->
 
+
+
+   <!----- Test--->
+  <script>
+console.log("✅ Script loaded");
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  console.log("✅ DOM loaded");
+
+  let pincodeInput = document.getElementById("pincode");
+
+  if (!pincodeInput) {
+    console.error("❌ Pincode input NOT found");
+    return;
+  }
+
+  pincodeInput.addEventListener("blur", function () {
+
+    let pin = this.value.trim();
+    console.log("Entered pincode:", pin);
+
+    if (pin.length !== 6) {
+      console.error("❌ Invalid length");
+      return;
+    }
+
+    fetch("https://api.postalpincode.in/pincode/" + pin)
+      .then(res => res.json())
+      .then(data => {
+
+        console.log("API Response:", data);
+
+        if (data[0].Status === "Success") {
+
+          let post = data[0].PostOffice[0];
+
+          document.getElementById("state").value = post.State;
+          document.getElementById("district").value = post.District;
+
+          console.log("✅ Filled data");
+
+        } else {
+          console.error("❌ Invalid pincode");
+        }
+
+      })
+      .catch(err => {
+        console.error("❌ Fetch error:", err);
+      });
+
+  });
+
+});
+</script>
 </body>
 </html>
