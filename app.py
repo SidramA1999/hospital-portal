@@ -216,21 +216,19 @@ def register():
 
     db.session.add(student)
     db.session.commit()
-
-# ✅ SEND EMAIL AFTER REGISTRATION (BACKGROUND)
-threading.Thread(
-    target=send_email,
-    args=(
-        data.get('email'),
-        "Registration Successful ✅",
-        "Your application has been submitted successfully. You can check your status on the website."
-    )
-).start()
-
+    
+    # ✅ SEND EMAIL AFTER REGISTRATION (INSIDE FUNCTION ✅)
+    threading.Thread(
+        target=send_email,
+        args=(
+            data.get('email'),
+            "Registration Successful ✅",
+            "Your application has been submitted successfully. You can check your status on the website."
+        )
+    ).start()
+    
     return redirect('/success')
 
-
-    #return {"status": "success", "student_id": student.id}
 
 
 ##----------------------Batches------------------------------------------------------ 
@@ -715,6 +713,9 @@ from email.mime.text import MIMEText
 
 def send_email(to_email, subject, message):
     try:
+        import smtplib
+        from email.mime.text import MIMETex
+
         sender = "amarsunadholi1415@gmail.com"       # ✅ your gmail
         password = "#AppA@july2359"        # ✅ app password (NOT normal password)
 
