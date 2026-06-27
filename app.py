@@ -309,6 +309,26 @@ def chat():
 
     return {"reply": response.choices[0].message.content}
 
+##------AI 
+from openai import OpenAI
+client = OpenAI(api_key="YOUR_API_KEY")
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    user_msg = request.json.get("message")
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": "Answer ONLY based on hospital training rules."
+            },
+            {"role": "user", "content": user_msg}
+        ]
+    )
+
+    return {"reply": response.choices[0].message.content}
 
 # ---------------- ADMIN DASHBOARD ----------------
 @app.route('/admin')
