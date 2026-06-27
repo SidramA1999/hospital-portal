@@ -45,6 +45,7 @@ class Student(db.Model):
 
     batch_id = db.Column(db.Integer)
     gender = db.Column(db.String(10))
+    seat = db.Column(db.String(10))
     transaction_id = db.Column(db.String(100))
     payment_proof = db.Column(db.String(200))
     payment_status = db.Column(db.String(20), default="Pending")
@@ -165,6 +166,11 @@ def register():
     data = request.form
     file = request.files.get('payment_proof')
 
+    
+    seat = data.get('seat')   
+    print("Selected seat:", seat)
+
+
     # ✅ handle upload
     filename = None
     if file:
@@ -206,6 +212,7 @@ def register():
         district=data.get('district'),
         place=data.get('place'),
         batch_id=batch.id,
+        seat=seat,
         gender=gender,
         transaction_id=data.get('transaction_id'),  # ✅ IMPORTANT
         payment_proof=filename,                    # ✅ IMPORTANT
