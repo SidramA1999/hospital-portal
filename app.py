@@ -10,7 +10,12 @@ from datetime import datetime
 
 
 app = Flask(__name__)
-#app.secret_key = "secret123"
+import os
+
+# ✅ create upload folder if not exists
+if not os.path.exists("static/uploads"):
+    os.makedirs("static/uploads")
+
 
 import os
 app.secret_key = os.getenv("SECRET_KEY", "fallback123")
