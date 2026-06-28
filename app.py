@@ -100,7 +100,8 @@ def logout():
     session.clear()
     return redirect('/')
 
-# ---------------- HOME Stsus of Application ----------------
+# ---------------- HOME Stsus of Application ------------
+    
 @app.route("/check_status", methods=["POST"])
 def check_status():
 
@@ -169,7 +170,7 @@ def update_status(id, status):
 
 
 from datetime import datetime
-
+"""
 @app.route('/register', methods=['GET','POST'])
 def register():
 
@@ -251,10 +252,93 @@ def register():
     ).start()
     try:
     # your register code here
-except Exception as e:
+        except Exception as e:
     return str(e)
 
     return redirect('/success')
+"""
+@app.route('/register', methods=['GET','POST'])
+def register():
+
+    if request.method == 'GET':
+        return render_template("register.html", batches=prepare_batches())
+
+    try:
+        data = request.form
+        file = request.files.get('payment_proof')
+
+        seat = data.get('seat')
+        print("Selected seat:", seat)
+
+        filename = None
+        if file:
+            filename = file.filename
+            file.save(f"static/uploads/{filename}")
+
+        batch_id = int(data.get('batch_id'))
+        gender = data.get('gender')
+
+        batch = db.session.get(Batch, batch_id)
+
+        if not batch:
+            return "Invalid batch"
+
+        if batch.filled_slots >= batch.capacity:
+            return "Batch is full"
+
+        male_count = Student.query.filter_by(batch_id=batch.id, gender="Male").count()
+        female_count = Student.query.filter_by(batch_id=batch.id, gender="Female").count()
+
+        if gender == "Male" and male_count >= 3:
+            return "No seats for Male"
+
+        if gender == "Female" and female_count >= 3:
+            return "No seats for Female"
+
+        # ✅ FIX AGE SAFELY
+        age_input = data.get('age')
+        try:
+            age = int(age_input.replace(" Yrs", "").strip())
+        except:
+            age = 0
+
+        student = Student(
+            name=data.get('name'),
+            email=data.get('email'),
+            phone=data.get('phone'),
+            age=age,
+            college=data.get('college'),
+            pincode=data.get('pincode'),
+            state=data.get('state'),
+            district=data.get('district'),
+            place=data.get('place'),
+            batch_id=batch.id,
+            seat=seat,
+            gender=gender,
+            transaction_id=data.get('transaction_id'),
+            payment_proof=filename,
+            payment_status="Pending"
+        )
+
+        batch.filled_slots += 1
+
+        db.session.add(student)
+        db.session.commit()
+
+        # ✅ email sending
+        threading.Thread(
+            target=send_email,
+            args=(
+                data.get('email'),
+                "Registration Successful ✅",
+                "Your application has been submitted successfully."
+            )
+        ).start()
+
+        return redirect('/success')
+
+    except Exception as e:
+        return f"ERROR: {str(e)}"   # ✅ DEBUG SAFE
 
 
 
