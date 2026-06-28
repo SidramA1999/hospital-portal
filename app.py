@@ -11,9 +11,9 @@ from datetime import datetime
 
 app = Flask(__name__)
 #app.secret_key = "secret123"
-import os
 
-app.secret_key = os.getenv("SECRET_KEY")
+import os
+app.secret_key = os.getenv("SECRET_KEY", "fallback123")
 
 # ---------------- DATABASE ----------------
 
