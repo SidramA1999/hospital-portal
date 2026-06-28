@@ -248,7 +248,11 @@ def register():
             "Your application has been submitted successfully. You can check your status on the website."
         )
     ).start()
-    
+    try:
+    # your register code here
+except Exception as e:
+    return str(e)
+
     return redirect('/success')
 
 
