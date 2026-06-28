@@ -20,8 +20,13 @@ app.secret_key = os.getenv("SECRET_KEY", "fallback123")
 # ✅ DATABASE CONFIG ONCE
 db_url = os.getenv("DATABASE_URL")
 
+db_url = os.getenv("DATABASE_URL")
+
+print("DB URL:", db_url)   # ✅ DEBUG
+
 if not db_url:
-    raise Exception("❌ DATABASE_URL missing — fix Railway variables")
+    print("❌ DATABASE_URL still not found")
+    db_url = "sqlite:///fallback.db"   # TEMP fallback
 
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
