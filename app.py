@@ -10,13 +10,26 @@ from datetime import datetime
 
 
 app = Flask(__name__)
-app.secret_key = "secret123"
+#app.secret_key = "secret123"
+import os
+
+app.secret_key = os.getenv("SECRET_KEY")
 
 # ---------------- DATABASE ----------------
 
 # ✅ DATABASE CONFIG ONCE
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+import os
+
+db_url = os.getenv("DATABASE_URL")
+
+# ✅ FIX for Railway (VERY IMPORTANT)
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+app.config['postgresql://postgres:WOpmcTiOjEdmxTxbPzoxGPckUNiSLJHY@postgres.railway.internal:5432/railway'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 db = SQLAlchemy(app)
 
@@ -523,22 +536,38 @@ def upload_csv():
     return redirect('/admin')
 
 # ---------------- EXPORT EXCEL ----------------
+from flask import send_file
+import pandas as pd
+import io
+
 @app.route('/export_excel')
 def export_excel():
+
     data = [{
+        "Date": datetime.now().strftime("%Y-%m-%d")
         "Name": s.name,
         "Email": s.email,
         "Phone": s.phone,
         "College": s.college,
+        "Seat": s.seat,
+        "Gender": s.gender,
         "Batch": s.batch_id,
-        "Status": s.payment_status
+        "Status": s.application_status   # ✅ better field
     } for s in Student.query.all()]
 
     df = pd.DataFrame(data)
-    path = "report.xlsx"
-    df.to_excel(path, index=False)
 
-    return send_file(path, as_attachment=True)
+    # ✅ create in-memory file (NO disk use)
+    output = io.BytesIO()
+    df.to_excel(output, index=False)
+    output.seek(0)
+
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name="students.xlsx",
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
 # ---------------- CERTIFICATE ----------------
 @app.route('/certificate/<int:id>')
@@ -700,7 +729,7 @@ def prepare_batches():
 # ✅ ✅ MOVE DB INIT HERE (IMPORTANT)
 with app.app_context():
     db.create_all()
-    create_initial_batches()
+    #create_initial_batches()
     
 # ------------------Email auto meaasge------------------
 #-@#$$________+--------------------------
