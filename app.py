@@ -438,9 +438,17 @@ def admin():
                            students=Student.query.all(),
                            batches=Batch.query.all())
 
-###-----------------------===---=
+###-----------------------===---= All Candistes on Admin Portal
 #=====___---------------+++
+@app.route("/all_candidates")
+def all_candidates():
 
+    if not session.get('admin'):
+        return redirect('/login')
+
+    students = Student.query.order_by(Student.id.asc()).all()
+
+    return render_template("all_candidates.html", students=students)
 
 
 ###########--------------------------- Seat Status--------------------
