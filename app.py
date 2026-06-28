@@ -542,6 +542,11 @@ def upload_csv():
     return redirect('/admin')
 
 # ---------------- EXPORT EXCEL ----------------
+from flask import send_file
+import pandas as pd
+import io   
+from datetime import datetime
+
 @app.route('/export_excel')
 def export_excel():
     try:
