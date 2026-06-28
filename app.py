@@ -281,19 +281,6 @@ def register():
         if end.date() < today:
             continue
 
-        """month = start.strftime('%B')
-
-        if month not in grouped:
-            grouped[month] = {
-                "start": start,
-                "end": end,
-                "ids": [b.id],
-                "male": 0,
-                "female": 0
-            }
-        else:
-            grouped[month]["end"] = max(grouped[month]["end"], end)
-            grouped[month]["ids"].append(b.id)"""
 
         male_count = Student.query.filter_by(batch_id=b.id, gender="Male").count()
         female_count = Student.query.filter_by(batch_id=b.id, gender="Female").count()
