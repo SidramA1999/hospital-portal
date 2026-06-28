@@ -18,40 +18,20 @@ app.secret_key = os.getenv("SECRET_KEY", "fallback123")
 # ---------------- DATABASE ----------------
 
 # ✅ DATABASE CONFIG ONCE
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-"""import os
-
-db_url = os.getenv("DATABASE_URL")
-
-# ✅ FIX for Railway (VERY IMPORTANT)
-if db_url.startswith("postgres://"):
-    db_url = db_url.replace("postgres://", "postgresql://", 1)
-
-app.config['postgresql://postgres:WOpmcTiOjEdmxTxbPzoxGPckUNiSLJHY@postgres.railway.internal:5432/railway'] = db_url
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False"""
-
-
-#db = SQLAlchemy(app)
-
-import os
-
-db_url = os.getenv("DATABASE_URL")   # ✅ Railway gives this automatically
-
 db_url = os.getenv("DATABASE_URL")
 
 if not db_url:
-    print("⚠️ DATABASE_URL missing → fallback to SQLite")
-    db_url = "sqlite:///fallback.db"
+    raise Exception("❌ DATABASE_URL missing — fix Railway variables")
 
-# ✅ Convert for SQLAlchemy
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-# ✅ THIS IS IMPORTANT (fixed line)
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+
 # ---------------- MODELS ----------------
 class Batch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
