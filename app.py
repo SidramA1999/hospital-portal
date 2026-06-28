@@ -37,8 +37,11 @@ import os
 
 db_url = os.getenv("DATABASE_URL")   # ✅ Railway gives this automatically
 
+db_url = os.getenv("DATABASE_URL")
+
 if not db_url:
-    raise Exception("❌ DATABASE_URL not found. Check Railway variables")
+    print("⚠️ DATABASE_URL missing → fallback to SQLite")
+    db_url = "sqlite:///fallback.db"
 
 # ✅ Convert for SQLAlchemy
 if db_url.startswith("postgres://"):
@@ -48,7 +51,7 @@ if db_url.startswith("postgres://"):
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-
+db = SQLAlchemy(app)
 # ---------------- MODELS ----------------
 class Batch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -555,7 +558,7 @@ def upload_csv():
 from flask import send_file
 import pandas as pd
 import io
-from datetime import datetim
+from datetime import datetime
 
 @app.route('/export_excel')
 def export_excel():
@@ -760,7 +763,7 @@ from email.mime.text import MIMEText
 def send_email(to_email, subject, message):
     try:
         import smtplib
-        from email.mime.text import MIMETex
+        from email.mime.text import MIMEText
 
         sender = "amarsunadholi1415@gmail.com"       # ✅ your gmail
         password = "mgwetuaewypxhemm"        # ✅ app password (NOT normal password)
