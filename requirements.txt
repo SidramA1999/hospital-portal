@@ -8,3 +8,4 @@ requests
 razorpay
 openai
 openpyxl
+psycopg2-binary
