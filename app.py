@@ -544,7 +544,7 @@ import io
 def export_excel():
 
     data = [{
-        "Date": datetime.now().strftime("%Y-%m-%d")
+        "Date": datetime.now().strftime("%Y-%m-%d"),
         "Name": s.name,
         "Email": s.email,
         "Phone": s.phone,
