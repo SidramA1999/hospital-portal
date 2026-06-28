@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Candidates</title>
+</head>
+<body>
+
+<h2>All Registered Candidates</h2>
+
+<table border="1" cellpadding="8">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Batch</th>
+        <th>Gender</th>
+        <th>Status</th>
+        <th>Payment</th>
+    </tr>
+
+    {% for s in students %}
+    <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.phone }}</td>
+        <td>{{ s.batch_id }}</td>
+        <td>{{ s.gender }}</td>
+        <td>{{ s.application_status }}</td>
+        <td>{{ s.payment_status }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
