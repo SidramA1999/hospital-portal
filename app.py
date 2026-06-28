@@ -264,7 +264,7 @@ def register():
 
 
 ##----------------------Batches------------------------------------------------------ 
-def prepare_batches():
+"""def prepare_batches():
     batches = Batch.query.order_by(Batch.start_date).all()
     #grouped = {}
     result = []
@@ -321,7 +321,7 @@ def prepare_batches():
     return result
 
 
-
+"""
 
     #return render_template("register.html", batches=Batch.query.all())
 
@@ -749,7 +749,13 @@ def prepare_batches():
 # ✅ ✅ MOVE DB INIT HERE (IMPORTANT)
 with app.app_context():
     db.create_all()
+    if not Batch.query.first():
+        create_initial_batches(
+
     #create_initial_batches()
+    
+    
+
     
 # ------------------Email auto meaasge------------------
 #-@#$$________+--------------------------
