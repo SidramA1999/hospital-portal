@@ -542,39 +542,39 @@ def upload_csv():
     return redirect('/admin')
 
 # ---------------- EXPORT EXCEL ----------------
-from flask import send_file
-import pandas as pd
-import io
-from datetime import datetime
-
 @app.route('/export_excel')
 def export_excel():
+    try:
+        data = [{
+            "Date": datetime.now().strftime("%Y-%m-%d"),
+            "Name": s.name,
+            "Email": s.email,
+            "Phone": s.phone,
+            "College": s.college,
+            "Seat": s.seat,
+            "Gender": s.gender,
+            "Batch": s.batch_id,
+            "Status": s.application_status
+        } for s in Student.query.all()]
 
-    data = [{
-        "Date": datetime.now().strftime("%Y-%m-%d"),
-        "Name": s.name,
-        "Email": s.email,
-        "Phone": s.phone,
-        "College": s.college,
-        "Seat": s.seat,
-        "Gender": s.gender,
-        "Batch": s.batch_id,
-        "Status": s.application_status   # ✅ better field
-    } for s in Student.query.all()]
+        if not data:
+            return "No student data available"
 
-    df = pd.DataFrame(data)
+        df = pd.DataFrame(data)
 
-    # ✅ create in-memory file (NO disk use)
-    output = io.BytesIO()
-    df.to_excel(output, index=False)
-    output.seek(0)
+        output = io.BytesIO()
+        df.to_excel(output, index=False, engine="openpyxl")  # ✅ IMPORTANT
+        output.seek(0)
 
-    return send_file(
-        output,
-        as_attachment=True,
-        download_name="students.xlsx",
-        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
+        return send_file(
+            output,
+            as_attachment=True,
+            download_name="students.xlsx",
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+
+    except Exception as e:
+        return str(e)   # ✅ show error for debugging
 
 # ---------------- CERTIFICATE ----------------
 @app.route('/certificate/<int:id>')
