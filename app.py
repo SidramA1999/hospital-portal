@@ -737,7 +737,7 @@ def prepare_batches():
 with app.app_context():
     db.create_all()
     if not Batch.query.first():
-        create_initial_batches(
+        create_initial_batches()
 
     #create_initial_batches()
     
