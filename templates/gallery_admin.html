@@ -1,0 +1,46 @@
+<style>
+form{
+    max-width:600px;
+    margin:auto;
+    padding:20px;
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button{
+    background:#14532d;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+}
+</style>
+
+<h2>Gallery Management</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <input type="text" name="title" placeholder="Image Title">
+
+    <select name="category">
+        <option value="hospital">Hospital</option>
+        <option value="doctors">Doctors</option>
+        <option value="interns">Interns</option>
+        <option value="events">Events</option>
+        <option value="panchakarma">Panchakarma</option>
+    </select>
+
+    <input type="file" name="image">
+
+    <button type="submit">
+        Upload
+    </button>
+
+</form>
