@@ -12,6 +12,16 @@ from datetime import datetime
 app = Flask(__name__)
 import os
 
+
+import os
+
+if not os.path.exists("static/uploads"):
+    os.makedirs("static/uploads")
+
+if not os.path.exists("static/gallery"):
+    os.makedirs("static/gallery")
+
+
 # ✅ create upload folder if not exists
 if not os.path.exists("static/uploads"):
     os.makedirs("static/uploads")
@@ -43,6 +53,13 @@ db = SQLAlchemy(app)
 
 
 # ---------------- MODELS ----------------
+class Gallery(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(50))
+    title = db.Column(db.String(200))
+    image = db.Column(db.String(255))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
 class Batch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_date = db.Column(db.String(20))
@@ -450,6 +467,32 @@ def all_candidates():
 
     return render_template("all_candidates.html", students=students)
 
+
+@app.route('/gallery_admin', methods=['GET', 'POST'])
+def gallery_admin():
+
+    if request.method == 'POST':
+
+        category = request.form['category']
+        title = request.form['title']
+
+        file = request.files['image']
+
+        filename = file.filename
+        file.save(f"static/gallery/{filename}")
+
+        img = Gallery(
+            category=category,
+            title=title,
+            image=filename
+        )
+
+        db.session.add(img)
+        db.session.commit()
+
+    images = Gallery.query.all()
+
+    return render_template("gallery_admin.html", images=images)
 
 ###########--------------------------- Seat Status--------------------
 @app.route('/seat_status')
