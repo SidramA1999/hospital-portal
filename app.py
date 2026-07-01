@@ -619,6 +619,26 @@ def delete_batch(id):
         db.session.delete(b)
         db.session.commit()
     return "deleted"
+
+###### ----- Gallery
+@app.route('/gallery')
+def gallery():
+
+    hospital = Gallery.query.filter_by(category='hospital').all()
+    doctors = Gallery.query.filter_by(category='doctors').all()
+    interns = Gallery.query.filter_by(category='interns').all()
+    events = Gallery.query.filter_by(category='events').all()
+    panchakarma = Gallery.query.filter_by(category='panchakarma').all()
+
+    return render_template(
+        "gallery.html",
+        hospital=hospital,
+        doctors=doctors,
+        interns=interns,
+        events=events,
+        panchakarma=panchakarma
+    )
+
 #---------------------------------------students Details CLickable by Admin-----------
 @app.route('/student/<int:id>')
 def student_detail(id):
