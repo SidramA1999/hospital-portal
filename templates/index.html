@@ -226,7 +226,7 @@ body{
 }
 
 @media (max-width:640px){
-  .nav-links .btn span.label{ display:none; }
+  .nav-links .btn span.label{ display:inline; }
   .navbar{ border-radius:26px; }
 }
 
@@ -508,6 +508,178 @@ body{
   margin-top:0;
 }
 
+
+/*Mobile version*/
+@media (max-width:768px){
+
+  .navbar{
+    flex-direction:row;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .logo-area{
+    flex:1;
+  }
+
+  .nav-links{
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    gap:5px;
+  }
+
+  .btn{
+    font-size:10px;
+    padding:7px 9px;
+  }
+}
+
+@media (max-width:768px){
+
+  .title{
+    font-size:14px !important;
+    text-align:center;
+  }
+
+  .title span{
+    font-size:10px;
+  }
+}
+
+@media (max-width:768px){
+
+  .status-check{
+    width:95%;
+    padding:20px;
+  }
+
+  .status-check input{
+    width:100%;
+  }
+
+  .status-check button{
+    width:100%;
+    margin-top:10px;
+  }
+}
+
+
+@media (max-width:768px){
+
+  .cards{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .vial{
+    width:95%;
+    max-width:320px;
+  }
+}
+
+
+@media (max-width:768px){
+
+  .contact-grid{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .contact-card{
+    width:90%;
+    max-width:320px;
+  }
+}
+
+@media (max-width:768px){
+
+  .map-frame{
+    max-width:100%;
+  }
+
+  .map iframe{
+    height:220px;
+  }
+}
+
+@media (max-width:768px){
+
+  .chatbot{
+    right:10px;
+    left:10px;
+    width:auto;
+    max-width:none;
+  }
+
+  #chatToggle{
+    bottom:15px;
+    right:15px;
+  }
+}
+
+
+@media (max-width:768px){
+
+  .navbar{
+    flex-direction:column;
+    gap:12px;
+    padding:15px;
+    border-radius:20px;
+  }
+
+  .nav-links{
+    width:100%;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .title{
+    font-size:14px !important;
+    text-align:center;
+  }
+
+  .hero-content{
+    padding:25px 18px;
+  }
+
+  .hero h1{
+    font-size:30px;
+  }
+
+  .status-check{
+    width:95%;
+    padding:20px;
+  }
+
+  .status-check input,
+  .status-check button{
+    width:100%;
+  }
+
+  .cards,
+  .contact-grid{
+    flex-direction:column;
+    align-items:center;
+  }
+
+  .vial,
+  .contact-card{
+    width:95%;
+    max-width:320px;
+  }
+
+  .map-frame{
+    max-width:100%;
+  }
+
+  .chatbot{
+    left:10px;
+    right:10px;
+    width:auto;
+  }
+}
+
+   
 /* =========================================================
    APOTHECARY VIALS — signature element
    The three program-info cards (and the physician stats
