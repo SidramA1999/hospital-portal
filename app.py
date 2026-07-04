@@ -365,7 +365,7 @@ def success():
 from openai import OpenAI
 
 # ✅ CLIENT
-client = OpenAI(api_key="YOUR_API_KEY")
+client = OpenAI(api_key="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")
 
 
 # ✅ SINGLE CHAT ROUTE (ONLY ONE ✅)
