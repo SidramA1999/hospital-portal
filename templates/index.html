@@ -4,19 +4,63 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Amrutha Aarogya Kendra Speciality Ayurveda Hospital Kalloli. Dr.Tukaram Umarani Ayurveda </title>
-<meta name="description" content="Amrutha Aarogya Kendra is a speciality Ayurveda hospital in Kalloli offering clinical training, Panchakarma, and holistic treatment.">
+<meta name="keywords"
+content="Ayurveda Hospital Kalloli,
+Panchakarma Training,
+Ayurveda Internship Karnataka,
+Dr Tukaram Umarani">
+<meta property="og:title">
+<meta property="og:image">
+<meta property="og:description">
 
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Poppins&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-:root {
-  --primary:#2d6a4f;
-  --secondary:#40916c;
-  --light:#f4f8f4;
+/* =========================================================
+   DESIGN TOKENS — "Liquid Apothecary"
+   A liquid-glass system built around the actual material of
+   an Ayurveda dispensary: amber tincture bottles, herbal
+   liquid, brass fittings, and frosted vial glass — rather
+   than generic translucency for its own sake.
+========================================================= */
+:root{
+  /* -- Botanical ground -- */
+  --deep-1:#08261c;      /* near-black forest, page/hero base   */
+  --deep-2:#0f3a29;      /* mid forest                          */
+  --deep-3:#175136;      /* lighter forest, gradient stop       */
+
+  /* -- Herbal accents -- */
+  --gold:#cf9f45;        /* turmeric / tincture gold             */
+  --gold-light:#e8c877;
+  --leaf:#7fb885;        /* fresh leaf, secondary accent         */
+  --terracotta-jar:#b8703f; /* clay jar accent, used sparingly   */
+
+  /* -- Glass material -- */
+  --glass-fill: rgba(255,255,255,0.10);
+  --glass-fill-strong: rgba(255,255,255,0.16);
+  --glass-edge-top: rgba(255,255,255,0.55);
+  --glass-edge-bottom: rgba(0,0,0,0.18);
+  --glass-blur: 22px;
+
+  /* -- Surfaces (light mode "paper" for dense text) -- */
+  --paper:#f6f3ea;
+  --paper-2:#ffffff;
+  --ink:#12271e;
+  --ink-soft:#3c5548;
+
+  --radius-lg:28px;
+  --radius-md:20px;
+  --radius-sm:14px;
+
+  --font-display:'Fraunces', serif;
+  --font-body:'Manrope', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
 }
-<!--- Shake Animation -->
+
+*{box-sizing:border-box;}
+
 @keyframes shake {
   0%   { transform: translateX(0); }
   25%  { transform: translateX(-5px); }
@@ -24,523 +68,826 @@
   75%  { transform: translateX(-5px); }
   100% { transform: translateX(0); }
 }
-/*-----Contact --->
-.contact a {
-  display:inline-block;
-  margin:6px 0;
-  padding:8px 12px;
-  border-radius:6px;
-  text-decoration:none;
-  font-weight:600;
-}
-/*Contact Grid */
-.contact-section {
-  text-align: center;
-  padding: 40px 20px;
+
+@keyframes drift {
+  0%   { transform: translate(0,0) scale(1); }
+  50%  { transform: translate(-3%, 4%) scale(1.06); }
+  100% { transform: translate(0,0) scale(1); }
 }
 
-<!--   search Status --->
-.status-check {
-  text-align:center;
-  padding:30px 20px;
-  background:#ffffff;
-  margin:30px auto;
-  max-width:400px;
-  border-radius:10px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.1);
+@keyframes fillRise {
+  from { height:0%; }
 }
 
-.status-check input {
-  width:80%;
-  padding:10px;
-  margin:10px 0;
-  border:1px solid #ccc;
-  border-radius:5px;
-}
-
-.status-check button {
-  padding:10px 15px;
-  background:#2d6a4f;
-  color:white;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-}
-
-/*   Galley */
-.gallery-preview{
-    padding:60px 20px;
-    text-align:center;
-    background:#f8fafc;
-}
-
-.gallery-preview h2{
-    font-size:36px;
-    color:#14532d;
-    margin-bottom:20px;
-}
-
-.gallery-btn{
-    background:#14532d;
-    color:white;
-    padding:12px 25px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    font-size:16px;
-    margin-top:25px;
-}
-
-.gallery-btn:hover{
-    background:#1b6b3a;
-}
-  
-
-/* GRID LAYOUT */
-.contact-grid {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin-top: 20px;
-}
-
-/* CARD STYLE */
-.contact-card {
-  background: white;
-  width: 150px;
-  padding: 15px;
-  border-radius: 12px;
-  text-decoration: none;
-  color: #333;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: 0.3s;
-  font-weight: 600;
-}
-
-.contact-card small {
-  display: block;
-  margin-top: 5px;
-  font-size: 12px;
-  color: #666;
-}
-
-/* HOVER EFFECT */
-.contact-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-}
-
-/* COLOR VARIANTS */
-.call {
-  border-top: 4px solid #2d6a4f;
-}
-
-.whatsapp {
-  border-top: 4px solid #25D366;
-}
-
-.email {
-  border-top: 4px solid #343a40;
-}
-
-/* ADDRESS */
-
-  
-/* 📞 CALL */
-.contact a[href^="tel"] {
-  background:#1b4332;   /* darker green */
-  color:#ffffff;        /* white text */
-}
-
-/* 💬 WHATSAPP */
-.contact a[href*="wa.me"] {
-  background:#128C7E;   /* WhatsApp green */
-  color:#ffffff;        /* white text */
-}
-
-/* 📧 EMAIL */
-.contact a[href^="mailto"] {
-  background:#343a40;   /* dark gray */
-  color:#ffffff;        /* white text */
-}
-  
-/* BODY */
-body {
+body{
   margin:0;
-  font-family:'Poppins', sans-serif;
-  background:var(--light);
+  font-family:var(--font-body);
+  background:var(--paper);
+  color:var(--ink);
 }
 
-/* NAVBAR */
-.navbar {
-  display:flex;
-  justify-content:space-between;
-  padding:15px 30px;
-  background:white;
-  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+/* =========================================================
+   LIQUID GLASS BASE MIXIN (applied via classes)
+========================================================= */
+.glass{
+  position:relative;
+  background:
+    linear-gradient(180deg, var(--glass-fill-strong), var(--glass-fill));
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-radius:var(--radius-lg);
+  border-top:1.5px solid var(--glass-edge-top);
+  border-left:1px solid rgba(255,255,255,0.28);
+  border-bottom:1.5px solid var(--glass-edge-bottom);
+  border-right:1px solid rgba(0,0,0,0.08);
+  box-shadow:
+    0 18px 45px rgba(6,20,14,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.35);
 }
 
-.navbar h2 {
-  font-family:'Playfair Display';
-  color:var(--primary);
-}
-
-.navbar a {
-  margin-left:20px;
-  text-decoration:none;
-  color:#333;
-}
-
-/* HERO */
-.hero {
-  position: relative;
-  background: url('/static/exterior.jpg') center/cover no-repeat;
-  padding:100px 20px;
-  text-align:center;
-  color:white;
-}
-
-.hero h1, .hero p {
-  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
-}
-
-
-/* DARK OVERLAY */
-.hero::before {
+/* thin specular sheen across the top of any glass surface */
+.glass::before{
   content:"";
   position:absolute;
-  top:0;
-  left:0;
+  top:0; left:8%; right:8%;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+  opacity:.7;
+}
+
+/* =========================================================
+   NAVBAR — floating glass pill bar
+========================================================= */
+.navbar{
+  position:sticky;
+  top:14px;
+  z-index:1000;
+  margin:0 auto;
+  max-width:1180px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 22px;
+  background: linear-gradient(180deg, rgba(20,60,44,0.55), rgba(10,38,28,0.55));
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border-radius: 100px;
+  border-top:1.5px solid rgba(255,255,255,0.45);
+  border-bottom:1.5px solid rgba(0,0,0,0.2);
+  box-shadow: 0 16px 40px rgba(4,15,10,0.35);
+}
+
+.logo-area{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:flex-start;
+  gap:12px;
+}
+
+.logo{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid rgba(255,255,255,.4);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  transition:.4s;
+}
+.logo:hover{
+  transform:translateY(-3px) scale(1.06);
+  box-shadow:0 12px 26px rgba(0,0,0,.3), inset 0 2px 2px rgba(255,255,255,.5);
+}
+
+@media (max-width:768px){
+  .logo-area{ gap:10px; }
+  .title{ font-size:16px !important; }
+}
+
+.title{
+  color:#fdfcf8;
+  font-family:var(--font-display);
+  font-size:21px;
+  font-weight:600;
+  line-height:1.1;
+}
+.title span{
+  display:block;
+  font-family:var(--font-body);
+  font-size:11.5px;
+  font-weight:500;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  opacity:0.75;
+  margin-top:3px;
+  color:var(--gold-light);
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* LIQUID GLASS BUTTON */
+.btn{
+  background:rgba(255,255,255,0.12);
+  backdrop-filter:blur(15px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-radius:100px;
+  border-top:1.5px solid rgba(255,255,255,0.4);
+  border-left:1px solid rgba(255,255,255,0.20);
+  border-bottom:1.5px solid rgba(0,0,0,0.12);
+  border-right:1px solid rgba(0,0,0,0.05);
+  color:#fdfcf8;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:13.5px;
+  padding:10px 16px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.12);
+  transition:all .3s ease;
+  cursor:pointer;
+  text-decoration:none;
+  white-space:nowrap;
+}
+.btn:hover{
+  background:rgba(255,255,255,0.2);
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(0,0,0,0.2);
+}
+.btn:active{ transform:scale(.98); background:rgba(255,255,255,0.28); }
+
+.theme-btn{
+  width:42px !important;
+  min-width:42px !important;
+  height:42px;
+  padding:0;
+  border-radius:50%;
+}
+
+@media (max-width:640px){
+  .nav-links .btn span.label{ display:none; }
+  .navbar{ border-radius:26px; }
+}
+
+/* =========================================================
+   HERO — botanical mesh gradient behind a floating glass card
+========================================================= */
+.hero{
+  position:relative;
+  min-height:78vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  overflow:hidden;
+  padding:70px 20px 90px;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(207,159,69,0.35), transparent 45%),
+    radial-gradient(circle at 82% 78%, rgba(127,184,133,0.28), transparent 50%),
+    linear-gradient(160deg, var(--deep-1), var(--deep-2) 55%, var(--deep-3));
+}
+
+.hero-blob{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(40px);
+  opacity:.55;
+  animation:drift 14s ease-in-out infinite;
+}
+.hero-blob.b1{ width:340px; height:340px; background:var(--gold); top:-60px; left:-60px; }
+.hero-blob.b2{ width:280px; height:280px; background:var(--leaf); bottom:-40px; right:-30px; animation-delay:3s; }
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  max-width:640px;
+  padding:44px 42px;
+}
+
+.hero-eyebrow{
+  display:inline-block;
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gold-light);
+  background:rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:100px;
+  padding:6px 16px;
+  margin-bottom:22px;
+}
+
+.hero h1{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:44px;
+  line-height:1.12;
+  color:#fdfcf8;
+  margin:0 0 14px;
+}
+.hero h1 em{
+  font-style:italic;
+  color:var(--gold-light);
+}
+
+.hero p{
+  font-size:17px;
+  color:rgba(253,252,248,0.85);
+  margin:0 0 30px;
+  line-height:1.6;
+}
+
+@media (max-width:640px){
+  .hero h1{ font-size:32px; }
+  .hero-content{ padding:34px 24px; }
+}
+
+.apply-btn{
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  color:#1c2b1f;
+  padding:14px 32px;
+  border:none;
+  border-radius:100px;
+  font-family:var(--font-body);
+  font-weight:700;
+  font-size:15px;
+  cursor:pointer;
+  box-shadow:0 10px 26px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.6);
+  transition:.3s;
+}
+.apply-btn:hover{ transform:translateY(-3px); box-shadow:0 16px 34px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.6); }
+
+/* =========================================================
+   STATUS CHECK — glass panel
+========================================================= */
+.status-check{
+  text-align:center;
+  padding:34px 28px;
+  margin:-46px auto 0;
+  max-width:420px;
+  position:relative;
+  z-index:3;
+}
+.status-check h3{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:20px;
+  margin:0 0 6px;
+  color:#fdfcf8;
+}
+.status-check input{
+  width:78%;
+  padding:12px 14px;
+  margin:14px 0;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:100px;
+  background:rgba(255,255,255,0.9);
+  font-family:var(--font-body);
+  font-size:14px;
+}
+.status-check button{
+  padding:11px 22px;
+  background:linear-gradient(180deg, var(--gold-light), var(--gold));
+  color:#1c2b1f;
+  border:none;
+  border-radius:100px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
+#result{ color:#fdfcf8; font-weight:600; }
+
+/* =========================================================
+   WAVE TRANSITION
+   Bridges the hero's dark liquid background into the
+   physician section using the same tincture/gold material,
+   instead of a hard section edge.
+========================================================= */
+.wave-divider{
+  display:block;
+  width:100%;
+  line-height:0;
+  margin-top:-46px;
+  position:relative;
+  z-index:2;
+}
+.wave-divider svg{ display:block; width:100%; height:110px; }
+
+/* =========================================================
+   MEET THE PHYSICIAN + HOSPITAL STATS
+   Reuses the existing vial/glass vocabulary rather than
+   introducing new visual language.
+========================================================= */
+.physician-section{
+  position:relative;
+  padding:10px 20px 66px;
+  background: linear-gradient(180deg, rgba(207,159,69,0.16), var(--paper) 55%);
+}
+.physician-wrap{
+  max-width:1080px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap:40px;
+  align-items:center;
+}
+.physician-portrait{ display:flex; justify-content:center; }
+.portrait-frame{
+  position:relative;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  padding:9px;
+  background: linear-gradient(160deg, var(--gold-light), var(--gold));
+  box-shadow: 0 20px 50px rgba(6,20,14,0.25);
+}
+.portrait-frame img{
   width:100%;
   height:100%;
-  background: rgba(0,0,0,0.5);  /* 👈 dark overlay */
+  border-radius:50%;
+  object-fit:cover;
+  display:block;
+  border:4px solid var(--paper-2);
 }
-
-/* KEEP TEXT ABOVE OVERLAY */
-.hero * {
-  position: relative;
-  z-index: 1;
+.portrait-badge{
+  position:absolute;
+  bottom:6px;
+  right:6px;
+  background:var(--deep-2);
+  color:var(--gold-light);
+  font-family:var(--font-mono);
+  font-size:11px;
+  padding:6px 12px;
+  border-radius:100px;
+  border:1px solid rgba(255,255,255,0.25);
 }
-
-.hero h1 {
-  font-family:'Playfair Display';
-  font-size:34px;
-}
-
-/* BUTTON */
-.btn {
-  background:white;
-  color:var(--primary);
-  padding:12px 20px;
-  border-radius:6px;
-  text-decoration:none;
+.physician-copy{ text-align:left; }
+.physician-eyebrow{
   display:inline-block;
-  margin-top:20px;
-  font-weight:bold;
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--terracotta-jar);
+  margin-bottom:10px;
 }
-
-/* SECTION */
-.section {
-  padding:50px 20px;
-  text-align:center;
+.physician-copy h2{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:30px;
+  margin:0 0 4px;
+  color:var(--ink);
 }
+.physician-copy .role{
+  font-size:14.5px;
+  color:var(--ink-soft);
+  font-weight:600;
+  margin-bottom:14px;
+}
+.credential-pills{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+.credential-pills span{
+  background: rgba(15,58,41,0.08);
+  color:var(--deep-2);
+  font-size:12.5px;
+  font-weight:700;
+  padding:7px 14px;
+  border-radius:100px;
+  border:1px solid rgba(15,58,41,0.15);
+}
+.physician-quote{
+  font-family:var(--font-display);
+  font-style:italic;
+  font-size:18px;
+  line-height:1.55;
+  color:var(--deep-2);
+  border-left:3px solid var(--gold);
+  padding-left:16px;
+  margin:0 0 22px;
+}
+.physician-copy .apply-btn{ padding:12px 26px; font-size:14px; }
 
-/* CARDS */
-.cards {
+.stats-row{
+  max-width:1080px;
+  margin:52px auto 0;
   display:flex;
   justify-content:center;
-  gap:20px;
+  gap:22px;
   flex-wrap:wrap;
 }
+.stats-row .vial .value{ min-height:28px; }
 
-.card {
-  background:white;
-  padding:20px;
-  width:220px;
-  border-radius:12px;
-  box-shadow:0 4px 12px rgba(0,0,0,0.1);
+@media (max-width:860px){
+  .physician-wrap{ grid-template-columns: 1fr; text-align:center; }
+  .physician-copy{ text-align:center; }
+  .credential-pills{ justify-content:center; }
+  .physician-quote{ border-left:none; border-top:3px solid var(--gold); padding-left:0; padding-top:12px; }
+  .portrait-frame{ width:220px; height:220px; }
 }
 
-/* CONTACT */
-.contact {
-  background:var(--primary);
-  color:white;
-  padding:40px;
-}
-
-/* MAP */
-.map iframe {
-  width:80%;
-  height:300px;
-  border-radius:10px;
-  border:0;
-}
-
-/* SLIDER */
-.slider img {
-  width:70%;
-  max-width:600px;
-  border-radius:10px;
-  transition:0.5s;
-}
-
-/* FOOTER */
-.footer {
+/* =========================================================
+   SECTIONS
+========================================================= */
+.section{
+  padding:60px 20px;
   text-align:center;
-  background:#1b4332;
-  padding:10px;
-  color:white;
+  max-width:1100px;
+  margin:0 auto;
+}
+.section h2{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:30px;
+  color:var(--ink);
+  margin-bottom:8px;
+}
+.section > p{
+  color:var(--ink-soft);
+  font-size:15.5px;
+  margin-top:0;
 }
 
-/* ANIMATION */
-.fade {
-  opacity:0;
-  transform:translateY(30px);
-  transition:1s;
-}
-.fade.show {
-  opacity:1;
-  transform:translateY(0);
+/* =========================================================
+   APOTHECARY VIALS — signature element
+   The three program-info cards (and the physician stats
+   above) are rendered as frosted glass vials with a rising
+   tincture fill, echoing real dispensary bottles rather than
+   decorative glassmorphism.
+========================================================= */
+.cards{
+  display:flex;
+  justify-content:center;
+  gap:26px;
+  flex-wrap:wrap;
+  margin-top:34px;
 }
 
-
-/* ✨ Fancy Cards */
-.fancy-card {
+.vial{
+  width:200px;
+  padding:26px 20px 22px;
   text-align:center;
-  border-radius:15px;
   position:relative;
   overflow:hidden;
-  transition:0.4s;
+  transition:.4s;
+}
+.vial:hover{
+  transform:translateY(-8px);
+  box-shadow:0 24px 50px rgba(6,20,14,0.32), inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
-/* 🔥 Hover Glow Effect */
-.fancy-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(45,106,79,0.3);
+.vial .icon{
+  font-size:30px;
+  display:block;
+  margin-bottom:8px;
+  transition:.4s;
 }
+.vial:hover .icon{ transform:scale(1.15) rotate(6deg); }
 
-/* 🎯 Icon Animation */
-.icon {
-  font-size:32px;
-  transition:0.4s;
+.vial h4{
+  margin:0 0 6px;
+  font-family:var(--font-body);
+  font-size:13px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  font-weight:700;
 }
-
-.fancy-card:hover .icon {
-  transform: scale(1.2) rotate(8deg);
+.vial .value{
+  font-family:var(--font-mono);
+  font-size:22px;
+  font-weight:500;
+  color:var(--ink);
 }
+.vial .sub{ font-size:12.5px; color:var(--ink-soft); margin-top:2px; }
 
-/* 📊 Progress Bar */
-.progress {
+.vial-fill{
+  position:absolute;
+  left:0; right:0; bottom:0;
+  background:linear-gradient(180deg, rgba(207,159,69,0.35), rgba(207,159,69,0.55));
+  z-index:0;
+  border-top:1px solid rgba(255,255,255,0.5);
+}
+.vial > *:not(.vial-fill){ position:relative; z-index:1; }
+
+.progress{
   width:100%;
-  height:8px;
-  background:#eee;
+  height:7px;
+  background:rgba(0,0,0,0.08);
   border-radius:10px;
   margin-top:10px;
   overflow:hidden;
+  position:relative;
+  z-index:1;
 }
-
-.progress-fill {
+.progress-fill{
   height:100%;
-  background:whitesmoke;
-  transition:width 1s ease;
+  background:linear-gradient(90deg, var(--gold), var(--terracotta-jar));
+  transition:width 1.2s ease;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(90deg, #e4ebea, #d4dad9);
-  padding: 12px 25px;
-  color: white;
-}
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(90deg, #004d40, #009688);
-  padding: 14px 30px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-/* logo + title */
-.logo-area {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.logo {
-  height: 120px;
-  width: 120px;
-  border-radius: 80%;
-  border: 2px solid white;
-}
-/*---- AI chatbot ---*/
-.chat-box {
-  height: 250px;
-  overflow-y: auto;
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.msg {
-  padding: 8px 12px;
-  margin: 5px;
-  border-radius: 8px;
-}
-
-.user {
-  background: #2d6a4f;
-  color: white;
-  text-align: right;
-}
-
-.bot {
-  background: #eee;
-}
-  
-/*------- FAQ------*/
-.faq-container {
-  max-width: 700px;
-  margin: auto;
-}
-
-.faq-item {
-  margin-bottom: 10px;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.faq-question {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 12px;
-  background: #2d6a4f;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition: 0.3s;
-  background: #f4f8f4;
-  padding: 0 10px;
-}
-
-.faq-item.active .faq-answer {
-  max-height: 200px;
-  padding: 10px;
-}
-
-.icon {
-  transition: 0.3s;
-}
-
-.faq-item.active .icon {
-  transform: rotate(45deg);
-}
-
-  
-  
-/* title styles */
-.title {
-  color:white;
-  font-size: 40px;
- 
-  font-weight: bold;
-}
-
-.title span {
-  display: block;
-  font-size: 20px;
-  font-weight: normal;
-  opacity: 0.8;
-  color: white;
-}
-
-/* buttons */
-.nav-links {
-  display: flex;
-  gap: 15px;
-}
-
-.btn {
-  padding: 10px 18px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: 0.3s;
-}
-
-/* trainee button */
-.register-btn {
-  background: white;
-  color: #00796b;
-}
-
-.register-btn:hover {
-  background: #b80eb8;
-  transform: translateY(-2px);
-}
-
-/* admin button */
-.admin-btn {
-  background: #e9e9ee;
-  color: white;
-}
-
-.admin-btn:hover {
-  background: #ededf3bb;
-  transform: translateY(-2px);
-}
-
-/* responsive (important 🔥) */
-@media (max-width: 600px) {
-  .navbar {
-    flex-direction: column;
-    gap: 10px;
-  }
-}
-
-
-/* ✨ Button Effect */
-.fancy-btn {
-  background: linear-gradient(45deg, #9c770f44, #1066a0);
-  color:white;
-  padding:12px 25px;
-  border-radius:8px;
+/* =========================================================
+   GALLERY SLIDER
+========================================================= */
+.slider{ margin-top:20px; }
+.slider-frame{
   display:inline-block;
-  transition:0.3s;
+  padding:14px;
+  max-width:640px;
+  width:100%;
+}
+.slider img{
+  width:100%;
+  border-radius:var(--radius-md);
+  display:block;
+  transition:.5s;
 }
 
-.fancy-btn:hover {
-  transform:scale(1.05);
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+/* =========================================================
+   FAQ
+========================================================= */
+.faq-container{
+  max-width:720px;
+  margin:34px auto 0;
+  text-align:left;
+}
+.faq-item{
+  margin-bottom:14px;
+  overflow:hidden;
+}
+.faq-question{
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 20px;
+  background:transparent;
+  color:var(--ink);
+  border:none;
+  cursor:pointer;
+  font-family:var(--font-body);
+  font-weight:700;
+  font-size:14.5px;
+  text-align:left;
+}
+.faq-question .icon{
+  font-size:16px;
+  color:var(--gold);
+  transition:.3s;
+}
+.faq-answer{
+  max-height:0;
+  overflow:hidden;
+  transition:.35s ease;
+  padding:0 20px;
+  color:var(--ink-soft);
+  font-size:14px;
+  line-height:1.7;
+}
+.faq-item.active .faq-answer{ max-height:320px; padding:0 20px 18px; }
+.faq-item.active .faq-question .icon{ transform:rotate(45deg); }
+
+.faq-contact{ text-align:center; margin-top:26px; }
+.faq-contact a{
+  display:inline-block;
+  margin:6px;
+  padding:10px 18px;
+  border-radius:100px;
+  text-decoration:none;
+  font-weight:700;
+  font-size:13.5px;
+  color:#fff;
+}
+.faq-contact a.call{ background:var(--deep-2); }
+.faq-contact a.whatsapp{ background:#128C7E; }
+
+/* =========================================================
+   CONTACT
+========================================================= */
+.contact{
+  position:relative;
+  color:#fdfcf8;
+  padding:70px 20px 40px;
+  text-align:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(207,159,69,0.22), transparent 45%),
+    linear-gradient(180deg, var(--deep-1), var(--deep-2));
+}
+.contact h2{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:30px;
+  margin-bottom:20px;
 }
 
-<!--- UI ChatBot-->
-  #chatToggle {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #2d6a4f;
-  color: white;
-  padding: 15px;
-  border-radius: 50%;
+.map{ display:flex; justify-content:center; }
+.map-frame{ padding:12px; max-width:82%; width:100%; }
+.map iframe{
+  width:100%;
+  height:280px;
+  border-radius:var(--radius-md);
+  border:0;
+  display:block;
 }
 
-.chatbot {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: 300px;
-  background: white;
+.map-actions{ margin-top:18px; }
+.map-actions a{
+  display:inline-block;
+  margin:6px;
+  padding:11px 18px;
+  border-radius:100px;
+  text-decoration:none;
+  font-weight:700;
+  font-size:13.5px;
 }
+.map-actions a.open{ background:#fdfcf8; color:var(--deep-1); }
+.map-actions a.directions{ background:rgba(255,255,255,0.14); color:#fdfcf8; border:1px solid rgba(255,255,255,0.3); }
+
+.contact-section{ padding:46px 20px 10px; }
+.contact-grid{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+.contact-card{
+  width:150px;
+  padding:20px 14px;
+  text-decoration:none;
+  color:#fdfcf8;
+  font-weight:700;
+  font-size:14px;
+  transition:.3s;
+  text-align:center;
+}
+.contact-card .glyph{ font-size:24px; display:block; margin-bottom:6px; }
+.contact-card small{
+  display:block;
+  margin-top:6px;
+  font-size:11.5px;
+  font-weight:500;
+  color:rgba(253,252,248,0.7);
+  font-family:var(--font-mono);
+}
+.contact-card:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(0,0,0,0.35); }
+.contact-card.call{ border-top:2px solid var(--leaf); }
+.contact-card.whatsapp{ border-top:2px solid #25D366; }
+.contact-card.email{ border-top:2px solid var(--gold); }
+
+.contact-address{
+  margin-top:26px;
+  font-size:14px;
+  line-height:1.8;
+  color:rgba(253,252,248,0.85);
+}
+
+.visitor-pill{
+  display:inline-block;
+  margin:26px auto 0;
+  padding:8px 18px;
+  font-family:var(--font-mono);
+  font-size:12.5px;
+  color:#fdfcf8;
+}
+
+/* FOOTER */
+.footer{
+  text-align:center;
+  background:var(--deep-1);
+  padding:18px;
+  color:rgba(253,252,248,0.6);
+  font-size:12.5px;
+}
+
+/* ANIMATION */
+.fade{ opacity:0; transform:translateY(30px); transition:1s; }
+.fade.show{ opacity:1; transform:translateY(0); }
+
+/* =========================================================
+   AI CHATBOT — glass panel + floating orb
+========================================================= */
+#chatToggle{
+  position:fixed;
+  bottom:22px;
+  right:22px;
+  width:56px;
+  height:56px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  color:#fdfcf8;
+  background:linear-gradient(160deg, var(--gold), var(--terracotta-jar));
+  border-radius:50%;
+  box-shadow:0 14px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.5);
+  cursor:pointer;
+  z-index:1200;
+  transition:.3s;
+}
+#chatToggle:hover{ transform:translateY(-4px) scale(1.05); }
+
+.chatbot{
+  position:fixed;
+  bottom:88px;
+  right:22px;
+  width:310px;
+  max-width:88vw;
+  padding:16px;
+  z-index:1200;
+}
+.chat-box{
+  height:230px;
+  overflow-y:auto;
+  padding:8px;
+  margin-bottom:10px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,0.35);
+}
+.msg{
+  padding:9px 12px;
+  margin:6px 2px;
+  border-radius:14px;
+  font-size:13.5px;
+  max-width:85%;
+  line-height:1.4;
+}
+.msg.user{
+  background:linear-gradient(160deg, var(--gold-light), var(--gold));
+  color:#1c2b1f;
+  margin-left:auto;
+  text-align:right;
+}
+.msg.bot{ background:rgba(255,255,255,0.7); color:var(--ink); }
+
+.chat-input{ display:flex; gap:6px; }
+.chat-input input{
+  flex:1;
+  padding:10px 12px;
+  border-radius:100px;
+  border:1px solid rgba(255,255,255,0.4);
+  background:rgba(255,255,255,0.85);
+  font-family:var(--font-body);
+  font-size:13px;
+}
+.chat-input button{
+  border:none;
+  border-radius:50%;
+  width:38px;
+  height:38px;
+  background:rgba(255,255,255,0.3);
+  color:var(--ink);
+  cursor:pointer;
+  flex-shrink:0;
+}
+
+/* =========================================================
+   DARK MODE — deeper glass, same material
+========================================================= */
+body.dark-mode{ background:var(--deep-1); color:#e9efe9; }
+body.dark-mode .section h2{ color:#f4f1ea; }
+body.dark-mode .section > p{ color:rgba(233,239,233,0.65); }
+body.dark-mode .glass{
+  background:linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.04));
+  border-top-color:rgba(255,255,255,0.25);
+}
+body.dark-mode .vial h4{ color:rgba(233,239,233,0.7); }
+body.dark-mode .vial .value{ color:#f4f1ea; }
+body.dark-mode .vial .sub{ color:rgba(233,239,233,0.55); }
+body.dark-mode .faq-question{ color:#f4f1ea; }
+body.dark-mode .faq-answer{ color:rgba(233,239,233,0.7); }
+body.dark-mode .status-check input{ background:rgba(20,30,25,0.6); color:#f4f1ea; }
+body.dark-mode .physician-section{ background: linear-gradient(180deg, rgba(207,159,69,0.10), var(--deep-1) 55%); }
+body.dark-mode .physician-copy h2{ color:#f4f1ea; }
+body.dark-mode .physician-copy .role{ color:rgba(233,239,233,0.7); }
+body.dark-mode .physician-quote{ color:#f4f1ea; }
+body.dark-mode .credential-pills span{ background:rgba(255,255,255,0.08); color:#e8c877; border-color:rgba(255,255,255,0.15); }
+
+.theme-switch{
+  width:42px; height:42px; border-radius:50%;
+  border:none; background:transparent; cursor:pointer;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .hero-blob{ animation:none; }
+  .fade{ transition:none; }
+}
+
+
+/*   pop up */
+.liquid-popup{
+  border-radius:28px !important;
+  box-shadow:0 25px 60px rgba(8,38,28,.25) !important;
+}
+
+.liquid-confirm{
+  border-radius:100px !important;
+  padding:12px 28px !important;
+  font-weight:700 !important;
+}
+
 
 </style>
 
@@ -548,274 +895,277 @@ body {
 
 <body>
 
-<div class="navbar">
+<div class="navbar glass">
 
   <div class="logo-area">
     <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
     <div class="title">
-      Amruta Aarogya Kendra
+      Amrutha Aarogya Kendra
       <span>Speciality Ayurveda Hospital</span>
     </div>
   </div>
 
   <div class="nav-links">
-   <!-- <a href="/register" class="btn register-btn">Trainee Registration</a>  -->
-  <button type="button" onclick="openRules()" class="btn">
-  Trainee Registration
-</button>
-
-
-    <a href="/login" class="btn admin-btn">Admin</a>
-    
+    <button type="button" onclick="openRules()" class="btn">🎓<span class="label"> Trainee Registration</span></button>
+    <a href="/login" class="btn admin-btn">🔒<span class="label"> Admin</span></a>
+    <a href="/gallery" class="btn gallery-btn">📸<span class="label"> Gallery</span></a>
+    <button id="themeToggle" class="btn theme-btn">🌙</button>
   </div>
 
 </div>
 
-<!---- UI ChatBot---->
-<div id="chatbotBox" class="chatbot" style="display:none;">
-
-  <!-- Chat messages -->
+<!-- AI ChatBot -->
+<div id="chatbotBox" class="chatbot glass" style="display:none;">
   <div id="chatBox" class="chat-box"></div>
-
-  <!-- Input area -->
   <div class="chat-input">
-    <input id="userInput" placeholder="Ask..." />
-
-    <button onclick="sendMessage()">Send</button>
-
-    <!-- ✅ ADD VOICE BUTTON HERE -->
+    <input id="userInput" placeholder="Ask about training, fees, timings…" />
+    <button onclick="sendMessage()">➤</button>
     <button onclick="startVoice()">🎤</button>
   </div>
-
 </div>
-
-<!-- ✅ Floating button -->
 <div id="chatToggle" onclick="toggleChat()">💬</div>
 
-  
 
 <!-- HERO -->
 <div class="hero">
-  <h1 style="font-size:36px; font-weight:bold;">
-    Healing Naturally, Training Professionally
-  </h1>
+  <div class="hero-blob b1"></div>
+  <div class="hero-blob b2"></div>
 
-  <p style="font-size:18px; margin-top:10px;">
-    Join our Ayurvedic Internship Program
-  </p>
-
-  <button onclick="openRules()" class="btn">Apply Now</button>
+  <div class="hero-content glass">
+    <span class="hero-eyebrow">Kalloli · Belagavi</span>
+    <h1>Healing naturally.<br><em>Training</em> professionally.</h1>
+    <p>A hands-on Ayurvedic internship inside a working speciality hospital — real patients, real Panchakarma, real practice.</p>
+    <button onclick="openRules()" class="apply-btn">Apply Now</button>
+  </div>
 </div>
 
-<!--- saerch status -->
- <div class="status-check">
+<!-- STATUS CHECK -->
+<div class="status-check glass">
+  <h3>Check Application Status</h3>
+  <input type="text" id="searchInput" placeholder="Enter Name or Mobile">
+  <br>
+  <button onclick="checkStatus()">Check Status</button>
+  <p id="result"></p>
+</div>
 
-<h3>Check Application Status</h3>
+<!-- ============ WAVE TRANSITION: hero liquid pours into the physician section ============ -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C240,110 480,0 720,45 C960,90 1200,20 1440,60 L1440,120 L0,120 Z" fill="#0f3a29"/>
+    <path d="M0,60 C240,120 480,30 720,65 C960,100 1200,40 1440,75 L1440,120 L0,120 Z" fill="#cf9f45" opacity="0.35"/>
+  </svg>
+</div>
 
-<input type="text" id="searchInput" placeholder="Enter Name or Mobile">
+<!-- ============ MEET THE PHYSICIAN + HOSPITAL STATS ============ -->
+<div class="physician-section fade">
+  <div class="physician-wrap">
+    <div class="physician-portrait">
+      <div class="portrait-frame">
+        <img src="{{ url_for('static', filename='doctor.jpg') }}" alt="Dr. Tukaram Umarani">
+        <div class="portrait-badge">Since 2021</div>
+      </div>
+    </div>
+    <div class="physician-copy">
+      <span class="physician-eyebrow">👨‍⚕️🌿 Meet Our Ayurvedacharyas</span>
+      <h2>Dr. Tukaram Umarani</h2>
+      <div class="role">Chief Physician &amp; Medical Director, BAMS, MD (Ayurveda)</div>
+      <div class="credential-pills">
+        <span>Panchakarma</span>
+        <span>Agnikarma</span>
+        <span>Viddhakarma</span>
+        <span>Clinical Ayurveda</span>
+      </div>
+      <p class="physician-quote">"Every treatment starts with the body's own intelligence — we only help it remember."</p>
+      <a href="/gallery" class="apply-btn" style="display:inline-block; text-decoration:none;">Meet the Team</a>
+    </div>
+  </div>
 
-<button onclick="checkStatus()">Check</button>
-
-<p id="result"></p>
-
-</div>   
+  <div class="stats-row">
+    <div class="vial glass">
+      <span class="icon">🌿</span>
+      <h4>Years in Practice</h4>
+      <div class="value" data-target="17" data-suffix="+">0</div>
+      <div class="vial-fill" style="height:0%;" data-fill="55"></div>
+    </div>
+    <div class="vial glass">
+      <span class="icon">🩺</span>
+      <h4>Patients Treated</h4>
+      <div class="value" data-target="12400" data-suffix="+">0</div>
+      <div class="vial-fill" style="height:0%;" data-fill="80"></div>
+    </div>
+    <div class="vial glass">
+      <span class="icon">🔥</span>
+      <h4>Panchakarma Procedures</h4>
+      <div class="value" data-target="9000" data-suffix="+">0</div>
+      <div class="vial-fill" style="height:0%;" data-fill="70"></div>
+    </div>
+    <div class="vial glass">
+      <span class="icon">🎓</span>
+      <h4>Trainees Mentored</h4>
+      <div class="value" data-target="240" data-suffix="+">0</div>
+      <div class="vial-fill" style="height:0%;" data-fill="45"></div>
+    </div>
+  </div>
+</div>
 
 <!-- VISION -->
 <div class="section fade">
   <h2>Our Vision</h2>
-  <p>Holistic healthcare and real-world training</p>
+  <p>Holistic healthcare, delivered through real‑world clinical training.</p>
 </div>
 
 <!-- PROGRAM -->
 <div class="section fade">
   <h2>Internship Program</h2>
+  <p>Three things to know before you apply.</p>
 
   <div class="cards">
 
-    <!-- ✅ Duration -->
-    <div class="card fancy-card">
-      <h3 class="icon">⏳</h3>
+    <div class="vial glass">
+      <span class="icon">⏳</span>
       <h4>Duration</h4>
-      <p>30 Days</p>
+      <div class="value">30 Days</div>
+      <div class="vial-fill" style="height:30%;"></div>
     </div>
 
-    <!-- ✅ Fee -->
-    <div class="card fancy-card">
-      <h3 class="icon">💰</h3>
+    <div class="vial glass">
+      <span class="icon">💰</span>
       <h4>Fee</h4>
-      <p>₹1000 </p>
-      <p> (Refundable)</p>
+      <div class="value">₹1000</div>
+      <div class="sub">Refundable</div>
+      <div class="vial-fill" style="height:20%;"></div>
     </div>
 
-    <!-- ✅ Batch Capacity -->
-    <div class="card fancy-card">
-      <h3 class="icon">👥</h3>
+    <div class="vial glass">
+      <span class="icon">👥</span>
       <h4>Batch Capacity</h4>
-
-      <p>Total: <b>6 Students</b></p>
-      <p>👨 3 | 👩 3</p>
-
-      <!-- ✅ PROGRESS BAR -->
+      <div class="value">6 Students</div>
+      <div class="sub">👨 3 · 👩 3</div>
       <div class="progress">
         <div class="progress-fill" style="width:50%;"></div>
       </div>
-
-      <small>Seats Filling Fast</small>
-
+      <small class="sub">Seats filling fast</small>
+      <div class="vial-fill" style="height:50%;"></div>
     </div>
 
   </div>
 
-  
-  <button onclick="openRules()" class="btn fancy-btn">
-  Register Now
-</button>
-
+  <button onclick="openRules()" class="apply-btn" style="margin-top:34px;">Register Now</button>
 </div>
-  
 
 <!-- GALLERY -->
 <div class="section">
-  <h2>Our Hospital Snippet</h2>
-
+  <h2>Explore the Hospital</h2>
   <div class="slider">
-    <img id="slide" src="/static/img1.jpg">
+    <div class="slider-frame glass">
+      <img id="slide" src="/static/img1.jpg">
+    </div>
   </div>
 </div>
 
- <!---   FAQ ----->
+<!-- FAQ -->
 <div class="section">
   <h2>❓ Frequently Asked Questions</h2>
 
   <div class="faq-container">
 
-    <div class="faq-item">
-  <button class="faq-question">
-    <span>Is the registration fee refundable?</span>
-    <span class="icon">➕</span>
-  </button>
-  <div class="faq-answer">
-    ✔️ The registration fee <b>will be refunded after joining the training or upon completion of the training program</b>, as per hospital policy.
+    <div class="faq-item glass">
+      <button class="faq-question">
+        <span>Is the registration fee refundable?</span>
+        <span class="icon">➕</span>
+      </button>
+      <div class="faq-answer">
+        ✔️ The fee is refunded after you join the training, or on completion of the program, as per hospital policy.
+      </div>
+    </div>
+
+    <div class="faq-item glass">
+      <button class="faq-question">
+        <span>Will any stipend be provided during the training?</span>
+        <span class="icon">➕</span>
+      </button>
+      <div class="faq-answer">
+        ❌ No stipend is provided during the training period.
+      </div>
+    </div>
+
+    <div class="faq-item glass">
+      <button class="faq-question">
+        <span>What will I learn from this training?</span>
+        <span class="icon">➕</span>
+      </button>
+      <div class="faq-answer">
+        ✔️ Hands-on clinical and practical exposure in:
+        <ul style="margin-top:10px; line-height:1.7; padding-left:20px;">
+          <li>🩺 Panchakarma Procedures</li>
+          <li>🏥 OPD & IPD Management</li>
+          <li>💊 Dispensary Practice</li>
+          <li>🌿 General Ayurveda Clinical Practice</li>
+          <li>🔥 Viddhakarma & Agnikarma Procedures</li>
+          <li>🌱 Ayurvedic Medicine Preparation</li>
+          <li>🏡 Village Health & Rural Life Experience</li>
+          <li>📚 Daily Evening Classes & Clinical Discussions</li>
+        </ul>
+      </div>
+    </div>
+
   </div>
-</div>
 
-<div class="faq-item">
-  <button class="faq-question">
-    <span>Will any stipend be provided during the training?</span>
-    <span class="icon">➕</span>
-  </button>
-  <div class="faq-answer">
-    ❌ No, <b>no stipend will be provided</b> during the training period.
-  </div>
-</div>
-
-<div class="faq-item">
-  <button class="faq-question">
-    <span>What will I learn or gain from this training?</span>
-    <span class="icon">➕</span>
-  </button>
-  <div class="faq-answer">
-    ✔️ Students will receive <b>hands-on clinical and practical exposure</b> in the following areas:
-
-    <ul style="margin-top:10px; line-height:1.6; padding-left:20px;">
-      <li>🩺 Panchakarma Procedures</li>
-      <li>🏥 OPD & IPD Management</li>
-      <li>💊 Dispensary Practice</li>
-      <li>🌿 General Ayurveda Clinical Practice</li>
-      <li>🔥 Viddhakarma & Agnikarma Procedures</li>
-      <li>🌱 Ayurvedic Medicine Preparation</li>
-      <li>🏡 Village Health & Rural Life Experience</li>
-      <li>📚 Daily Evening Classes & Clinical Discussions</li>
-    </ul>
-  </div>
-</div>
-
-  </div> 
-  <!-- ✅ CONTACT -->
-  <div style="text-align:center; margin-top:20px;">
+  <div class="faq-contact">
     <p><b>Still have questions?</b></p>
-
-    <a href="tel:+919742151414">📞 Call</a>
-    <a href="https://wa.me/919916803734" target="_blank">💬 WhatsApp</a>
+    <a href="tel:+919742151414" class="call">📞 Call</a>
+    <a href="https://wa.me/919916803734" target="_blank" class="whatsapp">💬 WhatsApp</a>
   </div>
 </div>
-  
+
 <!-- CONTACT -->
 <div class="contact fade">
 
   <h2>Visit Our Hospital</h2>
 
-
-
-  
-
-  
-  <!-- ✅ CLEAN MAP -->
   <div class="map">
-    <iframe 
-      src="https://www.google.com/maps?q=16.266740868102037,74.87081896695311&z=16&output=embed"
-      loading="lazy">
-    </iframe>
+    <div class="map-frame glass">
+      <iframe
+        src="https://www.google.com/maps?q=16.266740868102037,74.87081896695311&z=16&output=embed"
+        loading="lazy">
+      </iframe>
+    </div>
   </div>
 
-  <br>
-
-  <!-- BUTTONS -->
-  <a href="https://maps.app.goo.gl/Aq6vvdGk3WWtfE6d8" target="_blank"
-     style="background:white;color:#2d6a4f;padding:10px;border-radius:5px;text-decoration:none;">
-     📍 Open in Maps
-  </a>
-
-  <a href="https://www.google.com/maps/dir/?api=1&destination=16.266740868102037,74.87081896695311"
-     target="_blank"
-     style="background:#1b4332;color:white;padding:10px;border-radius:5px;text-decoration:none;margin-left:10px;">
-     🚗 Get Directions
-  </a>
-
-<!-- ✅ CONTACT SECTION -->
-<div class="contact-section">
-
-  <h2>Contact Us</h2>
-
-  <!-- ✅ GRID BUTTONS -->
-  <div class="contact-grid">
-
-    <!-- CALL -->
-    <a href="tel:+919742151414" class="contact-card call">
-      📞 
-      <div>Call</div>
-      <small>+919742151414</small>
-    </a>
-
-    <!-- WHATSAPP -->
-    <a href="https://wa.me/919916803734" target="_blank" class="contact-card whatsapp">
-      💬
-      <div>WhatsApp</div>
-      <small>Chat Now</small>
-    </a>
-
-    <!-- EMAIL -->
-    <a href="mailto:tukaram.umarani@gmail.com" class="contact-card email">
-      📧
-      <div>Email</div>
-      <small>Send Mail</small>
-    </a>
-
+  <div class="map-actions">
+    <a href="https://maps.app.goo.gl/Aq6vvdGk3WWtfE6d8" target="_blank" class="open">📍 Open in Maps</a>
+    <a href="https://www.google.com/maps/dir/?api=1&destination=16.266740868102037,74.87081896695311" target="_blank" class="directions">🚗 Get Directions</a>
   </div>
 
-  <!-- ✅ ADDRESS -->
-  <div class="contact-address">
-    📍 Kalloli 591224 <br>
-    Tq- Mudalagi <br>
-    Dist- Belagavi
+  <div class="contact-section">
+    <h2 style="font-size:22px;">Contact Us</h2>
+
+    <div class="contact-grid">
+      <a href="tel:+919742151414" class="contact-card glass call">
+        <span class="glyph">📞</span>
+        <div>Call</div>
+        <small>+91 97421 51414</small>
+      </a>
+
+      <a href="https://wa.me/919916803734" target="_blank" class="contact-card glass whatsapp">
+        <span class="glyph">💬</span>
+        <div>WhatsApp</div>
+        <small>Chat Now</small>
+      </a>
+
+      <a href="mailto:tukaram.umarani@gmail.com" class="contact-card glass email">
+        <span class="glyph">📧</span>
+        <div>Email</div>
+        <small>Send Mail</small>
+      </a>
+    </div>
+
+    <div class="contact-address">
+      📍 Kalloli 591224 · Tq. Mudalagi · Dist. Belagavi
+    </div>
   </div>
 
-</div>
-
-
-<!-- VISITOR COUNT -->
-<div style="text-align:center; margin:10px;">
-  <p>👀 Visitors: {{ visits }}</p>
+  <div class="visitor-pill glass">👀 Visitors: {{ visits }}</div>
 </div>
 
 <!-- FOOTER -->
@@ -825,118 +1175,151 @@ body {
 
 <!-- ✅ JS -->
 <script>
-
 /* SCROLL ANIMATION */
 const elements = document.querySelectorAll('.fade');
-
-window.addEventListener('scroll', () => {
+function revealOnScroll(){
   elements.forEach(el => {
     if (el.getBoundingClientRect().top < window.innerHeight - 100) {
       el.classList.add('show');
     }
   });
-});
+}
+window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('DOMContentLoaded', revealOnScroll);
 
 /* IMAGE SLIDER */
 let images = [
-  "/static/img1.jpg",
-  "/static/img2.jpg",
-  "/static/img3.jpg",
-  "/static/img4.jpg",
-  "/static/img5.jpg",
-  "/static/img6.jpg",
-  "/static/img7.jpg",
-  "/static/img8.jpg"
+  "/static/img1.jpg","/static/img2.jpg","/static/img3.jpg","/static/img4.jpg",
+  "/static/img5.jpg","/static/img6.jpg","/static/img7.jpg","/static/img8.jpg"
 ];
-
 let i = 0;
-
 setInterval(() => {
   i = (i + 1) % images.length;
   document.getElementById("slide").src = images[i];
 }, 3000);
+</script>
 
+<!-- ============ Physician stats: count-up + vial fill on scroll into view ============ -->
+<script>
+(function(){
+  const statVials = document.querySelectorAll('.stats-row .vial');
+  if (!statVials.length) return;
 
+  function animateVial(vial){
+    const valueEl = vial.querySelector('.value');
+    const fillEl = vial.querySelector('.vial-fill');
+    const target = parseInt(valueEl.getAttribute('data-target'), 10) || 0;
+    const suffix = valueEl.getAttribute('data-suffix') || '';
+    const fillPct = fillEl ? parseInt(fillEl.getAttribute('data-fill'), 10) || 0 : 0;
 
+    if (fillEl) {
+      requestAnimationFrame(() => { fillEl.style.height = fillPct + '%'; });
+    }
 
-document.addEventListener("DOMContentLoaded", () => {
-  let bar = document.querySelector(".progress-fill");
-  if (bar) {
-    bar.style.width = "80%";
+    let start = null;
+    const duration = 1200;
+    function step(ts){
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / duration, 1);
+      const current = Math.round(target * progress);
+      valueEl.textContent = current.toLocaleString('en-IN') + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   }
-});
 
-
-
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateVial(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    statVials.forEach(v => observer.observe(v));
+  } else {
+    statVials.forEach(animateVial);
+  }
+})();
 </script>
 
 <!--- Pop up Rules and Regulations-->
 <script>
 function openRules() {
-
   Swal.fire({
     title: "📜 Rules & Regulations",
-    width: "520px",
+    width: "640px",
     confirmButtonText: "Proceed ➡",
-    confirmButtonColor: "#2d6a4f",
+    confirmButtonColor: "#cf9f45",
+    customClass: {
+    popup: 'liquid-popup',
+    confirmButton: 'liquid-confirm'},
     showCancelButton: true,
+    backdrop: `rgba(8,38,28,0.55)`,
+
+    
 
     html: `
 <div id="rulesBox" style="
-  max-height: 270px;
-  overflow-y: scroll;
-  text-align: left;
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 14px;
-  line-height: 1.7;
-  background:#fafafa;
+  max-height:320px;
+  overflow-y:auto;
+
+  text-align:left;
+
+  padding:20px;
+
+  border-radius:22px;
+
+  font-size:14px;
+  line-height:1.8;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.95),
+      rgba(246,243,234,0.98)
+    );
+
+  border-top:1px solid rgba(255,255,255,0.8);
+  border-left:1px solid rgba(255,255,255,0.4);
+  border-bottom:1px solid rgba(0,0,0,0.08);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    0 12px 30px rgba(8,38,28,0.08);
 ">
 
-<h3 style="color:#2d6a4f;">📋 Hospital Training Rules & Regulations</h3>
-<!-- ✅ Instruction -->
+
+<h3 style="color:#0f3a29;">📋 Hospital Training Rules & Regulations</h3>
+
 <div style="margin-top:15px;">
-
-  <h4 style="color:#2d6a4f; margin-bottom:5px;">
-    📌 Important Instruction
-  </h4>
-
+  <h4 style="color:#0f3a29; margin-bottom:5px;">📌 Important Instruction</h4>
   <p style="margin:0; line-height:1.6;">
     🪪 Only genuine and eligible students with valid institutional identification and supporting documents may register.
   </p>
-
 </div>
 
-  
-<!-- ✅ ELIGIBILITY -->
-<h4 style="color:#2d6a4f; margin-top:10px;">🎓 Eligibility</h4>
+<h4 style="color:#0f3a29; margin-top:10px;">🎓 Eligibility</h4>
 <p>1️⃣ Students who are <b>still pursuing their undergraduate (UG) course</b> are not eligible for training.</p>
 
-<!-- ✅ ACCOMMODATION -->
-<h4 style="color:#2d6a4f;">🏠 Accommodation</h4>
+<h4 style="color:#0f3a29;">🏠 Accommodation</h4>
 <p>2️⃣ Students must follow the accommodation arrangements and recommendations provided by the hospital.</p>
 
-<!-- ✅ ATTENDANCE & PARTICIPATION -->
-<h4 style="color:#2d6a4f;">🧑‍⚕️ Attendance & Participation</h4>
+<h4 style="color:#0f3a29;">🧑‍⚕️ Attendance & Participation</h4>
 <p>3️⃣ Active participation and regular attendance in all Panchakarma procedures are compulsory.</p>
 
-<!-- ✅ DISCIPLINE -->
-<h4 style="color:#2d6a4f;">⏰ Discipline & Conduct</h4>
+<h4 style="color:#0f3a29;">⏰ Discipline & Conduct</h4>
 <p>4️⃣ Students must follow and comply with all hospital rules and regulations to maintain discipline, punctuality, and professional behavior.</p>
-
 <p>5️⃣ ❌ Any form of misconduct, indiscipline, or inappropriate behavior will result in immediate termination from the Gurukul training program.</p>
 
-<!-- ✅ RESPECT -->
-<h4 style="color:#2d6a4f;">🙏 Respect & Behavior</h4>
+<h4 style="color:#0f3a29;">🙏 Respect & Behavior</h4>
 <p>7️⃣ Students must show respect to teachers, patients, hospital staff, and fellow students at all times.</p>
 
-<!-- ✅ ETHICS -->
-<h4 style="color:#2d6a4f;">🧼 Cleanliness & Ethics</h4>
+<h4 style="color:#0f3a29;">🧼 Cleanliness & Ethics</h4>
 <p>8️⃣ Students are expected to maintain cleanliness, confidentiality, and ethical conduct throughout the training period.</p>
 
-<!-- ✅ POLICY -->
-<h4 style="color:#2d6a4f;">⚠️ Policy Changes</h4>
+<h4 style="color:#0f3a29;">⚠️ Policy Changes</h4>
 <p>9️⃣ The hospital reserves the right to modify or update these rules and regulations whenever necessary.</p>
 
 </div>
@@ -946,116 +1329,78 @@ function openRules() {
 <input type="checkbox" id="agree" disabled>
 <label for="agree"> I have read and agree to all rules ✅</label>
 `,
-    
 
     didOpen: () => {
-
       const box = document.getElementById("rulesBox");
       const checkbox = document.getElementById("agree");
       const confirmBtn = Swal.getConfirmButton();
 
-      // ✅ disable button initially
       confirmBtn.disabled = true;
-
-      // ✅ smooth animation
       confirmBtn.style.transition = "all 0.3s ease";
 
-      // ✅ enable checkbox AFTER scroll
       box.addEventListener("scroll", () => {
         if (box.scrollTop + box.clientHeight >= box.scrollHeight - 10) {
           checkbox.disabled = false;
         }
       });
 
-      // ✅ button enable animation
       checkbox.addEventListener("change", () => {
-
         if (checkbox.checked) {
-
           confirmBtn.disabled = false;
-
           confirmBtn.style.transform = "scale(1.1)";
-          confirmBtn.style.boxShadow = "0 0 10px #2d6a4f";
-
+          confirmBtn.style.boxShadow = "0 0 10px #cf9f45";
           setTimeout(() => {
             confirmBtn.style.transform = "scale(1)";
             confirmBtn.style.boxShadow = "none";
           }, 300);
-
         } else {
           confirmBtn.disabled = true;
         }
-
       });
 
-      // ✅ shake animation if disabled click
       confirmBtn.addEventListener("click", (e) => {
-
         if (confirmBtn.disabled) {
-
           e.preventDefault();
-
           confirmBtn.style.animation = "shake 0.4s";
-
-          setTimeout(() => {
-            confirmBtn.style.animation = "";
-          }, 400);
+          setTimeout(() => { confirmBtn.style.animation = ""; }, 400);
         }
-
       });
-
     },
 
     preConfirm: () => {
-
       if (!document.getElementById("agree").checked) {
         Swal.showValidationMessage("Please accept rules ❌");
         return false;
       }
-
-      // ✅ save session
       sessionStorage.setItem("rulesAccepted", "true");
-
     }
 
   }).then((result) => {
-
     if (result.isConfirmed) {
       window.location.href = "/register";
     }
-
   });
-
 }
-  
 </script>
 
 <!--- FAQ---->
 <script>
 document.querySelectorAll(".faq-question").forEach(btn => {
-
   btn.addEventListener("click", () => {
-
     const item = btn.parentElement;
-
-    document.querySelectorAll(".faq-item").forEach(i => {
-      if (i !== item) {
-        i.classList.remove("active");
-        i.querySelector(".icon").innerText = "➕";
+    document.querySelectorAll(".faq-item").forEach(el => {
+      if (el !== item) {
+        el.classList.remove("active");
+        el.querySelector(".icon").innerText = "➕";
       }
     });
-
     item.classList.toggle("active");
-
-    btn.querySelector(".icon").innerText =
-      item.classList.contains("active") ? "➖" : "➕";
-
+    btn.querySelector(".icon").innerText = item.classList.contains("active") ? "➖" : "➕";
   });
-
 });
 </script>
 
-<!---UI ChatBot-->
+<!---UI ChatBot toggle-->
 <script>
 function toggleChat() {
   let box = document.getElementById("chatbotBox");
@@ -1063,14 +1408,12 @@ function toggleChat() {
 }
 </script>
 
-<!--- UI Chat Logiv-->
+<!--- UI Chat Logic -->
 <script>
 async function sendMessage() {
-
   let input = document.getElementById("userInput");
   let msg = input.value.trim();
-
-  if (!msg) return; // ✅ prevent empty message
+  if (!msg) return;
 
   addMessage(msg, "user");
   input.value = "";
@@ -1083,65 +1426,23 @@ async function sendMessage() {
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({ message: msg })
     });
-
     let data = await res.json();
-
     typing.innerText = data.reply;
-
-    speak(data.reply); // ✅ voice
-
+    speak(data.reply);
   } catch (err) {
     typing.innerText = "Server error ❌";
   }
-
 }
-</script>
 
-<script>
-
-// ✅ VOICE INPUT
 function startVoice() {
-
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
   if (!SpeechRecognition) {
     alert("Voice not supported in this browser ❌");
     return;
   }
-
   const recognition = new SpeechRecognition();
-
-  recognition.lang = "en-IN";   // ✅ change if needed
-  recognition.start();
-
-  recognition.onresult = function(event) {
-
-    let speech = event.results[0][0].transcript;
-
-    document.getElementById("userInput").value = speech;
-
-    sendMessage();  // ✅ auto send
-
-  };
-
-}
-<script>
-
-// ✅ VOICE INPUT
-function startVoice() {
-
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (!SpeechRecognition) {
-    alert("Voice not supported in this browser ❌");
-    return;
-  }
-
-  const recognition = new SpeechRecognition();
-
   recognition.lang = "en-IN";
   recognition.start();
-
   recognition.onresult = function(event) {
     let speech = event.results[0][0].transcript;
     document.getElementById("userInput").value = speech;
@@ -1149,60 +1450,38 @@ function startVoice() {
   };
 }
 
-
-// ✅ VOICE OUTPUT
 function speak(text) {
-
-  speechSynthesis.cancel();  // ✅ stop previous
-
+  speechSynthesis.cancel();
   let speech = new SpeechSynthesisUtterance(text);
   speech.lang = "en-IN";
-
   speechSynthesis.speak(speech);
 }
 
-
-// ✅ ADD MESSAGE + SAVE HISTORY
 function addMessage(text, type) {
-
   let chatBox = document.getElementById("chatBox");
-
   let div = document.createElement("div");
   div.className = "msg " + type;
   div.innerText = text;
-
   chatBox.appendChild(div);
-
-  // ✅ SCROLL DOWN
   chatBox.scrollTop = chatBox.scrollHeight;
 
-  // ✅ SAVE HISTORY
-  let history = JSON.parse(localStorage.getItem("chatHistory")) || [];
+  let history = JSON.parse(sessionStorage.getItem("chatHistory")) || [];
   history.push({ text, type });
-  localStorage.setItem("chatHistory", JSON.stringify(history));
+  sessionStorage.setItem("chatHistory", JSON.stringify(history));
 
   return div;
 }
 
-
-// ✅ LOAD HISTORY ON PAGE LOAD
 window.addEventListener("DOMContentLoaded", function () {
-
-  let history = JSON.parse(localStorage.getItem("chatHistory")) || [];
-
-  history.forEach(msg => {
-    addMessage(msg.text, msg.type);
-  });
-
+  let history = JSON.parse(sessionStorage.getItem("chatHistory")) || [];
+  history.forEach(msg => addMessage(msg.text, msg.type));
 });
-
 </script>
-<!---- JSS Saerch Status  -->
+
+<!---- Search Status  -->
 <script>
 async function checkStatus() {
-
   let value = document.getElementById("searchInput").value;
-
   if (!value) {
     alert("Enter name or mobile ❌");
     return;
@@ -1213,35 +1492,48 @@ async function checkStatus() {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ query: value })
   });
-
   let data = await res.json();
 
   let result = document.getElementById("result");
-  
-result.style.marginTop = "10px";
-result.style.fontWeight = "bold";
+  result.style.marginTop = "10px";
+  result.style.fontWeight = "bold";
 
-
-  // ✅ DISPLAY NICE MESSAGE
   if (data.status === "Approved") {
-  result.innerHTML = "✅ You are Eligible for Training 🎉";
-  result.style.color = "#2d6a4f";
+    result.innerHTML = "✅ You are Eligible for Training 🎉";
+    result.style.color = "#e8c877";
+  } else if (data.status === "Pending") {
+    result.innerHTML = "⏳ Your application is under review";
+    result.style.color = "orange";
+  } else if (data.status === "Rejected") {
+    result.innerHTML = "❌ You are not eligible for training";
+    result.style.color = "#ff8a80";
+  } else {
+    result.innerHTML = "❌ No record found";
+    result.style.color = "#fdfcf8";
+  }
 }
-else if (data.status === "Pending") {
-  result.innerHTML = "⏳ Your application is under review";
-  result.style.color = "orange";
-}
-else if (data.status === "Rejected") {
-  result.innerHTML = "❌ You are not eligible for training";
-  result.style.color = "red";
-}
-else {
-  result.innerHTML = "❌ No record found";
-  result.style.color = "black";
-}
-}
-</script>  
+</script>
 
-  
+<!-- Dark mode -->
+<script>
+const themeBtn = document.getElementById("themeToggle");
+themeBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  if (document.body.classList.contains("dark-mode")) {
+    localStorage.setItem("theme","dark");
+    themeBtn.innerHTML = "☀️";
+  } else {
+    localStorage.setItem("theme","light");
+    themeBtn.innerHTML = "🌙";
+  }
+});
+window.addEventListener("DOMContentLoaded", () => {
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark-mode");
+    themeBtn.innerHTML = "☀️";
+  }
+});
+</script>
+
 </body>
 </html>
