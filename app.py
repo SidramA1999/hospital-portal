@@ -368,9 +368,9 @@ from openai import OpenAI
 import os
 from openai import OpenAI
 
-client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
+key = os.getenv("OPENAI_API_KEY")
+
+client = OpenAI(api_key=key) if key else None
 
 
 # ✅ SINGLE CHAT ROUTE (ONLY ONE ✅)
