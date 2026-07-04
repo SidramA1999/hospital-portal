@@ -1,556 +1,1037 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Admin Dashboard</title>
+<meta charset="UTF-8">
+<title>Admin Dashboard — Amrutha Aarogya Kendra</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<!-- Feather icons -->
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+<!-- jsPDF + autotable, for client-side PDF export -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.min.js"></script>
 
 <style>
+/* =========================================================
+   DESIGN TOKENS — Luxury Healthcare System
+========================================================= */
+:root{
+  --primary:#0f3a29;
+  --secondary:#2d6a4f;
+  --accent:#cf9f45;
+  --bg:#f4f8f4;
+  --ink:#12271e;
+  --ink-soft:#516557;
+  --success:#52b788;
+  --danger:#e63946;
+  --warning:#ffb703;
 
-/* BODY */
-body {
-  font-family: 'Poppins', sans-serif;
-  background:#f6f9f6;
+  --glass-fill: rgba(255,255,255,0.55);
+  --glass-fill-strong: rgba(255,255,255,0.75);
+  --glass-edge-top: rgba(255,255,255,0.9);
+  --glass-edge-bottom: rgba(18,39,30,0.10);
+  --glass-blur: 18px;
+
+  --radius-xl:28px;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --radius-sm:12px;
+  --radius-pill:999px;
+
+  --font-display:'Fraunces', serif;
+  --font-body:'Manrope', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+
+  --shadow-1:0 8px 18px rgba(18,39,30,0.12);
+  --shadow-2:0 14px 34px rgba(18,39,30,0.14);
+  --shadow-3:0 24px 50px rgba(18,39,30,0.20);
+
+  --fast:.18s ease;
+  --norm:.28s ease;
+
+  --sidebar-w:248px;
+  --gap:16px;
+  --navbar-h:64px;
+  --grid:rgba(18,39,30,0.08);
+  --line:rgba(18,39,30,0.10);
+
+  --ok-bg:#d8f3dc; --ok-ink:#1b5e3a;
+  --warn-bg:#fff1d6; --warn-ink:#a15c00;
+  --danger-bg:#ffe1e1; --danger-ink:#b00020;
+}
+
+:root.dark{
+  --bg:#0b1310;
+  --ink:#e7efe9;
+  --ink-soft:#b5c3b8;
+  --line:rgba(231,239,233,0.10);
+  --glass-fill: rgba(20,28,24,0.55);
+  --glass-fill-strong: rgba(22,30,26,0.75);
+  --glass-edge-top: rgba(255,255,255,0.12);
+  --glass-edge-bottom: rgba(0,0,0,0.35);
+  --grid:rgba(231,239,233,0.10);
+  --shadow-1:0 8px 18px rgba(0,0,0,0.35);
+  --shadow-2:0 14px 34px rgba(0,0,0,0.42);
+  --shadow-3:0 24px 50px rgba(0,0,0,0.55);
+  --ok-bg:rgba(82,183,136,0.18); --ok-ink:#a9e2c7;
+  --warn-bg:rgba(255,183,3,0.16); --warn-ink:#ffd380;
+  --danger-bg:rgba(230,57,70,0.16); --danger-ink:#ff9aa3;
+}
+
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+body{
   margin:0;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:
+    radial-gradient(1200px 800px at -10% -10%, rgba(207,159,69,0.10), transparent 40%),
+    radial-gradient(1200px 800px at 110% 0%, rgba(127,184,133,0.16), transparent 45%),
+    var(--bg);
+  transition: background-color var(--norm), color var(--norm);
 }
 
-/* NAVBAR */
-.navbar {
-  padding:15px 30px;
-  background:#2d6a4f;
-  color:white;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-weight:500;
+.hidden{ display:none !important; }
+.sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+.glass{
+  position:relative;
+  background:linear-gradient(160deg, var(--glass-fill-strong), var(--glass-fill));
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-radius:var(--radius-lg);
+  border-top:1.5px solid var(--glass-edge-top);
+  border-bottom:1.5px solid var(--glass-edge-bottom);
+  box-shadow: var(--shadow-1), inset 0 1px 0 rgba(255,255,255,0.45);
 }
 
-/* CONTAINER */
-.container {
-  max-width:1100px;
-  margin:30px auto;
+.app{
+  display:grid;
+  grid-template-columns: calc(var(--sidebar-w) + var(--gap)) 1fr;
+  grid-template-rows: var(--navbar-h) 1fr;
+  grid-template-areas:
+    "sidebar navbar"
+    "sidebar main";
+  min-height:100vh;
 }
 
-/* CARDS GRID */
-.cards {
-  display:flex;
-  gap:20px;
-  flex-wrap:wrap;
-  margin-bottom:20px;
+/* ============== FLOATING "POPUP" SIDEBAR ============== */
+.sidebar-slot{ grid-area: sidebar; position:relative; }
+.sidebar{
+  position:sticky; top:var(--gap);
+  height:calc(100vh - (var(--gap) * 2));
+  width:var(--sidebar-w);
+  margin:var(--gap) 0 var(--gap) var(--gap);
+  padding:16px;
+  display:flex; flex-direction:column; gap:12px;
+  background: linear-gradient(165deg, rgba(15,58,41,0.92), rgba(6,32,23,0.94));
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 26px;
+  border:1px solid rgba(255,255,255,0.14);
+  box-shadow: var(--shadow-3), inset 0 1px 0 rgba(255,255,255,0.1);
+  z-index: 120;
+  transition: width var(--norm), transform var(--norm);
+}
+.sidebar .brand{ display:flex; align-items:center; gap:10px; color:#fdfcf8; padding:8px 6px 14px; border-bottom:1px solid rgba(255,255,255,0.10); }
+.sidebar .brand .logo{ width:48px; height:48px; object-fit:contain; border-radius:10px; flex-shrink:0; background:linear-gradient(160deg, var(--accent), #e8c877); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); }
+.sidebar .brand .name{ font-family:var(--font-display); font-weight:600; font-size:15.5px; letter-spacing:.2px; line-height:1.25; }
+.sidebar .collapse-btn{ margin-left:auto; border:none; background:rgba(255,255,255,0.10); color:#fdfcf8; width:26px; height:26px; border-radius:8px; display:grid; place-items:center; cursor:pointer; flex-shrink:0; }
+
+.nav-group{ margin-top:4px; display:flex; flex-direction:column; gap:6px; }
+.nav-item{
+  display:flex; align-items:center; gap:10px;
+  color:#e8efe9; text-decoration:none;
+  padding:11px 12px; border-radius:13px; font-weight:600; font-size:13.5px;
+  transition: transform var(--fast), background var(--fast);
+  white-space:nowrap; overflow:hidden;
+}
+.nav-item:hover{ transform: translateX(2px); background:rgba(255,255,255,0.10); }
+.nav-item[aria-current="page"]{ background:linear-gradient(160deg, rgba(207,159,69,0.35), rgba(207,159,69,0.14)); }
+.nav-item i{ width:17px; height:17px; flex-shrink:0; }
+
+.sidebar.collapsed{ width:76px; }
+.sidebar.collapsed .brand .name{ display:none; }
+.sidebar.collapsed .nav-item span{ display:none; }
+.sidebar.collapsed .collapse-btn{ transform: rotate(180deg); margin-left:0; }
+
+/* Popup drawer on mobile: sidebar detaches and floats over content */
+@media (max-width:980px){
+  .app{ grid-template-columns: 1fr; grid-template-areas: "navbar" "main"; }
+  .sidebar-slot{ display:contents; }
+  .sidebar{
+    position: fixed; top:0; bottom:0; left:0; margin:0; height:100vh;
+    width: min(82vw, 300px); border-radius:0 26px 26px 0;
+    transform: translateX(-105%);
+    transition: transform var(--norm);
+  }
+  .sidebar.open{ transform: translateX(0); }
+}
+.drawer-scrim{
+  position: fixed; inset:0; background: rgba(8,16,12,0.45); backdrop-filter: blur(2px);
+  opacity:0; pointer-events:none; transition:opacity var(--norm); z-index:110;
+}
+.drawer-scrim.show{ opacity:1; pointer-events:auto; }
+
+/* ============== Navbar ============== */
+.navbar{
+  grid-area: navbar;
+  position:sticky; top:0; z-index:100;
+  height:var(--navbar-h);
+  margin: var(--gap) var(--gap) 0 0;
+  padding:10px 18px;
+  display:flex; align-items:center; gap:12px; justify-content:space-between;
+  background:linear-gradient(180deg, rgba(15,58,41,0.90), rgba(8,38,28,0.90));
+  backdrop-filter:blur(18px) saturate(180%);
+  -webkit-backdrop-filter:blur(18px) saturate(180%);
+  border-radius: 20px;
+  border:1px solid rgba(255,255,255,0.12);
+  box-shadow: var(--shadow-2);
+  color:#fdfcf8;
+}
+@media (max-width:980px){ .navbar{ margin: var(--gap); border-radius:18px; } }
+
+.nav-left, .nav-right{ display:flex; align-items:center; gap:10px; }
+.nav-title{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-size:16.5px; font-weight:600; white-space:nowrap; }
+.nav-date{ font-size:12px; opacity:.85; font-family:var(--font-mono); }
+.searchbar{ display:flex; align-items:center; gap:8px; background: rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); border-radius: var(--radius-pill); padding:8px 12px; min-width: 220px; }
+.searchbar input{ border:none; outline:none; background:transparent; color:#fdfcf8; width:100%; font-size:13.5px; }
+.searchbar input::placeholder{ color:rgba(253,252,248,0.7); }
+.nav-icon-btn{ border:1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.12); color:#fdfcf8; width:38px; height:38px; display:grid; place-items:center; border-radius:12px; transition:transform var(--fast), background var(--fast); cursor:pointer; position:relative; }
+.nav-icon-btn:hover{ transform: translateY(-2px); background: rgba(255,255,255,0.18); }
+.badge-dot{ position:absolute; top:-4px; right:-4px; background:var(--accent); color:#1c2b1f; font-size:10px; font-weight:800; min-width:16px; height:16px; border-radius:999px; display:grid; place-items:center; padding:0 3px; }
+.profile{ display:flex; align-items:center; gap:8px; padding:6px 10px 6px 6px; border-radius:14px; background: rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); cursor:pointer; }
+.profile .avatar{ width:30px; height:30px; border-radius:50%; background: linear-gradient(160deg, #7fb885, #2d6a4f); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); }
+.dropdown{ position:absolute; top:calc(var(--navbar-h) + var(--gap) + 8px); right:var(--gap); min-width:200px; padding:8px; border-radius:14px; background:rgba(12,44,32,0.97); border:1px solid rgba(255,255,255,0.16); box-shadow: var(--shadow-3); display:none; z-index:130; }
+.dropdown.show{ display:block; }
+.dropdown a{ color:#fdfcf8; text-decoration:none; display:flex; align-items:center; gap:8px; padding:10px; border-radius:10px; transition:background var(--fast); font-size:13.5px; }
+.dropdown a:hover{ background:rgba(255,255,255,0.10); }
+
+/* ============== Main ============== */
+.main{ grid-area: main; padding: var(--gap) var(--gap) 40px 0; max-width:1440px; width:100%; margin:0 auto; }
+@media (max-width:980px){ .main{ padding: 0 var(--gap) 40px; } }
+
+.section-title{ font-family:var(--font-display); font-weight:600; font-size:21px; color:var(--ink); margin:26px 0 6px; display:flex; align-items:center; gap:8px; scroll-margin-top:96px; }
+.section-sub{ color:var(--ink-soft); font-size:13px; margin:0 0 14px; }
+
+/* KPI grid */
+.kpi-grid{ display:grid; gap:12px; grid-template-columns: repeat(6, minmax(150px,1fr)); }
+@media (max-width:1400px){ .kpi-grid{ grid-template-columns: repeat(3,1fr); } }
+@media (max-width:760px){ .kpi-grid{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:480px){ .kpi-grid{ grid-template-columns: 1fr; } }
+
+.kpi{ position:relative; overflow:hidden; padding:15px; min-height:100px; border-radius:var(--radius-lg); background:linear-gradient(160deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55)); border:1px solid rgba(255,255,255,0.6); box-shadow: var(--shadow-1), inset 0 1px 0 rgba(255,255,255,0.5); transition: transform var(--norm), box-shadow var(--norm); }
+:root.dark .kpi{ background:linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); border-color:rgba(255,255,255,0.08); }
+.kpi::before{ content:""; position:absolute; inset:0 0 auto 0; height:3px; background:linear-gradient(90deg, var(--secondary), var(--accent)); }
+.kpi:hover{ transform: translateY(-4px); box-shadow: var(--shadow-2); }
+.kpi-head{ display:flex; justify-content:space-between; align-items:center; }
+.kpi .icon{ width:32px; height:32px; border-radius:10px; display:grid; place-items:center; color:#0f3a29; background:linear-gradient(160deg, #e8f3ed, #cbe8d7); border:1px solid rgba(18,39,30,0.08); }
+:root.dark .kpi .icon{ color:#eaf6ee; background:linear-gradient(160deg, rgba(82,183,136,0.35), rgba(45,106,79,0.35)); }
+.kpi .label{ font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-soft); font-weight:700; }
+.kpi .value{ font-family:var(--font-mono); font-size:24px; font-weight:600; color:var(--ink); margin-top:4px; }
+.kpi .spark{ position:absolute; right:8px; bottom:8px; opacity:.5; }
+
+/* Quick actions */
+.actions-grid{ display:grid; gap:12px; grid-template-columns: repeat(4, 1fr); }
+@media (max-width:1100px){ .actions-grid{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:560px){ .actions-grid{ grid-template-columns: 1fr; } }
+.action-card{ display:flex; align-items:center; gap:10px; padding:13px 15px; border-radius:16px; background:rgba(255,255,255,0.65); border:1px solid var(--line); box-shadow: var(--shadow-1); transition: transform var(--fast), box-shadow var(--fast); cursor:pointer; text-decoration:none; color:inherit; font-weight:700; font-size:13px; }
+:root.dark .action-card{ background:rgba(255,255,255,0.06); }
+.action-card:hover{ transform: translateY(-3px); box-shadow: var(--shadow-2); }
+.action-card .ac-icon{ width:34px; height:34px; border-radius:11px; display:grid; place-items:center; color:white; background:linear-gradient(160deg, var(--secondary), var(--primary)); flex-shrink:0; }
+
+/* Cards */
+.card{ border-radius:var(--radius-lg); background:linear-gradient(160deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55)); border:1px solid rgba(255,255,255,0.6); box-shadow: var(--shadow-1), inset 0 1px 0 rgba(255,255,255,0.5); }
+:root.dark .card{ background:linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border-color:rgba(255,255,255,0.08); }
+.card h3{ margin:0 0 10px; font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--ink); display:flex; align-items:center; gap:8px; }
+
+/* ============== Compact analytics row (pie/donut focus) ============== */
+.charts-row{ display:grid; gap:14px; grid-template-columns: repeat(3, 1fr); }
+.charts-row .card{ padding:14px; }
+.charts-row canvas{ max-height:150px; }
+@media (max-width:900px){ .charts-row{ grid-template-columns: 1fr 1fr; } }
+@media (max-width:560px){ .charts-row{ grid-template-columns: 1fr; } }
+
+/* Batches */
+.batch-cards{ display:grid; gap:14px; grid-template-columns: repeat(3,1fr); }
+@media (max-width:1200px){ .batch-cards{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:680px){ .batch-cards{ grid-template-columns: 1fr; } }
+
+.batch-card{ position:relative; padding:18px; overflow:visible; }
+.batch-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+.batch-title{ font-family:var(--font-display); font-size:15.5px; font-weight:600; }
+.badges{ display:flex; gap:6px; flex-wrap:wrap; margin:10px 0; }
+.badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:var(--radius-pill); font-size:12px; font-weight:700; }
+.badge.open{ background:var(--ok-bg); color:var(--ok-ink); }
+.badge.full{ background:var(--danger-bg); color:var(--danger-ink); }
+.badge.warn{ background:var(--warn-bg); color:var(--warn-ink); }
+
+.batch-meta{ display:grid; grid-template-columns: repeat(2,1fr); gap:8px; margin:10px 0; font-size:13px; color:var(--ink-soft); }
+.batch-meta b{ font-family:var(--font-mono); color:var(--ink); }
+
+.progress-row{ display:flex; align-items:center; gap:10px; }
+.progress{ height:8px; border-radius:10px; background:rgba(18,39,30,0.10); overflow:hidden; flex:1; }
+.progress > span{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--secondary), var(--accent)); transition: width .8s ease; }
+
+.menu{ position:relative; }
+.menu-btn{ border:1px solid var(--line); background:rgba(255,255,255,0.6); border-radius:10px; padding:6px 8px; cursor:pointer; }
+.menu-list{ position:absolute; right:0; top:110%; background:rgba(255,255,255,0.97); border:1px solid var(--line); border-radius:12px; box-shadow: var(--shadow-2); display:none; min-width:150px; z-index:10; overflow:hidden; }
+:root.dark .menu-list{ background:rgba(20,30,25,0.97); }
+.menu-list a, .menu-list button{ display:flex; align-items:center; gap:8px; width:100%; background:none; border:none; text-align:left; padding:10px 12px; font-size:13px; cursor:pointer; color:inherit; }
+.menu-list button:hover{ background:rgba(127,184,133,0.15); }
+.menu.open .menu-list{ display:block; }
+
+.empty-state{ padding:30px 20px; text-align:center; color:var(--ink-soft); grid-column: 1 / -1; }
+.empty-state i{ display:block; margin:0 auto 10px; width:34px; height:34px; opacity:.6; }
+
+/* Table */
+.table-wrap{ border-radius:var(--radius-lg); overflow:auto; max-height:560px; }
+.table-card{ padding:10px; }
+.table-toolbar{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:6px 6px 10px; }
+.table-toolbar .search{ padding:10px 14px; border-radius:var(--radius-pill); border:1px solid var(--line); background:rgba(255,255,255,0.85); font-size:13.5px; min-width:220px; }
+.btn{ padding:10px 14px; border:none; border-radius:var(--radius-pill); cursor:pointer; font-size:13px; font-weight:700; display:inline-flex; align-items:center; gap:6px; transition: transform var(--fast), opacity var(--fast); box-shadow: var(--shadow-1); border-top:1px solid rgba(255,255,255,0.4); }
+.btn:hover{ transform: translateY(-2px); }
+.btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+.btn-green { background:linear-gradient(160deg, #52b788, #2d6a4f); color:white; }
+.btn-blue  { background:linear-gradient(160deg, #48b6e8, #0077b6); color:white; }
+.btn-red   { background:linear-gradient(160deg, #ef6f7c, #d62839); color:white; }
+.btn-gold  { background:linear-gradient(160deg, #e8c877, #cf9f45); color:#1c2b1f; }
+.btn-ghost { background:rgba(255,255,255,0.6); color:var(--ink); border:1px solid var(--line); box-shadow:none; }
+
+.table{ width:100%; border-collapse:collapse; }
+.table th{ position:sticky; top:0; z-index:1; background:linear-gradient(160deg, var(--secondary), var(--primary)); color:#fdfcf8; padding:14px 16px; text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.6px; font-weight:700; }
+.table td{ padding:12px 16px; border-bottom:1px solid var(--line); font-size:13.5px; background:rgba(255,255,255,0.60); }
+:root.dark .table td{ background:rgba(255,255,255,0.03); }
+.table tr:hover td{ background:rgba(127,184,133,0.14); }
+.table .row-actions{ display:flex; gap:6px; flex-wrap:wrap; }
+.table .row-actions .btn{ padding:6px 10px; font-size:12px; }
+
+@media (max-width:700px){
+  .table, .table thead, .table tbody, .table th, .table td, .table tr { display:block; }
+  .table thead{ display:none; }
+  .table tr{ margin-bottom:12px; border-radius:16px; background:rgba(255,255,255,0.6); display:block; padding:6px 0; box-shadow: var(--shadow-1); }
+  .table td{ display:flex; justify-content:space-between; align-items:center; gap:10px; border-bottom:1px solid var(--line); text-align:right; }
+  .table td::before{ content: attr(data-label); font-weight:700; color:var(--ink-soft); font-size:11px; text-transform:uppercase; margin-right:10px; text-align:left; }
+  .table td:last-child{ border-bottom:none; }
 }
 
-/* CARD */
-.card {
-  background:white;
-  padding:20px;
-  border-radius:14px;
-  width:240px;
-  box-shadow:0 8px 25px rgba(0,0,0,0.08);
-  transition:0.3s;
+.form-field{ position:relative; display:flex; flex-direction:column; gap:6px; text-align:left; }
+.form-field label{ font-size:12.5px; font-weight:700; color:var(--ink-soft); }
+.input{ padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:rgba(255,255,255,0.9); font-size:13.5px; color:var(--ink); outline:none; transition: box-shadow var(--fast), border-color var(--fast); }
+.input:focus{ border-color:var(--secondary); box-shadow:0 0 0 3px rgba(45,106,79,0.25); }
+
+.status{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px; }
+.status.paid{ background:var(--ok-bg); color:var(--ok-ink); }
+.status.pending{ background:var(--danger-bg); color:var(--danger-ink); }
+
+.advanced-search{ padding:14px 18px; margin-bottom:12px; }
+.advanced-search summary{ cursor:pointer; font-weight:800; font-size:13.5px; }
+.adv-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:12px; }
+@media (max-width:900px){ .adv-grid{ grid-template-columns: repeat(2,1fr); } }
+@media (max-width:520px){ .adv-grid{ grid-template-columns: 1fr; } }
+
+.footer{ margin:30px 0 10px; color:var(--ink-soft); font-size:12.5px; text-align:center; }
+
+:focus-visible{ outline:3px solid rgba(207,159,69,0.55); outline-offset:2px; }
+
+.mobile-only{ display:none; }
+@media (max-width:980px){ .mobile-only{ display:initial; } .searchbar{ display:none; } }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
 }
 
-.card:hover {
-  transform: translateY(-5px);
+/* Student in student section Admin portal*/
+.student-hover{
+  position:relative;
 }
 
-/* STATUS BADGES */
-.open {
-  background:#d8f3dc;
+.student-name{
   color:#2d6a4f;
-  padding:4px 10px;
-  border-radius:10px;
-  font-size:12px;
-}
-
-.full {
-  background:#ffe5e5;
-  color:#b00020;
-  padding:4px 10px;
-  border-radius:10px;
-  font-size:12px;
-}
-
-/* BUTTONS */
-.btn {
-  padding:6px 12px;
-  border:none;
-  border-radius:6px;
   cursor:pointer;
-  font-size:13px;
 }
 
-.btn-green {
-  background:#40916c;
-  color:white;
-}
-.btn-green:hover {
-  background:#2d6a4f;
-}
+.student-tooltip{
+  position:absolute;
+  left:0;
+  top:100%;
 
-.btn-red {
-  background:#e63946;
-  color:white;
-}
+  min-width:280px;
 
-.btn-blue {
-  background:#0077b6;
-  color:white;
-}
-
-/* FORM BOX */
-.form-box {
-  background:white;
-  padding:20px;
-  margin-bottom:20px;
+  background:#ffffff;
+  color:#222;
+  border-left:4px solid #2d6a4f;
+  border:1px solid #d9d9d9;
   border-radius:12px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.08);
-}
 
-/* INPUTS */
-input, select {
-  padding:10px;
-  margin:5px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  width:180px;
-}
+  padding:14px;
 
-/* SEARCH */
-.search {
-  padding:10px;
-  width:260px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  margin-bottom:10px;
-}
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
 
-/* TABLE */
-table {
-  width:100%;
-  border-collapse:collapse;
-  margin-top:15px;
-  background:white;
-  border-radius:10px;
-  overflow:hidden;
-}
+  z-index:9999;
 
-th {
-  background:#2d6a4f;
-  color:white;
-  padding:12px;
+  opacity:0;
+  visibility:hidden;
+
+  transform:translateY(8px);
+  transition:.25s ease;
+
   text-align:left;
 }
 
-td {
-  padding:12px;
-  border-bottom:1px solid #eee;
+.student-hover:hover .student-tooltip{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
 }
 
-tr:hover {
-  background:#f9f9f9;
-}
-
-/* SECTION SPACING */
-.section {
-  margin-top:25px;
-}
-
-/*---- To Glove low seats*/
-.card:hover {
-  transform:translateY(-5px);
-  box-shadow:0 12px 30px rgba(0,0,0,0.12);
+.student-tooltip a{
+  color:#2d6a4f !important;
+  font-weight:600;
+  text-decoration:none;
 }
 
 </style>
-
 </head>
 
 <body>
 
+<div class="drawer-scrim" id="drawerScrim" aria-hidden="true"></div>
 
-<!-- ✅ NAVBAR (TOP ALWAYS) -->
-<div class="navbar">
-  <h3>🌿 Admin Dashboard</h3>
-  <a href="/logout" style="color:white;">Logout</a>
+<div class="app">
+
+  <div class="sidebar-slot">
+    <nav class="sidebar" id="sidebar" aria-label="Primary">
+      <div class="brand" aria-label="Hospital Brand">
+        
+        <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo">
+         
+
+        
+        <div class="name">Amrutha<br>Aarogya Kendra</div>
+        <button class="collapse-btn" id="collapseBtn" aria-label="Collapse sidebar" title="Collapse sidebar">
+          <i data-feather="chevrons-left"></i>
+        </button>
+      </div>
+
+      <div class="nav-group">
+        <a class="nav-item" href="#" aria-current="page"><i data-feather="grid"></i><span>Dashboard</span></a>
+        <a class="nav-item" href="#students"><i data-feather="users"></i><span>Students</span></a>
+        <a class="nav-item" href="#batches"><i data-feather="calendar"></i><span>Batches</span></a>
+        <a class="nav-item" href="#analytics"><i data-feather="bar-chart-2"></i><span>Analytics</span></a>
+        <a class="nav-item" href="#settings"><i data-feather="settings"></i><span>Settings</span></a>
+        <a class="nav-item" href="/logout"><i data-feather="log-out"></i><span>Logout</span></a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Navbar -->
+  <header class="navbar" role="banner" aria-label="Top Navigation">
+    <div class="nav-left">
+      <button class="nav-icon-btn mobile-only" id="openDrawer" aria-label="Open menu"><i data-feather="menu"></i></button>
+      <div class="nav-title"><span>🌿 Admin Dashboard</span></div>
+      <span class="nav-date" id="dateTime" aria-live="polite"></span>
+      <div class="searchbar" role="search" aria-label="Global search">
+        <i data-feather="search"></i>
+        <input type="text" id="globalSearch" placeholder="Search dashboard…" aria-label="Search dashboard">
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="nav-icon-btn" id="notifBtn" aria-label="Notifications"><i data-feather="bell"></i><span class="badge-dot">3</span></button>
+      <button class="nav-icon-btn" id="darkToggle" aria-label="Toggle dark mode"><i data-feather="moon"></i></button>
+      <div class="profile" id="profileBtn" aria-haspopup="true" aria-expanded="false" aria-label="Profile menu">
+        <div class="avatar" aria-hidden="true"></div>
+        <span>Admin</span>
+        <i data-feather="chevron-down"></i>
+      </div>
+      <div class="dropdown" id="profileMenu" role="menu" aria-label="Profile menu">
+        <a href="#settings"><i data-feather="settings"></i> Settings</a>
+        <a href="/logout"><i data-feather="log-out"></i> Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="main" role="main">
+
+    <!-- KPI Grid -->
+    <div class="section-title">Overview</div>
+    <div class="kpi-grid" aria-label="Key performance indicators">
+      <div class="kpi">
+        <div class="kpi-head"><div class="icon"><i data-feather="user"></i></div><div class="label">Total Students</div></div>
+        <div class="value" data-counter="{{ students|length|default(0) }}">0</div>
+        <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
+      </div>
+      <div class="kpi">
+        <div class="kpi-head"><div class="icon"><i data-feather="check-circle"></i></div><div class="label">Paid</div></div>
+        <div class="value" data-counter="{{ students|selectattr('payment_status','equalto','Paid')|list|length|default(0) }}">0</div>
+        <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
+      </div>
+      <div class="kpi">
+        <div class="kpi-head"><div class="icon"><i data-feather="clock"></i></div><div class="label">Pending</div></div>
+        <div class="value" data-counter="{{ students|selectattr('payment_status','equalto','Pending')|list|length|default(0) }}">0</div>
+        <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
+      </div>
+      <div class="kpi">
+        <div class="kpi-head"><div class="icon"><i data-feather="calendar"></i></div><div class="label">Batches</div></div>
+        <div class="value" data-counter="{{ batches|length|default(0) }}">0</div>
+        <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
+      </div>
+      <div class="kpi">
+        <div class="kpi-head"><div class="icon"><i data-feather="users"></i></div><div class="label">Male</div></div>
+        <div class="value" data-counter="{{ students|selectattr('gender','equalto','Male')|list|length|default(0) }}">0</div>
+        <div class="kpi-head"><div                              class="label">Female</div></div>
+        <div class="value" data-counter="{{ students|selectattr('gender','equalto','Female')|list|length|default(0) }}">0</div>
+        <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
+      </div>
+      <div class="kpi">
+        <div class="kpi-head"><div class="icon"><i data-feather="activity"></i></div><div class="label">Remaining Seats</div></div>
+        <div class="value" id="remainingSeats">—</div>
+        <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="section-title">Quick Actions</div>
+    <div class="actions-grid">
+      <a href="/auto_batches" class="action-card" aria-label="Auto Generate Batches"><div class="ac-icon"><i data-feather="cpu"></i></div><div>Auto Generate</div></a>
+      <a href="/export_excel" class="action-card" aria-label="Export Excel"><div class="ac-icon"><i data-feather="table"></i></div><div>Export Excel</div></a>
+      <button class="action-card" id="refreshBtn" type="button" aria-label="Refresh Data"><div class="ac-icon"><i data-feather="refresh-cw"></i></div><div>Refresh Data</div></button>
+      <button class="action-card" id="notifyBtn" type="button" aria-label="Send Notifications"><div class="ac-icon"><i data-feather="send"></i></div><div>Send Notifications</div></button>
+    </div>
+
+    <!-- Analytics — short, pie/donut-first row -->
+    <div class="section-title" id="analytics">Analytics</div>
+    <div class="charts-row">
+      <div class="card glass">
+        <h3><i data-feather="pie-chart"></i> Gender Split</h3>
+        <canvas id="chartGender" aria-label="Gender split pie chart" role="img"></canvas>
+      </div>
+      <div class="card glass">
+        <h3><i data-feather="disc"></i> Payment Status</h3>
+        <canvas id="chartPayment" aria-label="Payment status donut chart" role="img"></canvas>
+      </div>
+      <div class="card glass">
+        <h3><i data-feather="calendar"></i> Batch Status</h3>
+        <canvas id="chartBatchStatus" aria-label="Batch status pie chart" role="img"></canvas>
+      </div>
+    </div>
+
+    <!-- Create Batch (unchanged endpoint/fields) -->
+    <div class="section-title">Create Batch</div>
+    <div class="card glass" style="padding:18px;">
+      <form action="/add_batch" method="POST" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="date" name="start_date" required class="input" aria-label="Start date">
+        <input type="date" name="end_date" required class="input" aria-label="End date">
+        <input type="number" name="capacity" placeholder="Capacity" required class="input" aria-label="Capacity">
+        <button class="btn btn-blue" type="submit"><i data-feather="plus"></i> Add Batch</button>
+      </form>
+    </div>
+
+    <!-- Bulk Upload (unchanged endpoint/field) -->
+    <div class="section-title">Bulk Upload</div>
+    <div class="card glass" style="padding:18px;">
+      <form action="/upload_csv" method="POST" enctype="multipart/form-data" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+        <input type="file" name="file" required class="input" aria-label="Upload CSV file">
+        <button class="btn btn-ghost" type="submit"><i data-feather="upload"></i> Upload CSV</button>
+      </form>
+    </div>
+
+    <!-- Batches — defensive rendering so a missing field never blanks the whole section -->
+    <div class="section-title" id="batches">Batches</div>
+    <p class="section-sub">Manage active and upcoming training batches.</p>
+
+    <div class="batch-cards">
+      {% set batch_list = batches|default([]) %}
+      {% for b in batch_list %}
+        {% set cap = (b.capacity|default(0)) or 0 %}
+        {% set filled = (b.filled_slots|default(0)) or 0 %}
+        {% set remaining = (cap - filled) if cap > 0 else 0 %}
+        {% set pct = ((filled / cap * 100) | round(0, 'floor')) if cap > 0 else 0 %}
+        <div class="batch-card card glass" data-batch-id="{{ b.id|default('') }}">
+          <div class="batch-head">
+            <div class="batch-title">{{ b.start_display|default('—') }} → {{ b.end_display|default('—') }}</div>
+            <div class="menu">
+              <button class="menu-btn" aria-haspopup="true" aria-expanded="false" aria-label="Batch actions"><i data-feather="more-horizontal"></i></button>
+              <div class="menu-list" role="menu" aria-label="Batch actions">
+                <button type="button" onclick="openEditBatchModal({{ b.id|default(0) }})"><i data-feather="edit-2"></i> Edit</button>
+                <button type="button" onclick="deleteBatch({{ b.id|default(0) }})"><i data-feather="trash-2"></i> Delete</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="badges">
+            {% if cap > 0 and filled < cap %}
+              <span class="badge open">✅ Open</span>
+              {% if remaining <= 2 %}<span class="badge warn">⚠ Few seats left</span>{% endif %}
+            {% elif cap > 0 %}
+              <span class="badge full">❌ Full</span>
+            {% else %}
+              <span class="badge warn">— Capacity not set</span>
+            {% endif %}
+          </div>
+
+          <div class="batch-meta">
+            <div>Slots: <b>{{ filled }}</b> / {{ cap }}</div>
+            <div>Remaining: <b>{{ remaining }}</b></div>
+          </div>
+
+          <div class="progress-row" aria-label="Occupancy">
+            <div class="progress" aria-hidden="true"><span data-progress="{{ pct }}"></span></div>
+            <div style="min-width:44px; text-align:right; font-family:var(--font-mono); font-size:13px;">{{ pct }}%</div>
+          </div>
+        </div>
+      {% else %}
+        <div class="empty-state card glass">
+          <i data-feather="calendar"></i>
+          No batches yet — create one above using the "Create Batch" form to get started.
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Students -->
+    <div class="section-title" id="students">Students</div>
+
+    <details class="card glass advanced-search">
+      <summary>Advanced Search &amp; Filters</summary>
+      <div class="adv-grid">
+        <input type="text" class="input adv" data-key="name" placeholder="Name">
+        <input type="text" class="input adv" data-key="phone" placeholder="Phone">
+        <input type="text" class="input adv" data-key="college" placeholder="College">
+        <input type="text" class="input adv" data-key="district" placeholder="District">
+        <select class="input adv" data-key="gender"><option value="">Gender</option><option>Male</option><option>Female</option></select>
+        <select class="input adv" data-key="payment_status"><option value="">Payment</option><option>Paid</option><option>Pending</option></select>
+      </div>
+    </details>
+
+    <div class="card glass table-card">
+      <div class="table-toolbar">
+        <input type="text" id="search" class="search" placeholder="Search student...">
+        <button class="btn btn-green" id="tableExportCsv" type="button"><i data-feather="download"></i> Export CSV</button>
+        <button class="btn btn-red" id="tableExportPdf" type="button"><i data-feather="file-text"></i> Download PDF</button>
+        <button class="btn btn-ghost" id="tableReset" type="button"><i data-feather="x-circle"></i> Reset</button>
+      </div>
+      <div class="table-wrap">
+        <table id="table" class="table" role="table" aria-label="Students table">
+          <thead>
+            <tr role="row"><th>Name</th><th>Batch</th><th>Gender</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            {% for s in students|default([]) %}
+            <!--<tr role="row" tabindex="0" onclick="openStudentProfile({{ s.id|default(0) }})" style="cursor:pointer;"> -->
+              <tr role="row"tabindex="0"onclick="window.open('/student/{{ s.id }}','_blank')"style="cursor:pointer;">
+              <td data-label="Name" class="student-hover">
+
+              <span class="student-name"><b>{{ s.name|default('—') }}</b></span>
+
+              <div class="student-tooltip">
+
+             <b>{{ s.name }}</b><br><br>📧 {{ s.email }}<br>📱 {{ s.phone }}<br>🎓 {{ s.college }}<br>👤 {{ s.gender }}<br>💳 {{ s.payment_status }}<br><br>/student/{{ s.id }}>View Full Profile →</a></div></td>
+
+             <!---- <td data-label="Batch">{{ s.batchid|default('—') }}</td> -->
+              <td data-label="Batch">{% for b in batches %}  {% if b.id == s.batch_id %} {{ b.start_display }} → {{ b.end_display }}    {% endif %}{% endfor %}</td>
+              <td data-label="Gender">{% if s.gender == "Male" %} Male{% else %} Female{% endif %}</td>
+              <td data-label="Status">
+                {% if s.payment_status == "Paid" %}<span class="status paid">Paid</span>{% else %}<span class="status pending">Pending</span>{% endif %}
+              </td>
+              <td data-label="Actions" class="row-actions" onclick="event.stopPropagation();">
+                <button type="button" onclick="markPaid({{ s.id|default(0) }})" class="btn btn-green">✅ Verify</button>
+                <button type="button" onclick="deleteStudent({{ s.id|default(0) }})" class="btn btn-red">🗑 Reject/Delete</button>
+                <button type="button"onclick="fetch('/mark_completed/{{ s.id }}').then(()=>location.reload())"class="btn btn-success">✅ Complete</button>
+                <button type="button" onclick="window.location='/certificate/{{ s.id|default(0) }}'" class="btn btn-gold">📄 Cert</button>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="5" style="text-align:center; padding:26px; color:var(--ink-soft);">No students found.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="footer">© Amrutha Aarogya Kendra — Admin Portal</div>
+  </main>
 </div>
-
-
-<div class="container">
-
-<!-- ACTION BUTTONS -->
-<div style="margin-bottom:15px;">
-  <a href="/auto_batches" class="btn btn-green">Auto Generate</a>
-  <a href="/export_excel" class="btn btn-blue">Export Excel</a>
-</div>
-
-<!-- SEARCH -->
-<input type="text" id="search" class="search" placeholder="Search student...">
-
-<!-- ANALYTICS -->
-<h2>Analytics</h2>
-<canvas id="chart"></canvas>
 
 <script>
-new Chart(document.getElementById("chart"), {
-  type: 'bar',
-  data: {
-    labels: ["Total", "Paid", "Pending"],
-    datasets: [{
-      data: [
-        {{ students|length }},
-        {{ students|selectattr('payment_status','equalto','Paid')|list|length }},
-        {{ students|selectattr('payment_status','equalto','Pending')|list|length }}
-      ],
-      backgroundColor: ["#40916c","green","red"]
-    }]
+feather.replace();
+
+/* Date/time */
+(function initDateTime(){
+  const el = document.getElementById('dateTime');
+  function tick(){
+    const now = new Date();
+    const date = now.toLocaleDateString(undefined, {weekday:'short', year:'numeric', month:'short', day:'numeric'});
+    const time = now.toLocaleTimeString(undefined, {hour:'2-digit', minute:'2-digit'});
+    el.textContent = date + " • " + time;
   }
-});
-</script>
-<!-- =====-All candidtes----====-->
-  <a href="/all_candidates">
-    <button style="padding:10px; background-color:green; color:white;">
-        📊 View All Candidates
-    </button>
-</a>
+  tick(); setInterval(tick, 15000);
+})();
 
- <a href="/gallery_admin">
-    <button>
-        📸 Manage Gallery
-    </button>
-</a>
- 
-  
-  
-<!-- CREATE BATCH -->
+/* Dark mode */
+(function darkMode(){
+  const root = document.documentElement;
+  if(localStorage.getItem('aaktheme') === 'dark'){ root.classList.add('dark'); }
+  document.getElementById('darkToggle').addEventListener('click', function(){
+    root.classList.toggle('dark');
+    localStorage.setItem('aaktheme', root.classList.contains('dark') ? 'dark' : 'light');
+  });
+})();
 
-<!-- ✅ CREATE BATCH CARD -->
-  <div class="form-box">
-    <h2>➕ Create Batch</h2>
+/* Sidebar popup drawer + desktop collapse */
+(function sidebarBehavior(){
+  const sidebar = document.getElementById('sidebar');
+  const scrim = document.getElementById('drawerScrim');
+  const openBtn = document.getElementById('openDrawer');
+  const collapseBtn = document.getElementById('collapseBtn');
 
-    <form action="/add_batch" method="POST">
-      <input type="date" name="start_date" required>
-      <input type="date" name="end_date" required>
-      <input type="number" name="capacity" placeholder="Capacity" required>
+  function closeDrawer(){
+    sidebar.classList.remove('open');
+    scrim.classList.remove('show');
+    scrim.setAttribute('aria-hidden','true');
+  }
+  if(openBtn){
+    openBtn.addEventListener('click', function(){
+      sidebar.classList.add('open');
+      scrim.classList.add('show');
+      scrim.setAttribute('aria-hidden','false');
+    });
+  }
+  scrim.addEventListener('click', closeDrawer);
+  if(collapseBtn){
+    collapseBtn.addEventListener('click', function(){ sidebar.classList.toggle('collapsed'); });
+  }
+  window.addEventListener('resize', function(){
+    if(!window.matchMedia('(max-width: 980px)').matches){ closeDrawer(); }
+  });
+})();
 
-      <button class="btn btn-blue">Add Batch</button>
-    </form>
-  </div>
+/* Profile menu */
+(function profileMenu(){
+  const btn = document.getElementById('profileBtn');
+  const menu = document.getElementById('profileMenu');
+  btn.addEventListener('click', function(){
+    const open = menu.classList.toggle('show');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', function(e){
+    if(!menu.contains(e.target) && !btn.contains(e.target)){ menu.classList.remove('show'); btn.setAttribute('aria-expanded','false'); }
+  });
+})();
 
-</div>
+/* KPI counters + sparklines */
+(function kpis(){
+  document.querySelectorAll('[data-counter]').forEach(function(el){
+    const target = parseInt(el.getAttribute('data-counter'), 10) || 0;
+    let n = 0;
+    const step = Math.max(1, Math.round(target / 30));
+    const t = setInterval(function(){
+      n += step;
+      if(n >= target){ n = target; clearInterval(t); }
+      el.textContent = n;
+    }, 28);
+  });
+  document.querySelectorAll('.kpi .spark').forEach(function(cv){
+    const ctx = cv.getContext('2d');
+    const w = cv.width, h = cv.height;
+    const pts = Array.from({length:10}, function(_, i){
+      return { x: i * (w / 9), y: h - (Math.random() * h * 0.7 + h * 0.15) };
+    });
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, 'rgba(45,106,79,0.5)');
+    grad.addColorStop(1, 'rgba(207,159,69,0.0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, h);
+    pts.forEach(function(p){ ctx.lineTo(p.x, p.y); });
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#2d6a4f';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    pts.forEach(function(p, i){ i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); });
+    ctx.stroke();
+  });
+})();
 
+/* Fill batch occupancy bars */
+(function fillProgress(){
+  document.querySelectorAll('.progress > span[data-progress]').forEach(function(el){
+    const pct = Math.max(0, Math.min(100, parseFloat(el.getAttribute('data-progress')) || 0));
+    requestAnimationFrame(function(){ el.style.width = pct + '%'; });
+  });
+})();
 
-<!-- BULK UPLOAD -->
-<h2>Bulk Upload</h2>
-
-<form action="/upload_csv" method="POST" enctype="multipart/form-data" class="form-box">
-  <input type="file" name="file" required>
-  <button class="btn">Upload CSV</button>
-</form>
-
-<!-- BATCHES -->
-<h2 style="margin-bottom:15px;">📅 Batches</h2>
-
-<div class="cards">
-{% for b in batches %}
-<div class="card" style="width:260px;">
-
-  <!-- ✅ DATE -->
-  <h3 style="margin-bottom:5px;">
-    {{ b.start_date }} → {{ b.end_date }}
-  </h3>
-
-  <!-- ✅ SLOTS -->
-  <p style="margin:5px 0;">
-    Slots: <b>{{ b.filled_slots }}</b> / {{ b.capacity }}
-  </p>
-
-  <!-- ✅ STATUS -->
-  {% if b.filled_slots < b.capacity %}
-    <span class="open">✅ Open</span>
-
-    {% if b.capacity - b.filled_slots <= 1 %}
-      <span style="color:#e67e22; font-weight:bold;">⚠ Few seats left</span>
-    {% endif %}
-
-{% else %}
-    <span class="full">❌ Full</span>
-{% endif %}
-
-
-  <!-- ✅ ACTIONS -->
-  <div style="margin-top:12px;">
-    <button onclick="editBatch({{b.id}})" class="btn btn-blue">✏ Edit</button>
-    <button onclick="deleteBatch({{b.id}})" class="btn btn-red">🗑 Delete</button>
-  </div>
-
-</div>
-{% endfor %}
-</div>
-
-<!-- STUDENTS -->
-<h2 style="margin-top:20px;">👨‍🎓 Students</h2>
-
-<input type="text" id="search" placeholder="🔍 Search student..." 
-       style="padding:10px; width:260px; border-radius:6px; border:1px solid #ccc; margin-bottom:10px;">
-
-<table id="table">
-
-<tr>
-  <th>Name</th>
-  <th>Mobile</th>   <!-- ✅ ADDED -->
-  <th>Batch</th>
-  <th>Gender</th>
-  <th>Status</th>
-  <th>Actions</th>
-</tr>
-
-{% for s in students %}
-<tr>
-
-  <!-- ✅ NAME -->
-  <td>
-    <a href="/student/{{ s.id }}">
-      {{ s.name }}
-    </a>
-  </td>
-
-  <!-- ✅ MOBILE -->
-  <td>
-    <a href="tel:+91{{ s.phone }}">
-      {{ s.phone }}
-    </a>
-  </td>
-
-  <!-- ✅ BATCH -->
-  <td>{{ s.batch_id }}</td>
-
-  <!-- ✅ GENDER -->
-  <td>
-    {% if s.gender == "Male" %}
-      👨 Male
-    {% else %}
-      👩 Female
-    {% endif %}
-  </td>
-
-  <!-- ✅ STATUS (APPLICATION STATUS ✅) -->
-  <td>
-    {% if s.application_status == "Approved" %}
-      <span style="color:green;">✅ Approved</span>
-    {% elif s.application_status == "Pending" %}
-      <span style="color:orange;">⏳ Pending</span>
-    {% else %}
-      <span style="color:red;">❌ Rejected</span>
-    {% endif %}
-  </td>
-
-  <!-- ✅ ACTIONS -->
-  <td>
-
-    {% if s.application_status == "Pending" %}
-
-      <!-- ✅ APPROVE -->
-      <a href="/update_status/{{ s.id }}/approve"
-         style="background:#2d6a4f;color:white;padding:5px 10px;border-radius:5px;text-decoration:none;">
-         ✅ Approve
-      </a>
-
-      <!-- ✅ REJECT -->
-      <a href="/update_status/{{ s.id }}/reject"
-         style="background:#d00000;color:white;padding:5px 10px;border-radius:5px;text-decoration:none;">
-         ❌ Reject
-      </a>
-
-    {% else %}
-      ✅ Done
-    {% endif %}
-
-    <br><br>
-
-    <!-- ✅ OTHER BUTTONS -->
-    <button onclick="markPaid({{s.id}})" class="btn btn-green">💳 Pay</button>
-    <button onclick="deleteStudent({{s.id}})" class="btn btn-red">🗑 Delete</button>
-    <button onclick="window.location='/certificate/{{s.id}}'" class="btn btn-blue">📄 Cert</button>
-
-  </td>
-
-</tr>
-{% endfor %}
-
-</table>
-
- <script>     
-/* 🔍 SEARCH */
-document.getElementById("search").addEventListener("keyup", function () {
-  let value = this.value.toLowerCase();
-  let rows = document.querySelectorAll("#table tr");
-
-  rows.forEach((row, index) => {
-    if (index === 0) return; // skip header
-
-    row.style.display = row.innerText.toLowerCase().includes(value)
-      ? ""
-      : "none";
+/* Notifications */
+document.getElementById('notifBtn').addEventListener('click', function(){
+  Swal.fire({
+    title: 'Notifications',
+    html:
+      '<div style="text-align:left">' +
+        '<div><b>New Registration</b> · 2m ago</div><div style="color:#516557">A student was added to a batch</div><hr>' +
+        '<div><b>Payment Received</b> · 15m ago</div><div style="color:#516557">A payment was marked as paid</div><hr>' +
+        '<div><b>CSV Upload</b> · 1h ago</div><div style="color:#516557">Records were processed from a CSV file</div>' +
+      '</div>',
+    confirmButtonText: 'Close',
+    confirmButtonColor: '#2d6a4f'
   });
 });
 
+/* Batch card dropdown menus */
+document.querySelectorAll('.menu').forEach(function(m){
+  const btn = m.querySelector('.menu-btn');
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    document.querySelectorAll('.menu.open').forEach(function(other){ if(other !== m) other.classList.remove('open'); });
+    m.classList.toggle('open');
+  });
+});
+document.addEventListener('click', function(){
+  document.querySelectorAll('.menu.open').forEach(function(m){ m.classList.remove('open'); });
+});
 
-/* ✅ MARK PAYMENT */
-function markPaid(id) {
-  if (!confirm("Mark this student as PAID?")) return;
+/* Remaining seats, computed from rendered batch cards */
+(function remainingSeats(){
+  const cards = document.querySelectorAll('[data-batch-id]');
+  let total = 0, found = false;
+  cards.forEach(function(card){
+    const metaEl = card.querySelector('.batch-meta');
+    if(!metaEl) return;
+    const match = metaEl.innerText.match(/Remaining:\s*(\d+)/i);
+    if(match){ total += parseInt(match[1], 10); found = true; }
+  });
+  const el = document.getElementById('remainingSeats');
+  if(el) el.textContent = found ? total : '—';
+})();
 
-  fetch(`/mark_paid/${id}`)
-    .then(() => {
-      showAlert("✅ Payment marked successfully", "success");
-      setTimeout(() => location.reload(), 800);
+/* Search: basic + advanced filters */
+const table = document.getElementById('table');
+const simpleSearch = document.getElementById('search');
+function filterTable(){
+  const query = (simpleSearch.value || '').toLowerCase();
+  const adv = {};
+  document.querySelectorAll('.adv').forEach(function(i){ adv[i.dataset.key] = (i.value || '').toLowerCase(); });
+  table.querySelectorAll('tbody tr').forEach(function(row){
+    const text = row.innerText.toLowerCase();
+    let show = text.includes(query);
+    Object.keys(adv).forEach(function(key){ if(adv[key]) show = show && text.includes(adv[key]); });
+    row.style.display = show ? '' : 'none';
+  });
+}
+let searchTimer;
+function debouncedFilter(){ clearTimeout(searchTimer); searchTimer = setTimeout(filterTable, 160); }
+simpleSearch.addEventListener('keyup', debouncedFilter);
+document.querySelectorAll('.adv').forEach(function(i){ i.addEventListener('input', debouncedFilter); });
+document.getElementById('tableReset').addEventListener('click', function(){
+  simpleSearch.value = '';
+  document.querySelectorAll('.adv').forEach(function(i){ i.value = ''; });
+  filterTable();
+});
+
+/* Visible-row helper shared by CSV + PDF export */
+function getVisibleRowsData(){
+  return Array.from(table.querySelectorAll('tbody tr'))
+    .filter(function(r){ return r.style.display !== 'none' && r.querySelectorAll('td').length >= 4; })
+    .map(function(r){
+      return Array.from(r.querySelectorAll('td')).slice(0, 4).map(function(td){
+        let txt = td.textContent || td.innerText;
+
+          txt = txt
+            .replace(/→/g, ' - ')
+            .replace(/&/g, '')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          return txt;
+
+      });
     });
 }
 
+/* Export CSV */
+document.getElementById('tableExportCsv').addEventListener('click', function(){
+  const data = getVisibleRowsData();
+  const lines = ['Name,Batch,Gender,Status'].concat(data.map(function(r){
+    return r.map(function(v){ return '"' + v.replace(/"/g, '""') + '"'; }).join(',');
+  }));
+  const blob = new Blob([lines.join('\n')], {type: 'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'students.csv';
+  a.click();
+});
 
-/* 🗑 DELETE STUDENT */
-function deleteStudent(id){
+/* Export PDF (client-side, jsPDF + autotable) */
+document.getElementById('tableExportPdf').addEventListener('click', function(){
+  const data = getVisibleRowsData();
+  if(!data.length){
+    Swal.fire('Nothing to export', 'No visible student rows match the current filters.', 'info');
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape' });
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('Amrutha Aarogya Kendra — Student Report', 14, 16);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Generated ' + new Date().toLocaleString(), 14, 22);
+  doc.autoTable({
+    head: [['Name', 'Batch', 'Gender', 'Status']],
+    body: data,
+    startY: 28,
+    headStyles: { fillColor: [15, 58, 41] },
+    styles: { fontSize: 10 }
+  });
+  doc.save('Amruta-Arogya-Kendra-Trainees.pdf');
+});
 
+/* Student profile modal */
+window.openStudentProfile = function(id){
+  const row = Array.from(document.querySelectorAll('#table tbody tr')).find(function(r){
+    return (r.getAttribute('onclick') || '').indexOf('(' + id + ')') !== -1;
+  });
+  const nameEl = row ? row.querySelector('td:nth-child(1) b') : null;
+  const name = nameEl ? nameEl.innerText : 'Student';
+  const batch = row ? row.querySelector('td:nth-child(2)').innerText : '—';
+  const status = row ? row.querySelector('td:nth-child(4)').innerText.trim() : '—';
+  Swal.fire({
+    title: name,
+    html: '<div style="text-align:left; line-height:1.6"><div><b>Batch:</b> ' + batch + '</div><div><b>Status:</b> ' + status + '</div></div>',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Mark Paid',
+    denyButtonText: 'Certificate',
+    cancelButtonText: 'Close',
+    confirmButtonColor: '#2d6a4f'
+  }).then(function(res){
+    if(res.isConfirmed){ markPaid(id); }
+    else if(res.isDenied){ window.location = '/certificate/' + id; }
+  });
+};
+
+/* Edit batch modal — same endpoint: /editbatch/<id>/<start>/<end>/<capacity> */
+window.openEditBatchModal = function(id){
+  Swal.fire({
+    title: 'Edit Batch',
+    html:
+      '<div class="form-field"><label for="swal-start">Start Date</label><input id="swal-start" type="date" class="input" required></div>' +
+      '<div class="form-field" style="margin-top:8px;"><label for="swal-end">End Date</label><input id="swal-end" type="date" class="input" required></div>' +
+      '<div class="form-field" style="margin-top:8px;"><label for="swal-cap">Capacity</label><input id="swal-cap" type="number" min="1" class="input" placeholder="Capacity" required></div>',
+    focusConfirm: false,
+    confirmButtonText: 'Save',
+    showCancelButton: true,
+    confirmButtonColor: '#2d6a4f',
+    preConfirm: function(){
+      const start = document.getElementById('swal-start').value;
+      const end = document.getElementById('swal-end').value;
+      const cap = document.getElementById('swal-cap').value;
+      if(!start || !end || !cap){ Swal.showValidationMessage('Please fill all fields'); return false; }
+      return {start: start, end: end, cap: cap};
+    }
+  }).then(function(r){
+    if(!r.isConfirmed) return;
+    Swal.fire({title:'Updating...', didOpen:function(){ Swal.showLoading(); }, allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false});
+    fetch('/edit_batch/' + id + '/' + r.value.start + '/' + r.value.end + '/' + r.value.cap)
+      .then(function(){ return Swal.fire('Batch updated successfully', '', 'success'); })
+      .then(function(){ location.reload(); });
+  });
+};
+
+/* mark_Paid / deleteStudent / deleteBatch — same endpoints */
+window.markPaid = function(id){
+  Swal.fire({ title: 'Mark as Paid?', icon: 'question', showCancelButton: true, confirmButtonColor: '#2d6a4f', confirmButtonText: 'Yes, mark paid' })
+    .then(function(result){
+      if(result.isConfirmed){
+        Swal.fire({title:'Processing...', didOpen:function(){ Swal.showLoading(); }, allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false});
+        fetch('/mark_paid/' + id).then(function(){ return Swal.fire('Success!', 'Payment updated.', 'success'); }).then(function(){ location.reload(); });
+      }
+    });
+};
+window.deleteStudent = function(id){
+  let timerInterval;
   Swal.fire({
     title: 'Delete this student?',
-    text: "This action cannot be undone!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#aaa',
-    confirmButtonText: 'Yes, delete'
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      fetch(`/delete_student/${id}`)
-        .then(() => {
-          Swal.fire(
-            'Deleted!',
-            'Student has been removed.',
-            'success'
-          ).then(() => location.reload());
-        });
-
+    html: 'This action cannot be undone.<br><b>Auto-cancel in <span id="undoTimer">6</span>s</b>',
+    icon: 'warning', showCancelButton: true, confirmButtonColor: '#d62839', cancelButtonColor: '#aaa', confirmButtonText: 'Yes, delete',
+    didOpen: function(){
+      const span = document.getElementById('undoTimer');
+      let t = 6;
+      timerInterval = setInterval(function(){ t -= 1; span.textContent = t; if(t <= 0){ clearInterval(timerInterval); Swal.close(); } }, 1000);
+    },
+    willClose: function(){ clearInterval(timerInterval); }
+  }).then(function(result){
+    if(result.isConfirmed){
+      Swal.fire({title:'Deleting...', didOpen:function(){ Swal.showLoading(); }, allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false});
+      fetch('/delete_student/' + id).then(function(){ return Swal.fire('Deleted!', 'Student has been removed.', 'success'); }).then(function(){ location.reload(); });
     }
-
   });
-
-}
-
-
-/* 🗑 DELETE BATCH */
-function deleteBatch(id){
-
-  Swal.fire({
-    title: 'Delete this batch?',
-    text: "All students in this batch may be affected!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    confirmButtonText: 'Delete'
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      fetch(`/delete_batch/${id}`)
-        .then(() => {
-          Swal.fire(
-            'Deleted!',
-            'Batch removed successfully.',
-            'success'
-          ).then(() => location.reload());
-        });
-
-    }
-
-  });
-
-}
-
-/**-------Alert-----*/
-function markPaid(id){
-
-  Swal.fire({
-    title: 'Mark as Paid?',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Yes'
-  }).then((result) => {
-
-    if (result.isConfirmed) {
-
-      fetch(`/mark_paid/${id}`)
-        .then(() => {
-          Swal.fire(
-            'Success!',
-            'Payment updated.',
-            'success'
-          ).then(() => location.reload());
-        });
-
-    }
-
-  });
-
-}
-
-
-/* ✏ EDIT BATCH */
-function editBatch(id) {
-
-  let start = prompt("Enter Start Date (YYYY-MM-DD):");
-  if (!start) return;
-
-  let end = prompt("Enter End Date (YYYY-MM-DD):");
-  if (!end) return;
-
-  let capacity = prompt("Enter Capacity:");
-  if (!capacity) return;
-
-  fetch(`/edit_batch/${id}/${start}/${end}/${capacity}`)
-    .then(() => {
-      showAlert("✅ Batch updated successfully", "success");
-      setTimeout(() => location.reload(), 800);
+};
+window.deleteBatch = function(id){
+  Swal.fire({ title: 'Delete this batch?', text: 'Students in this batch may be affected.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#d62839', confirmButtonText: 'Delete' })
+    .then(function(result){
+      if(result.isConfirmed){
+        Swal.fire({title:'Deleting...', didOpen:function(){ Swal.showLoading(); }, allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false});
+        fetch('/delete_batch/' + id).then(function(){ return Swal.fire('Deleted!', 'Batch removed successfully.', 'success'); }).then(function(){ location.reload(); });
+      }
     });
-}
+};
 
+/* Quick actions (front-end only placeholders) */
+document.getElementById('refreshBtn').addEventListener('click', function(){ location.reload(); });
+document.getElementById('notifyBtn').addEventListener('click', function(){
+  Swal.fire('Send Notifications', 'Connect this action to your messaging integration.', 'info');
+});
 
-/* ✅ SIMPLE ALERT HELPER */
-function showAlert(msg, type) {
+/* ================= Charts: pie/donut-first, compact ================= */
+const totalStudents = {{ students|length|default(0) }};
+const paidStudents = {{ students|selectattr('payment_status','equalto','Paid')|list|length|default(0) }};
+const pendingStudents = {{ students|selectattr('payment_status','equalto','Pending')|list|length|default(0) }};
+const maleStudents = {{ students|selectattr('gender','equalto','Male')|list|length|default(0) }};
+const femaleStudents = {{ students|selectattr('gender','equalto','Female')|list|length|default(0) }};
 
-  let div = document.createElement("div");
+new Chart(document.getElementById('chartGender').getContext('2d'), {
+  type: 'pie',
+  data: { labels: ['Male', 'Female'], datasets: [{ data: [maleStudents, femaleStudents], backgroundColor: ['#2d6a4f', '#cf9f45'] }] },
+  options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+});
 
-  div.innerText = msg;
-  div.style.position = "fixed";
-  div.style.top = "20px";
-  div.style.right = "20px";
-  div.style.padding = "12px 18px";
-  div.style.borderRadius = "8px";
-  div.style.color = "white";
-  div.style.fontWeight = "bold";
-  div.style.zIndex = "9999";
+new Chart(document.getElementById('chartPayment').getContext('2d'), {
+  type: 'doughnut',
+  data: { labels: ['Paid', 'Pending'], datasets: [{ data: [paidStudents, pendingStudents], backgroundColor: ['#2d6a4f', '#e63946'] }] },
+  options: { cutout: '62%', responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+});
 
-  // ✅ color by type
-  if (type === "success") {
-    div.style.background = "#2d6a4f";
-  } else {
-    div.style.background = "#b00020";
-  }
-
-  document.body.appendChild(div);
-
-  setTimeout(() => {
-    div.remove();
-  }, 2000);
-}
-
+(function batchStatusChart(){
+  const cards = document.querySelectorAll('[data-batch-id]');
+  let open = 0, full = 0, unset = 0;
+  cards.forEach(function(card){
+    if(card.querySelector('.badge.full')) full += 1;
+    else if(card.querySelector('.badge.open')) open += 1;
+    else unset += 1;
+  });
+  const hasData = (open + full + unset) > 0;
+  new Chart(document.getElementById('chartBatchStatus').getContext('2d'), {
+    type: 'pie',
+    data: {
+      labels: hasData ? ['Open', 'Full', 'Unset capacity'] : ['No batches yet'],
+      datasets: [{
+        data: hasData ? [open, full, unset] : [1],
+        backgroundColor: hasData ? ['#52b788', '#e63946', '#ffb703'] : ['#d9e4dd']
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+  });
+})();
 </script>
-
-
-
 
 </body>
 </html>
