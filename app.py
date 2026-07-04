@@ -239,7 +239,7 @@ def register():
             target=send_email,
             args=(
                 student.email,
-                "Training Application Received ✅"
+                "Training Application Received ✅",
 
                 f"""
                 Dear {student.name},
