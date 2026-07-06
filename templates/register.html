@@ -531,6 +531,11 @@ body.dark .seat-summary{ color:var(--gold-light); }
 body.dark .pay-amount{ color:var(--gold-light); }
 .pay-sub{ text-align:center; color:var(--ink-soft); font-size:12.5px; margin-bottom:20px; }
 
+/* "Pay Now" — reuses .submit-btn's look via shared class in markup */
+.pay-now-btn i{ margin-right:8px; }
+
+/* QR block — no longer shown on the page by default; rendered inside the
+   payment-method dialog only after "Scan QR Code" is chosen. */
 .qr-wrap{ display:flex; justify-content:center; margin-bottom:16px; }
 .qr-frame{
   position:relative;
@@ -541,7 +546,6 @@ body.dark .pay-amount{ color:var(--gold-light); }
   overflow:hidden;
   transition:.3s;
 }
-.qr-frame:hover{ transform:scale(1.03); }
 .qr-frame img{ width:190px; height:190px; display:block; border-radius:10px; }
 .qr-scan{
   position:absolute; left:18px; right:18px; height:3px;
@@ -549,6 +553,32 @@ body.dark .pay-amount{ color:var(--gold-light); }
   animation:scan 2.4s ease-in-out infinite;
 }
 @keyframes scan{ 0%{ top:18px; } 50%{ top:190px; } 100%{ top:18px; } }
+
+.qr-tap-hint{
+  text-align:center;
+  font-size:11.5px;
+  color:var(--ink-soft);
+  margin:-10px 0 16px;
+}
+
+.restore-note{
+  text-align:center;
+  font-size:12px;
+  color:var(--leaf);
+  background:rgba(127,184,133,.12);
+  border-radius:100px;
+  padding:8px 14px;
+  margin:0 0 18px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.restore-note.show{ display:flex; }
+.restore-note button{
+  border:none; background:none; color:var(--deep-2); font-weight:700;
+  text-decoration:underline; cursor:pointer; font-size:12px; padding:0;
+}
 
 .upi-row{
   display:flex; align-items:center; justify-content:center; gap:8px;
@@ -581,6 +611,145 @@ body.dark .pay-amount{ color:var(--gold-light); }
   font-size:12px; font-weight:700; color:var(--ok);
   background:var(--ok-bg); border-radius:100px; padding:8px 16px; margin-bottom:20px;
 }
+
+/* =========================================================
+   11b. PAYMENT METHOD DIALOG (matches Liquid Apothecary tokens)
+========================================================= */
+.pay-dialog-overlay{
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(8,38,28,.55);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+}
+.pay-dialog-overlay.open{ display:flex; }
+
+.pay-dialog{
+  width:100%;
+  max-width:360px;
+  padding:26px 24px;
+  border-radius:var(--radius-lg);
+  animation:dialogPop .22s ease;
+}
+@keyframes dialogPop{
+  from{ opacity:0; transform:translateY(14px) scale(.97); }
+  to{ opacity:1; transform:translateY(0) scale(1); }
+}
+
+.pay-dialog h3{
+  font-family:var(--font-display);
+  font-weight:600;
+  font-size:18px;
+  color:var(--ink);
+  margin:0 0 4px;
+  text-align:center;
+}
+.pay-dialog .pay-dialog-sub{
+  text-align:center;
+  font-size:12.5px;
+  color:var(--ink-soft);
+  margin:0 0 20px;
+}
+
+.pay-option{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  border-radius:var(--radius-md);
+  border:1.5px solid var(--line);
+  background:rgba(255,255,255,.6);
+  cursor:pointer;
+  margin-bottom:10px;
+  transition:.2s;
+}
+body.dark .pay-option{ background:rgba(255,255,255,.05); }
+.pay-option:hover{ border-color:var(--leaf); background:rgba(127,184,133,.08); }
+.pay-option.checked{
+  border-color:var(--gold);
+  background:linear-gradient(160deg, rgba(232,200,119,.22), rgba(207,159,69,.08));
+  box-shadow:0 8px 20px rgba(207,159,69,.18);
+}
+.pay-option input{ accent-color:var(--gold); width:17px; height:17px; flex-shrink:0; }
+.pay-option .po-icon{
+  width:34px; height:34px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:linear-gradient(160deg, var(--leaf), var(--deep-2)); color:#fff; font-size:14px;
+}
+.pay-option .po-text{ flex:1; }
+.pay-option .po-title{ font-weight:700; font-size:13.5px; color:var(--ink); }
+.pay-option .po-desc{ font-size:11.5px; color:var(--ink-soft); margin-top:1px; }
+
+.po-recommended{
+  display:inline-block;
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.4px;
+  text-transform:uppercase;
+  color:var(--deep-2);
+  background:linear-gradient(160deg, var(--gold-light), var(--gold));
+  padding:2px 8px;
+  border-radius:100px;
+  margin-left:7px;
+  vertical-align:middle;
+}
+
+.pd-back{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  border:none;
+  background:none;
+  color:var(--ink-soft);
+  font-family:var(--font-body);
+  font-weight:700;
+  font-size:12.5px;
+  cursor:pointer;
+  padding:0;
+  margin-bottom:16px;
+}
+.pd-back:hover{ color:var(--leaf); }
+
+.pay-dialog-qr-note{
+  text-align:center;
+  font-size:12px;
+  color:var(--ink-soft);
+  margin:2px 0 4px;
+}
+
+.pay-dialog-actions{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+}
+.pay-dialog-actions button{
+  flex:1;
+  border:none;
+  padding:12px;
+  border-radius:100px;
+  font-family:var(--font-body);
+  font-weight:700;
+  font-size:13.5px;
+  cursor:pointer;
+  transition:.2s;
+}
+.pay-dialog-actions .pd-cancel{
+  background:rgba(18,39,30,.08);
+  color:var(--ink-soft);
+}
+body.dark .pay-dialog-actions .pd-cancel{ background:rgba(255,255,255,.1); color:var(--ink); }
+.pay-dialog-actions .pd-cancel:hover{ background:rgba(18,39,30,.14); }
+.pay-dialog-actions .pd-continue{
+  background:linear-gradient(180deg, var(--gold-light), var(--gold));
+  color:#1c2b1f;
+  box-shadow:0 10px 22px rgba(207,159,69,.3);
+}
+.pay-dialog-actions .pd-continue:hover{ transform:translateY(-2px); }
 
 /* =========================================================
    12. UPLOAD DROPZONE
@@ -939,20 +1108,20 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
         </div>
       </div>
 
-      <div class="pay-amount">₹1,000</div>
-      <p class="pay-sub">Refundable registration fee</p>
+      <div class="pay-amount">₹1,050</div>
+      <p class="pay-sub">₹1,000 Refundable registration fee</p>
 
       <div class="secure-badge"><i class="fa-solid fa-shield-halved"></i> Verified Secure Payment</div>
 
-      <div class="qr-wrap">
-        <div class="qr-frame">
-          <div class="qr-scan"></div>
-          <!-- ✅ CLICKABLE QR (unchanged link) -->
-          <a href="upi://pay?pa=tukaram.umarani-2@okicici&pn=Amruta Aarogya Kendra Ayurveda Speciality Hospital Kalloli&am=1050&cu=INR">
-            <img src="{{ url_for('static', filename='qr.jpg') }}" alt="Scan to pay">
-          </a>
-        </div>
-      </div>
+      <p class="restore-note" id="restoreNote">
+        <i class="fa-solid fa-circle-check"></i> Your saved details were restored.
+        <button type="button" id="clearDraftBtn">Not you? Clear saved details</button>
+      </p>
+
+      <button type="button" class="submit-btn pay-now-btn" id="payNowBtn">
+        <i class="fa-solid fa-wallet"></i> Pay Now
+      </button>
+      <p class="qr-tap-hint">Tap Pay Now to choose how you'd like to pay — your form details are saved automatically.</p>
 
       <div class="upi-row">
         <span id="upiId">tukaram.umarani-2@okicici</span>
@@ -960,8 +1129,8 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       </div>
 
       <ol class="pay-steps">
-        <li>Scan the QR code or tap it on your phone to open your UPI app.</li>
-        <li>Pay the ₹1,000 registration fee shown above.</li>
+        <li>Tap <b>Pay Now</b> and choose how you want to pay.</li>
+        <li>Pay the ₹1,050 registration fee shown above.</li>
         <li>Copy the transaction ID from your UPI app's confirmation screen.</li>
         <li>Enter that ID and a screenshot below, then submit.</li>
       </ol>
@@ -1003,6 +1172,66 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
   <button class="submit-btn" style="margin:0;" onclick="document.getElementById('submitBtn').click();">
     ✅ Register Now
   </button>
+</div>
+
+<!-- PAYMENT METHOD DIALOG — two views: choose method, then (optionally) show QR -->
+<div class="pay-dialog-overlay" id="payDialogOverlay" role="dialog" aria-modal="true" aria-labelledby="payDialogTitle">
+  <div class="pay-dialog glass">
+
+    <!-- VIEW 1: choose method -->
+    <div id="payDialogSelectView">
+      <h3 id="payDialogTitle">Choose Your Payment Method</h3>
+      <p class="pay-dialog-sub">Select an option to continue</p>
+
+      <label class="pay-option checked" data-value="app">
+        <input type="radio" name="payMethod" value="app" checked>
+        <span class="po-icon"><i class="fa-solid fa-mobile-screen-button"></i></span>
+        <span class="po-text">
+          <span class="po-title">📱 Open Payment App <span class="po-recommended">Recommended</span></span>
+          <span class="po-desc">Launch your UPI app on this device</span>
+        </span>
+      </label>
+
+      <label class="pay-option" data-value="scan">
+        <input type="radio" name="payMethod" value="scan">
+        <span class="po-icon"><i class="fa-solid fa-qrcode"></i></span>
+        <span class="po-text">
+          <span class="po-title">📷 Scan QR Code</span>
+          <span class="po-desc">Show a QR to scan with another device</span>
+        </span>
+      </label>
+
+      <div class="pay-dialog-actions">
+        <button type="button" class="pd-cancel" id="payDialogCancel">Cancel</button>
+        <button type="button" class="pd-continue" id="payDialogContinue">Continue</button>
+      </div>
+    </div>
+
+    <!-- VIEW 2: QR code (only rendered after "Scan QR Code" is chosen) -->
+    <div id="payDialogQrView" style="display:none;">
+      <button type="button" class="pd-back" id="payDialogBack"><i class="fa-solid fa-arrow-left"></i> Back</button>
+      <h3>Scan to Pay</h3>
+      <p class="pay-dialog-sub">₹1,050 · Amrutha Aarogya Kendra</p>
+
+      <div class="qr-wrap">
+        <div class="qr-frame">
+          <div class="qr-scan"></div>
+          <img src="{{ url_for('static', filename='qr.jpg') }}" alt="Scan to pay">
+        </div>
+      </div>
+
+      <div class="upi-row" style="margin-bottom:8px;">
+        <span id="upiIdModal">tukaram.umarani-2@okicici</span>
+        <button type="button" id="copyUpiModalBtn"><i class="fa-solid fa-copy"></i> Copy</button>
+      </div>
+      <p class="pay-dialog-qr-note"><i class="fa-solid fa-lock"></i> Your registration details are saved — nothing is lost.</p>
+
+      <div class="pay-dialog-actions">
+        <button type="button" class="pd-continue" id="payDialogDone" style="flex:1;">Done, I've Paid</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <!-- FOOTER -->
@@ -1096,27 +1325,16 @@ function updateSeats() {
     btn.innerText = "✅ Register Now";
   }
 
-  // visual seat cards (additive — same underlying data)
-  document.getElementById("seatCards").classList.add("show");
   document.getElementById("maleCount").textContent = male;
   document.getElementById("femaleCount").textContent = female;
 
-  function paint(barId, count) {
-    let bar = document.getElementById(barId);
-    let pct = Math.max(0, Math.min(100, count * 20)); // simple visual scale
-    bar.style.width = pct + "%";
-    bar.style.background = count <= 0 ? "var(--danger)" : count <= 1 ? "var(--warn)" : "var(--ok)";
-  }
-  paint("maleBar", male);
-  paint("femaleBar", female);
-
-  // sync visual batch cards
-  document.querySelectorAll(".batch-card").forEach(c => {
+  // sync visual batch chips
+  document.querySelectorAll(".showtime-chip").forEach(c => {
     c.classList.toggle("selected", c.dataset.value === select.value);
   });
 }
 
-/* Build premium batch cards from the same <option> list (select stays source of truth) */
+/* Build premium batch chips from the same <option> list (select stays source of truth) */
 function buildBatchCards() {
   let select = document.getElementById("batchSelect");
   let grid = document.getElementById("batchGrid");
@@ -1132,7 +1350,7 @@ function buildBatchCards() {
 
     let card = document.createElement("button");
     card.type = "button";
-    card.className = "batch-card" + (total <= 0 ? " disabled" : "");
+    card.className = "showtime-chip" + (total <= 0 ? " disabled" : "");
     card.dataset.value = opt.value;
     card.innerHTML = `
       <div class="b-name">${opt.textContent.trim()}</div>
@@ -1368,6 +1586,219 @@ function copyUpi() {
     Swal.fire({ icon:"success", title:"UPI ID copied", toast:true, position:"top", timer:1500, showConfirmButton:false });
   });
 }
+
+/* =========================================================
+   FORM DRAFT — SAVE & RESTORE
+   Everything the trainee has typed is mirrored into sessionStorage
+   as they go, and restored automatically if they leave this page
+   (to open their UPI app, or just to close the tab) and come back.
+   This runs regardless of which payment method they pick, so it
+   also covers plain back-navigation, accidental refreshes, etc.
+
+   NOTE: browsers do not allow re-populating a <input type="file">
+   from script for security reasons, so the payment-screenshot
+   upload itself can't be restored — if it's missing after they
+   return, they'll just need to reattach that one file.
+========================================================= */
+const REG_DRAFT_KEY = "aak_registration_draft_v1";
+const REG_DRAFT_MAX_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
+
+const DRAFT_FIELD_IDS = [
+  "name", "dob", "age", "gender", "email", "phone",
+  "college", "pincode", "state", "district", "place", "transaction_id"
+];
+
+function saveFormDraft() {
+  try {
+    const data = { savedAt: Date.now() };
+    DRAFT_FIELD_IDS.forEach(id => {
+      let el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    data.dobText = (document.getElementById("dobText") || {}).innerText || "";
+    data.batch_id = (document.getElementById("batchSelect") || {}).value || "";
+    sessionStorage.setItem(REG_DRAFT_KEY, JSON.stringify(data));
+  } catch (e) {
+    console.warn("Could not save registration draft:", e);
+  }
+}
+
+function clearFormDraft() {
+  try { sessionStorage.removeItem(REG_DRAFT_KEY); } catch (e) { /* ignore */ }
+}
+
+function restoreFormDraft() {
+  let raw;
+  try { raw = sessionStorage.getItem(REG_DRAFT_KEY); } catch (e) { return; }
+  if (!raw) return;
+
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { return; }
+  if (!data || !data.savedAt || (Date.now() - data.savedAt) > REG_DRAFT_MAX_AGE_MS) {
+    clearFormDraft();
+    return;
+  }
+
+  let restoredAnything = false;
+
+  DRAFT_FIELD_IDS.forEach(id => {
+    let el = document.getElementById(id);
+    if (el && data[id]) {
+      el.value = data[id];
+      restoredAnything = true;
+    }
+  });
+
+  if (data.dobText) {
+    document.getElementById("dobText").innerText = data.dobText;
+  }
+
+  if (data.batch_id) {
+    let batchSelect = document.getElementById("batchSelect");
+    batchSelect.value = data.batch_id;
+    if (batchSelect.value === data.batch_id) {
+      restoredAnything = true;
+      updateSeats();
+    }
+  }
+
+  // Floating labels for <select> rely on a "filled" class (inputs handle
+  // this natively via :not(:placeholder-shown), selects need the assist).
+  document.querySelectorAll(".field select").forEach(sel => {
+    sel.classList.toggle("filled", !!sel.value);
+  });
+
+  // Re-run the same validation styling the user would have triggered on blur
+  ["email", "phone", "pincode"].forEach(id => {
+    let el = document.getElementById(id);
+    if (el && el.value) el.dispatchEvent(new Event("blur"));
+  });
+
+  if (restoredAnything) {
+    document.getElementById("restoreNote").classList.add("show");
+  }
+}
+
+document.getElementById("clearDraftBtn").addEventListener("click", function () {
+  clearFormDraft();
+  window.location.reload();
+});
+
+// Keep the draft fresh as the user types, and as an extra safety net
+// right before the tab is hidden/unloaded (covers UPI app-switching
+// on mobile browsers that do reload the tab on return).
+let draftSaveTimer;
+document.querySelectorAll("#regForm input, #regForm select").forEach(el => {
+  el.addEventListener("input", () => {
+    clearTimeout(draftSaveTimer);
+    draftSaveTimer = setTimeout(saveFormDraft, 400);
+  });
+  el.addEventListener("change", saveFormDraft);
+});
+window.addEventListener("pagehide", saveFormDraft);
+window.addEventListener("beforeunload", saveFormDraft);
+
+// Draft is no longer needed once the form has actually been submitted.
+document.getElementById("regForm").addEventListener("submit", function () {
+  let btn = document.getElementById("submitBtn");
+  btn.innerText = "Submitting…";
+  btn.disabled = true;
+  clearFormDraft();
+});
+
+document.addEventListener("DOMContentLoaded", restoreFormDraft);
+
+/* =========================================================
+   PAY NOW → PAYMENT METHOD DIALOG
+   Step 1: user taps "Pay Now" -> dialog opens on the choice view.
+   Step 2a: "Open Payment App" + Continue -> save draft, redirect
+            to the existing UPI deep link (unchanged).
+   Step 2b: "Scan QR Code" + Continue -> save draft, switch the
+            dialog to the QR view. QR is only ever rendered here,
+            never on the page by default.
+   From the QR view: "Back" returns to the choice view, "Done,
+   I've Paid" simply closes the dialog — the QR was on-screen the
+   whole time so nothing about the saved data changes.
+========================================================= */
+(function () {
+  const UPI_LINK = "upi://pay?pa=tukaram.umarani-2@okicici&pn=Amruta Aarogya Kendra Ayurveda Speciality Hospital Kalloli&am=1050&cu=INR";
+
+  const payNowBtn    = document.getElementById("payNowBtn");
+  const overlay      = document.getElementById("payDialogOverlay");
+  const selectView    = document.getElementById("payDialogSelectView");
+  const qrView        = document.getElementById("payDialogQrView");
+  const cancelBtn     = document.getElementById("payDialogCancel");
+  const continueBtn   = document.getElementById("payDialogContinue");
+  const backBtn       = document.getElementById("payDialogBack");
+  const doneBtn       = document.getElementById("payDialogDone");
+  const copyUpiModal  = document.getElementById("copyUpiModalBtn");
+  const options       = document.querySelectorAll(".pay-option");
+
+  function showSelectView() {
+    qrView.style.display = "none";
+    selectView.style.display = "block";
+  }
+
+  function showQrView() {
+    selectView.style.display = "none";
+    qrView.style.display = "block";
+  }
+
+  function openDialog() {
+    showSelectView();
+    overlay.classList.add("open");
+  }
+
+  function closeDialog() {
+    overlay.classList.remove("open");
+    // Reset to the choice view for the next time it's opened
+    setTimeout(showSelectView, 200);
+  }
+
+  payNowBtn.addEventListener("click", openDialog);
+  cancelBtn.addEventListener("click", closeDialog);
+  doneBtn.addEventListener("click", closeDialog);
+
+  backBtn.addEventListener("click", showSelectView);
+
+  // Click outside the dialog box closes it
+  overlay.addEventListener("click", function (e) {
+    if (e.target === overlay) closeDialog();
+  });
+
+  // Escape key closes it
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && overlay.classList.contains("open")) closeDialog();
+  });
+
+  // Highlight the selected option card
+  options.forEach(opt => {
+    opt.addEventListener("click", () => {
+      options.forEach(o => o.classList.remove("checked"));
+      opt.classList.add("checked");
+    });
+  });
+
+  continueBtn.addEventListener("click", function () {
+    let selected = document.querySelector('input[name="payMethod"]:checked').value;
+
+    // Always save first — this is the moment the user is either about
+    // to leave the page (payment app) or reveal the QR to scan.
+    saveFormDraft();
+
+    if (selected === "app") {
+      window.location.href = UPI_LINK;
+    } else {
+      showQrView();
+    }
+  });
+
+  copyUpiModal.addEventListener("click", function () {
+    navigator.clipboard.writeText(document.getElementById("upiIdModal").textContent).then(() => {
+      Swal.fire({ icon:"success", title:"UPI ID copied", toast:true, position:"top", timer:1500, showConfirmButton:false });
+    });
+  });
+})();
 </script>
 
 </body>
