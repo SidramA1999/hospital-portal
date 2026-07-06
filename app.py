@@ -13,6 +13,11 @@ import threading
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
+
+# Cache static files for 1 year
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000
+
+
 import os
 
 
