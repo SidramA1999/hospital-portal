@@ -13,11 +13,6 @@ import threading
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
-
-# Cache static files for 1 year
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 31536000
-
-
 import os
 
 
@@ -74,6 +69,7 @@ class Batch(db.Model):
     end_date = db.Column(db.String(20))
     capacity = db.Column(db.Integer, default=3)
     filled_slots = db.Column(db.Integer, default=0)
+    is_active = db.Column(db.Boolean, default=True)
 
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -244,7 +240,7 @@ def register():
             target=send_email,
             args=(
                 student.email,
-                "Training Application Received ✅",
+                "Training Application Received ✅"
 
                 f"""
                 Dear {student.name},
@@ -370,12 +366,7 @@ def success():
 from openai import OpenAI
 
 # ✅ CLIENT
-import os
-from openai import OpenAI
-
-key = os.getenv("OPENAI_API_KEY")
-
-client = OpenAI(api_key=key) if key else None
+client = OpenAI(api_key="YOUR_API_KEY")
 
 
 # ✅ SINGLE CHAT ROUTE (ONLY ONE ✅)
@@ -954,44 +945,91 @@ def create_initial_batches():
 
 # ✅ FIXED PREPARE FUNCTION (VERY IMPORTANT)
 from datetime import datetime
+
 def prepare_batches():
+
     batches = Batch.query.order_by(Batch.start_date).all()
+
     result = []
-    today = datetime.today().date()
+
+    today = datetime.today()
+
+    current_month = datetime(
+        today.year,
+        today.month,
+        1
+    )
+
+    if today.month == 12:
+        next_month = datetime(today.year + 1, 1, 1)
+        limit_month = datetime(today.year + 1, 2, 1)
+    elif today.month == 11:
+        next_month = datetime(today.year, 12, 1)
+        limit_month = datetime(today.year + 1, 1, 1)
+    else:
+        next_month = datetime(today.year, today.month + 1, 1)
+        limit_month = datetime(today.year, today.month + 2, 1)
 
     for b in batches:
+
         try:
-            start = datetime.strptime(b.start_date, "%Y-%m-%d")
-            end = datetime.strptime(b.end_date, "%Y-%m-%d")
+            start = datetime.strptime(
+                b.start_date,
+                "%Y-%m-%d"
+            )
+
+            end = datetime.strptime(
+                b.end_date,
+                "%Y-%m-%d"
+            )
+
         except:
             continue
 
-        
-# ✅ ✅ SKIP PAST BATCHES
-        if end.date() < today:
+        # admin blocked
+        if hasattr(b, "is_active") and not b.is_active:
             continue
 
+        # current month + next month only
+        if start < current_month:
+            continue
 
-        male_count = Student.query.filter_by(batch_id=b.id, gender="Male").count()
-        female_count = Student.query.filter_by(batch_id=b.id, gender="Female").count()
+        if start >= limit_month:
+            continue
 
-        male_left = max(0, 3 - male_count)
-        female_left = max(0, 3 - female_count)
+        male_count = Student.query.filter_by(
+            batch_id=b.id,
+            gender="Male"
+        ).count()
 
-        # ✅ ✅ FIXED LABEL (THIS WAS YOUR MAIN BUG)
-       
-        #label = f"{start.strftime('%B %Y')} ({start.day} – {end.day}) (👨 {male_left} | 👩 {female_left} left)"
-        label = f"{start.strftime('%d %b')} → {end.strftime('%d %b')} (👨 {male_left} | 👩 {female_left})"
+        female_count = Student.query.filter_by(
+            batch_id=b.id,
+            gender="Female"
+        ).count()
 
         result.append({
             "id": b.id,
-            "label": label,
-            "male_left": male_left,
-            "female_left": female_left
+            "label": f"{start.strftime('%d %b')} → {end.strftime('%d %b')}",
+            "male_left": max(0, 3 - male_count),
+            "female_left": max(0, 3 - female_count)
         })
 
     return result
 
+#---------------Toggle Block / Unblock batches manually by Admin
+@app.route('/toggle_batch/<int:id>')
+def toggle_batch(id):
+
+    if not session.get('admin'):
+        return redirect('/login')
+
+    batch = Batch.query.get_or_404(id)
+
+    batch.is_active = not batch.is_active
+
+    db.session.commit()
+
+    return redirect('/admin')
 
 
 
