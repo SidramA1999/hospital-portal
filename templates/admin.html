@@ -560,14 +560,26 @@ body{
             <div class="batch-title">{{ b.start_display|default('—') }} → {{ b.end_display|default('—') }}</div>
             <div class="menu">
               <button class="menu-btn" aria-haspopup="true" aria-expanded="false" aria-label="Batch actions"><i data-feather="more-horizontal"></i></button>
+
               <div class="menu-list" role="menu" aria-label="Batch actions">
-                <button type="button" onclick="openEditBatchModal({{ b.id|default(0) }})"><i data-feather="edit-2"></i> Edit</button>
-                <button type="button" onclick="deleteBatch({{ b.id|default(0) }})"><i data-feather="trash-2"></i> Delete</button>
-              </div>
+
+              <button type="button"onclick="openEditBatchModal({{ b.id|default(0) }})"><i data-feather="edit-2"></i> Edit</button>
+              <button type="button"onclick="window.location='/toggle_batch/{{ b.id }}'">{% if b.is_active == True %}🚫 Block Batch{% else %}✅ Unblock Batch{% endif %}</button>
+
+              <button type="button"onclick="deleteBatch({{ b.id|default(0) }})"><i data-feather="trash-2"></i> Delete</button>
+
+            </div>
             </div>
           </div>
 
           <div class="badges">
+            
+            {% if b.is_active %}
+              <span class="badge open">✅ Active</span>
+            {% else %}
+              <span class="badge full">🚫 Block</span>{% endif %}
+
+
             {% if cap > 0 and filled < cap %}
               <span class="badge open">✅ Open</span>
               {% if remaining <= 2 %}<span class="badge warn">⚠ Few seats left</span>{% endif %}
