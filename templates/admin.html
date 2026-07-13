@@ -588,7 +588,7 @@ body{
         <a class="nav-item" href="#students"><i data-feather="users"></i><span>Students</span></a>
         <a class="nav-item" href="#batches"><i data-feather="calendar"></i><span>Batches</span></a>
         <a class="nav-item" href="#analytics"><i data-feather="bar-chart-2"></i><span>Analytics</span></a>
-        <a class="nav-item" href="#monthwise"><i data-feather="trending-up"></i><span>Monthly Trend</span></a>
+        
         <a class="nav-item" href="#settings"><i data-feather="settings"></i><span>Settings</span></a>
         <a class="nav-item" href="/logout"><i data-feather="log-out"></i><span>Logout</span></a>
       </div>
@@ -699,34 +699,6 @@ body{
       </div>
     </section>
 
-    <!-- MONTHLY TREND -->
-    <section class="page-section" id="monthwise">
-      <div class="section-title">Monthly Trend</div>
-      <p class="section-sub">Student enrollment grouped by batch start month.</p>
-      <div class="card glass" style="padding:14px;">
-        <div class="chart-box-tall"><canvas id="chartMonthly" aria-label="Monthly enrollment bar chart" role="img"></canvas></div>
-        <div class="month-legend" id="monthLegend"></div>
-      </div>
-
-      <div class="card glass month-picker-card" style="padding:14px;">
-        <div class="month-picker-row">
-          <label for="monthSelect">View month:</label>
-          <select id="monthSelect" class="input"></select>
-          <span class="month-count-pill" id="monthCountPill">0 students</span>
-        </div>
-      </div>
-
-      <div class="card glass table-card" style="margin-top:14px;">
-        <div class="table-wrap">
-          <table class="table" role="table" aria-label="Students for selected month">
-            <thead>
-              <tr role="row"><th>Name</th><th>Batch</th><th>Gender</th><th>Status</th><th></th></tr>
-            </thead>
-            <tbody id="monthTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
 
     <!-- CREATE BATCH -->
     <section class="page-section" id="create-batch">
@@ -1348,144 +1320,6 @@ new Chart(document.getElementById('chartPayment').getContext('2d'), {
   });
 })();
 
-/* ================= Month-wise student enrollment: chart + dropdown detail view ================= */
-(function monthwise(){
-  // 1) Map each batch id -> a month key ("Jan 2026") + a sortable value, from its start date.
-  const batchMonthMap = {};
-  document.querySelectorAll('.batch-card[data-batch-id]').forEach(function(card){
-    const id = card.getAttribute('data-batch-id');
-    const raw = card.getAttribute('data-start') || '';
-    const d = new Date(raw);
-    if(!isNaN(d.getTime())){
-      batchMonthMap[id] = {
-        key: d.toLocaleDateString(undefined, { month: 'short', year: 'numeric' }),
-        sortValue: d.getFullYear() * 12 + d.getMonth()
-      };
-    } else {
-      batchMonthMap[id] = { key: 'Unknown', sortValue: Number.MAX_SAFE_INTEGER };
-    }
-  });
-
-  // 2) Build one record per student, tagged with its month.
-  const records = Array.from(document.querySelectorAll('#table tbody tr[data-batch]')).map(function(row){
-    const bId = row.getAttribute('data-batch');
-    const info = batchMonthMap[bId] || { key: 'Unknown', sortValue: Number.MAX_SAFE_INTEGER };
-    return {
-      id: row.getAttribute('data-id') || '',
-      name: row.getAttribute('data-name') || '—',
-      gender: row.getAttribute('data-gender') || '',
-      status: row.getAttribute('data-status') || '',
-      batchLabel: row.getAttribute('data-batch-label') || '—',
-      monthKey: info.key,
-      sortValue: info.sortValue
-    };
-  });
-
-  const canvas = document.getElementById('chartMonthly');
-  const legendEl = document.getElementById('monthLegend');
-  const selectEl = document.getElementById('monthSelect');
-  const countPillEl = document.getElementById('monthCountPill');
-  const tbodyEl = document.getElementById('monthTableBody');
-
-  if(!records.length){
-    canvas.style.display = 'none';
-    legendEl.innerHTML = '<div style="color:var(--ink-soft); font-size:13px;">No student-batch data available yet to build a monthly trend.</div>';
-    selectEl.innerHTML = '<option>No data</option>';
-    selectEl.disabled = true;
-    countPillEl.textContent = '0 students';
-    tbodyEl.innerHTML = '<tr><td colspan="5" class="month-table-empty">No students to show yet.</td></tr>';
-    return;
-  }
-
-  // 3) Group by month, in chronological order.
-  const grouped = {};
-  records.forEach(function(r){
-    if(!grouped[r.monthKey]){ grouped[r.monthKey] = { label: r.monthKey, sortValue: r.sortValue, items: [] }; }
-    grouped[r.monthKey].items.push(r);
-  });
-  const months = Object.keys(grouped).map(function(k){ return grouped[k]; });
-  months.sort(function(a, b){ return a.sortValue - b.sortValue; });
-
-  // 4) Bar chart.
-  const chart = new Chart(canvas.getContext('2d'), {
-    type: 'bar',
-    data: {
-      labels: months.map(function(m){ return m.label; }),
-      datasets: [{
-        label: 'Students enrolled',
-        data: months.map(function(m){ return m.items.length; }),
-        backgroundColor: 'rgba(45,106,79,0.75)',
-        hoverBackgroundColor: 'rgba(207,159,69,0.85)',
-        borderRadius: 8,
-        maxBarThickness: 46
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } },
-      onClick: function(evt, elements){
-        if(elements && elements.length){ selectMonth(months[elements[0].index].label); }
-      },
-      scales: {
-        x: { ticks: { color: chartTextColor }, grid: { display: false } },
-        y: { beginAtZero: true, ticks: { precision: 0, color: chartTextColor }, grid: { color: 'rgba(18,39,30,0.08)' } }
-      }
-    }
-  });
-
-  // 5) Chip legend (also clickable).
-  legendEl.innerHTML = months.map(function(m){
-    return '<button type="button" class="month-chip" data-month="' + m.label + '"><span class="dot"></span>' + m.label + ': ' + m.items.length + ' student' + (m.items.length === 1 ? '' : 's') + '</button>';
-  }).join('');
-  legendEl.querySelectorAll('.month-chip').forEach(function(chip){
-    chip.addEventListener('click', function(){ selectMonth(chip.getAttribute('data-month')); });
-  });
-
-  // 6) Dropdown options.
-  selectEl.innerHTML = months.map(function(m){
-    return '<option value="' + m.label + '">' + m.label + ' — ' + m.items.length + ' student' + (m.items.length === 1 ? '' : 's') + '</option>';
-  }).join('');
-  selectEl.addEventListener('change', function(){ renderMonthTable(this.value); });
-
-  function renderMonthTable(monthLabel){
-    const group = grouped[monthLabel];
-    const items = group ? group.items : [];
-
-    document.querySelectorAll('.month-chip').forEach(function(chip){
-      chip.classList.toggle('active', chip.getAttribute('data-month') === monthLabel);
-    });
-    countPillEl.textContent = items.length + ' student' + (items.length === 1 ? '' : 's');
-
-    if(!items.length){
-      tbodyEl.innerHTML = '<tr><td colspan="5" class="month-table-empty">No students enrolled in this month.</td></tr>';
-      return;
-    }
-
-    tbodyEl.innerHTML = items.map(function(r){
-      const statusClass = r.status === 'Paid' ? 'paid' : 'pending';
-      const statusLabel = r.status === 'Paid' ? 'Paid' : 'Pending';
-      return (
-        '<tr tabindex="0" style="cursor:pointer;" onclick="window.open(\'/student/' + r.id + '\',\'_blank\')">' +
-          '<td data-label="Name"><b>' + r.name + '</b></td>' +
-          '<td data-label="Batch">' + r.batchLabel + '</td>' +
-          '<td data-label="Gender">' + (r.gender || '—') + '</td>' +
-          '<td data-label="Status"><span class="status ' + statusClass + '">' + statusLabel + '</span></td>' +
-          '<td data-label="" onclick="event.stopPropagation();"><button type="button" class="btn btn-gold" onclick="window.location=\'/certificate/' + r.id + '\'">📄 Cert</button></td>' +
-        '</tr>'
-      );
-    }).join('');
-  }
-
-  function selectMonth(monthLabel){
-    selectEl.value = monthLabel;
-    renderMonthTable(monthLabel);
-    document.getElementById('monthwise').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-  }
-
-  // Default to the most recent month with data.
-  selectMonth(months[months.length - 1].label);
-})();
 </script>
 
 </body>
