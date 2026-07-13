@@ -322,7 +322,7 @@ body{
 
 .batch-card{ position:relative; padding:15px; overflow:visible; }
 .batch-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
-.batch-title{ font-family:var(--font-display); font-size:15.5px; font-weight:600; }
+.batch-title{ font-family:var(--font-display); font-size:15.5px; font-weight:600; flex:1 1 auto; min-width:0; padding-right:8px; word-break:break-word; }
 .badges{ display:flex; gap:6px; flex-wrap:wrap; margin:10px 0; }
 .badge{ display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:var(--radius-pill); font-size:12px; font-weight:700; }
 .badge.open{ background:var(--ok-bg); color:var(--ok-ink); }
@@ -336,14 +336,18 @@ body{
 .progress{ height:3px; border-radius:10px; background:rgba(18,39,30,0.10); overflow:hidden; flex:1; }
 .progress > span{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--secondary), var(--accent)); transition:width 1s ease-out; }
 
-.menu{ position:relative; }
+.menu{ position:relative; flex-shrink:0; }
 .menu-btn{ border:1px solid var(--line); background:rgba(255,255,255,0.6); border-radius:10px; padding:6px 8px; cursor:pointer; }
 .menu-list{ position:absolute; right:0; top:110%; background:rgba(255,255,255,0.97); border:1px solid var(--line); border-radius:12px; box-shadow: var(--shadow-2); display:none; min-width:150px; z-index:10; overflow:hidden; max-width:calc(100vw - 40px); }
-@media (max-width:480px){ .menu-list{ right:-40px; } }
 :root.dark .menu-list{ background:rgba(20,30,25,0.97); }
-.menu-list a, .menu-list button{ display:flex; align-items:center; gap:8px; width:100%; background:none; border:none; text-align:left; padding:10px 12px; font-size:13px; cursor:pointer; color:inherit; }
+.menu-list a, .menu-list button{ display:flex; align-items:center; gap:8px; width:100%; background:none; border:none; text-align:left; padding:10px 12px; font-size:13px; cursor:pointer; color:inherit; white-space:nowrap; }
 .menu-list button:hover{ background:rgba(127,184,133,0.15); }
 .menu.open .menu-list{ display:block; }
+
+/* View Enrolled Students button */
+.view-students-btn{ margin-top:10px; width:100%; justify-content:center; }
+.view-students-btn .count-pill{ background:rgba(255,255,255,0.5); color:var(--secondary); border-radius:999px; padding:2px 10px; font-size:11.5px; font-weight:800; margin-left:6px; white-space:nowrap; }
+:root.dark .view-students-btn .count-pill{ background:rgba(255,255,255,0.14); color:#a9e2c7; }
 
 .empty-state{ padding:30px 20px; text-align:center; color:var(--ink-soft); grid-column: 1 / -1; }
 .empty-state i{ display:block; margin:0 auto 10px; width:34px; height:34px; opacity:.6; }
@@ -478,10 +482,12 @@ body{
     gap:8px;
   }
 
-  /* Batch Cards */
+  /* Batch Cards — keep the head as a row so the 3-dot menu
+     stays pinned to the right and the title truncates/wraps
+     instead of pushing the menu out of place */
   .batch-head{
-    flex-direction:column;
     align-items:flex-start;
+    flex-wrap:nowrap;
   }
 
   .batch-meta{
@@ -693,30 +699,30 @@ body{
       </div>
     </section>
 
-    <!-- MONTH-WISE STUDENT TREND -->
-     
+    <!-- MONTHLY TREND -->
     <section class="page-section" id="monthwise">
-      <div class="section-title">Month-wise Student Enrollments</div>
-      <p class="section-sub">Students grouped by the start month of the batch they belong to. Pick a month (or tap a bar / chip) to see who's in it.</p>
-      <div class="card glass" style="padding:18px;">
-        <div class="chart-box-tall"><canvas id="chartMonthly" aria-label="Month wise enrollment chart" role="img"></canvas></div>
+      <div class="section-title">Monthly Trend</div>
+      <p class="section-sub">Student enrollment grouped by batch start month.</p>
+      <div class="card glass" style="padding:14px;">
+        <div class="chart-box-tall"><canvas id="chartMonthly" aria-label="Monthly enrollment bar chart" role="img"></canvas></div>
         <div class="month-legend" id="monthLegend"></div>
-      </div>   
+      </div>
 
-      <div class="card glass month-picker-card" style="padding:18px;">
+      <div class="card glass month-picker-card" style="padding:14px;">
         <div class="month-picker-row">
-          <label for="monthSelect">View students of Month</label>
+          <label for="monthSelect">View month:</label>
           <select id="monthSelect" class="input"></select>
           <span class="month-count-pill" id="monthCountPill">0 students</span>
         </div>
-        <div class="table-wrap" style="max-height:440px; margin-top:14px;">
-          <table class="table" id="monthTable">
+      </div>
+
+      <div class="card glass table-card" style="margin-top:14px;">
+        <div class="table-wrap">
+          <table class="table" role="table" aria-label="Students for selected month">
             <thead>
-              <tr><th>Name</th><th>Batch</th><th>Gender</th><th>Status</th><th></th></tr>
+              <tr role="row"><th>Name</th><th>Batch</th><th>Gender</th><th>Status</th><th></th></tr>
             </thead>
-            <tbody id="monthTableBody">
-              <tr><td colspan="5" class="month-table-empty">No data yet.</td></tr>
-            </tbody>
+            <tbody id="monthTableBody"></tbody>
           </table>
         </div>
       </div>
@@ -797,6 +803,10 @@ body{
               <div class="progress" aria-hidden="true"><span data-progress="{{ pct }}"></span></div>
               <div style="min-width:44px; text-align:right; font-family:var(--font-mono); font-size:13px;">{{ pct }}%</div>
             </div>
+
+            <button type="button" class="btn btn-ghost view-students-btn">
+              <i data-feather="users"></i> View Enrolled Students
+            </button>
           </div>
         {% else %}
           <div class="empty-state card glass">
@@ -1215,6 +1225,85 @@ document.getElementById('refreshBtn').addEventListener('click', function(){ loca
 document.getElementById('notifyBtn').addEventListener('click', function(){
   Swal.fire('Send Notifications', 'Connect this action to your messaging integration.', 'info');
 });
+
+/* ================= View Enrolled Students popup (per batch) =================
+   Shows only students the admin has accepted — i.e. payment_status === "Paid" —
+   pulled straight from the hidden data-* attributes already on the students table rows.
+   Split into separate Male / Female groups, each with its own count.
+   Also stamps a live "M · F" count badge onto each "View Enrolled Students" button. */
+(function enrolledStudentsPopup(){
+  function getAccepted(batchId){
+    const rows = Array.from(document.querySelectorAll('#table tbody tr[data-batch]'))
+      .filter(function(r){
+        return r.getAttribute('data-batch') === String(batchId) && r.getAttribute('data-status') === 'Paid';
+      });
+    const male = rows.filter(function(r){ return r.getAttribute('data-gender') === 'Male'; })
+      .map(function(r){ return r.getAttribute('data-name') || '—'; });
+    const female = rows.filter(function(r){ return r.getAttribute('data-gender') === 'Female'; })
+      .map(function(r){ return r.getAttribute('data-name') || '—'; });
+    const other = rows.filter(function(r){
+      const g = r.getAttribute('data-gender');
+      return g !== 'Male' && g !== 'Female';
+    }).map(function(r){ return r.getAttribute('data-name') || '—'; });
+    return { male: male, female: female, other: other };
+  }
+
+  function renderGroup(title, icon, names){
+    if(!names.length) return '';
+    return (
+      '<div style="margin-bottom:12px;">' +
+        '<div style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-weight:800;color:var(--ink-soft);margin:6px 0 6px;text-align:left;">' +
+          icon + ' ' + title + ' (' + names.length + ')' +
+        '</div>' +
+        '<ul style="text-align:left;list-style:none;padding:0;margin:0;">' +
+          names.map(function(name){
+            return '<li style="padding:9px 10px;border-bottom:1px solid rgba(18,39,30,0.08);font-weight:600;display:flex;align-items:center;gap:8px;">' +
+                   '<span style="color:#2d6a4f;">✅</span>' + name + '</li>';
+          }).join('') +
+        '</ul>' +
+      '</div>'
+    );
+  }
+
+  document.querySelectorAll('.view-students-btn').forEach(function(btn){
+    const card = btn.closest('.batch-card');
+    if(!card) return;
+    const batchId = card.getAttribute('data-batch-id');
+    const initial = getAccepted(batchId);
+
+    // live "M · F" count badge on the button itself
+    const pill = document.createElement('span');
+    pill.className = 'count-pill';
+    pill.textContent = '♂ ' + initial.male.length + '  ♀ ' + initial.female.length;
+    btn.appendChild(pill);
+
+    btn.addEventListener('click', function(){
+      const label = card.querySelector('.batch-title')
+        ? card.querySelector('.batch-title').textContent.trim() : 'Batch';
+      const fresh = getAccepted(batchId);
+      const total = fresh.male.length + fresh.female.length + fresh.other.length;
+
+      const summary =
+        '<div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;">' +
+          '<span style="background:var(--ok-bg);color:var(--ok-ink);padding:6px 12px;border-radius:999px;font-weight:800;font-size:12.5px;">♂ Male: ' + fresh.male.length + '</span>' +
+          '<span style="background:#ffe9d6;color:#a15c00;padding:6px 12px;border-radius:999px;font-weight:800;font-size:12.5px;">♀ Female: ' + fresh.female.length + '</span>' +
+        '</div>';
+
+      const html = total
+        ? summary + renderGroup('Male', '♂', fresh.male) + renderGroup('Female', '♀', fresh.female) + renderGroup('Other', '•', fresh.other)
+        : summary + '<div style="color:#516557;padding:14px 0;text-align:center;">No accepted (paid) students yet.</div>';
+
+      Swal.fire({
+        title: 'Enrolled Students',
+        html: '<div style="font-size:12.5px;color:#516557;margin-bottom:10px;">' + label + '</div>' +
+              '<div style="max-height:320px;overflow-y:auto;">' + html + '</div>',
+        confirmButtonText: 'Close',
+        confirmButtonColor: '#2d6a4f',
+        width: 400
+      });
+    });
+  });
+})();
 
 /* ================= Charts: pie/donut-first, compact ================= */
 const totalStudents = {{ students|length|default(0) }};
