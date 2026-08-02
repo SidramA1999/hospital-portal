@@ -859,16 +859,6 @@ def certificate(id):
         c = canvas.Canvas(buffer, pagesize=letter)
         width, height = letter
 
-        draw_certificate(
-            c, width, height,
-            student_name=s.name,
-            batch_start=start_fmt,
-            batch_end=end_fmt,
-            cert_no=f"AAK-{s.id:04d}",
-            issue_date=datetime.now().strftime("%d-%b-%Y"),
-            logo_path="static/logo.jpg",
-            seal_path="static/seal.png",
-        )
         c.showPage()
         c.save()
         buffer.seek(0)
