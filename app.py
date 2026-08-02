@@ -1088,30 +1088,20 @@ def send_email(to_email, subject, message):
 
 
 #-------------------- Certificate
-"""
-Certificate generator matching the "AMRUTA AAROGYA KENDRA" printed
-template (navy + gold, ribboned left edge, wave footer, circular seal).
-
-Drop-in replacement for the draw_certificate() function currently in
-app.py. See the bottom of this file for the updated /certificate/<id>
-route that calls it.
-"""
-
 import io
+import math
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
-# ---- Palette, matched from the template photo ----
-NAVY = (0.086, 0.196, 0.337)       # deep navy blue
-NAVY_DARK = (0.05, 0.13, 0.24)     # near-black navy for body text/signature
-GOLD = (0.75, 0.62, 0.22)          # muted gold
+NAVY = (0.086, 0.196, 0.337)
+NAVY_DARK = (0.05, 0.13, 0.24)
+GOLD = (0.75, 0.62, 0.22)
 INK = (0.09, 0.13, 0.18)
-CREAM = (0.996, 0.992, 0.973)      # warm off-white page background
+CREAM = (0.996, 0.992, 0.973)
 
 
 def _fit_font(c, text, font, max_w, start, min_size=13):
-    """Shrink font size until `text` fits inside `max_w`."""
     size = start
     while size > min_size and c.stringWidth(text, font, size) > max_w:
         size -= 1
@@ -1119,9 +1109,6 @@ def _fit_font(c, text, font, max_w, start, min_size=13):
 
 
 def _draw_spaced_centered(c, text, font, size, cx, y, tracking, color):
-    """Draw letter-spaced (tracked) centered text — used for the big
-    'CERTIFICATE' title and the gold subtitle, to match the template's
-    wide, tracked display lettering."""
     c.setFont(font, size)
     widths = [c.stringWidth(ch, font, size) for ch in text]
     total = sum(widths) + tracking * (len(text) - 1)
@@ -1130,6 +1117,266 @@ def _draw_spaced_centered(c, text, font, size, cx, y, tracking, color):
     for ch, w in zip(text, widths):
         c.drawString(x, y, ch)
         x += w + tracking
+
+
+def _draw_lotus_watermark(c, cx, cy, r, petals=16, color=GOLD, alpha=0.06):
+    c.saveState()
+    c.setFillAlpha(alpha)
+    c.setFillColorRGB(*color)
+    for i in range(petals):
+        angle = (360 / petals) * i
+        c.saveState()
+        c.translate(cx, cy)
+        c.rotate(angle)
+        p = c.beginPath()
+        p.moveTo(0, 0)
+        p.curveTo(r * 0.28, r * 0.35, r * 0.22, r * 0.85, 0, r)
+        p.curveTo(-r * 0.22, r * 0.85, -r * 0.28, r * 0.35, 0, 0)
+        p.close()
+        c.drawPath(p, stroke=0, fill=1)
+        c.restoreState()
+    c.setFillAlpha(alpha * 1.4)
+    c.circle(cx, cy, r * 0.16, stroke=0, fill=1)
+    c.restoreState()
+
+
+def _draw_ribbon_flag(c, outer, bar_w, x0, y0, height_span, gold, navy, flip_y=False):
+    """One navy/gold folded-ribbon flag. flip_y mirrors it vertically
+    so the same shape can sit at a top or bottom corner."""
+    c.saveState()
+    p = c.beginPath()
+    if not flip_y:
+        p.moveTo(x0, y0)
+        p.lineTo(x0 + bar_w, y0)
+        p.lineTo(x0 + bar_w, y0 - height_span + 34)
+        p.lineTo(x0, y0 - height_span)
+    else:
+        p.moveTo(x0, y0)
+        p.lineTo(x0 + bar_w, y0)
+        p.lineTo(x0 + bar_w, y0 + height_span - 34)
+        p.lineTo(x0, y0 + height_span)
+    p.close()
+    c.setFillColorRGB(*navy)
+    c.drawPath(p, stroke=0, fill=1)
+    c.setStrokeColorRGB(*gold)
+    c.setLineWidth(2)
+    if not flip_y:
+        c.line(x0 - 1, y0 - height_span + 16, x0 + bar_w + 1, y0 - height_span + 50)
+    else:
+        c.line(x0 - 1, y0 + height_span - 16, x0 + bar_w + 1, y0 + height_span - 50)
+    c.restoreState()
+
+
+import random
+
+
+def _draw_paper_texture(c, x0, y0, x1, y1, seed=42, density=1400, color=INK, alpha=0.035):
+    """Very light stipple grain to simulate a paper texture — cheap but
+    effective without needing an external texture image."""
+    rnd = random.Random(seed)
+    c.saveState()
+    c.setFillAlpha(alpha)
+    c.setFillColorRGB(*color)
+    for _ in range(density):
+        x = rnd.uniform(x0, x1)
+        y = rnd.uniform(y0, y1)
+        r = rnd.uniform(0.2, 0.55)
+        c.circle(x, y, r, stroke=0, fill=1)
+    c.restoreState()
+
+
+def _draw_beveled_frame(c, x, y, w, h, thickness, gold, navy):
+    """An inset picture-frame bevel: a light 'catching the light' edge
+    on the top-left and a darker shadow edge on the bottom-right, so
+    the border reads as a carved groove rather than a flat line."""
+    gold_light = tuple(min(1, v + 0.22) for v in gold)
+    gold_dark = tuple(max(0, v - 0.28) for v in gold)
+
+    c.saveState()
+    # base frame band
+    c.setFillColorRGB(*gold)
+    c.rect(x, y, w, h, stroke=0, fill=1)
+    # carve out the inner window (cream shows back through)
+    c.setFillColorRGB(*CREAM)
+    c.rect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness, stroke=0, fill=1)
+
+    # highlight along the outer top+left edge of the band
+    c.setStrokeColorRGB(*gold_light)
+    c.setLineWidth(1.1)
+    c.line(x, y + h, x + w, y + h)
+    c.line(x, y, x, y + h)
+
+    # shadow along the outer bottom+right edge of the band
+    c.setStrokeColorRGB(*gold_dark)
+    c.setLineWidth(1.1)
+    c.line(x, y, x + w, y)
+    c.line(x + w, y, x + w, y + h)
+
+    # inner edge gets the opposite treatment (groove feels carved-in)
+    ix, iy, iw, ih = x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness
+    c.setStrokeColorRGB(*gold_dark)
+    c.setLineWidth(0.9)
+    c.line(ix, iy + ih, ix + iw, iy + ih)
+    c.line(ix, iy, ix, iy + ih)
+    c.setStrokeColorRGB(*gold_light)
+    c.line(ix, iy, ix + iw, iy)
+    c.line(ix + iw, iy, ix + iw, iy + ih)
+
+    c.setStrokeColorRGB(*navy)
+    c.setLineWidth(1.6)
+    c.rect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness, stroke=1, fill=0)
+    c.restoreState()
+
+
+def _draw_embossed_text_centered(c, text, font, size, cx, y, color, tracking=0, depth=0.9):
+    """Foil-stamp / engraved look: a darker offset duplicate underneath
+    the main text creates a subtle raised (or pressed-in) edge."""
+    dark = tuple(max(0, v - 0.35) for v in color)
+    light = tuple(min(1, v + 0.35) for v in color)
+    if tracking:
+        _draw_spaced_centered(c, text, font, size, cx + depth, y - depth, tracking, dark)
+        _draw_spaced_centered(c, text, font, size, cx - depth * 0.4, y + depth * 0.4, tracking, light)
+        _draw_spaced_centered(c, text, font, size, cx, y, tracking, color)
+    else:
+        c.setFont(font, size)
+        c.setFillColorRGB(*dark)
+        c.drawCentredString(cx + depth, y - depth, text)
+        c.setFillColorRGB(*light)
+        c.drawCentredString(cx - depth * 0.4, y + depth * 0.4, text)
+        c.setFillColorRGB(*color)
+        c.drawCentredString(cx, y, text)
+
+
+def _draw_card_shadow(c, x, y, w, h, blur_steps=10, max_offset=14, alpha=0.05):
+    """A soft, faked drop shadow (concentric offset rounded rects at
+    decreasing opacity) behind the certificate card, so it reads as a
+    lifted, dimensional object rather than flat page art."""
+    c.saveState()
+    for i in range(blur_steps, 0, -1):
+        off = (max_offset / blur_steps) * i
+        c.setFillAlpha(alpha)
+        c.setFillColorRGB(0, 0, 0)
+        c.roundRect(x + off * 0.4, y - off * 0.5, w, h, 10, stroke=0, fill=1)
+    c.restoreState()
+    """One pair of laurel leaves branching from the stem, used to build
+    a wreath around the medallion seal. A second, lighter color on the
+    leaf tips gives a two-tone, slightly dimensional look."""
+    c.saveState()
+    c.translate(x, y)
+    c.rotate(angle)
+    for side in (1, -1):
+        p = c.beginPath()
+        p.moveTo(0, 0)
+        p.curveTo(side * 3 * scale, 2 * scale, side * 5 * scale, 6 * scale, 0, 9 * scale)
+        p.curveTo(side * -1 * scale, 6 * scale, side * -1.5 * scale, 2 * scale, 0, 0)
+        p.close()
+        c.setFillColorRGB(*color)
+        c.drawPath(p, stroke=0, fill=1)
+
+        if color2:
+            p2 = c.beginPath()
+            p2.moveTo(0, 5 * scale)
+            p2.curveTo(side * 2 * scale, 6 * scale, side * 3 * scale, 7.5 * scale, 0, 9 * scale)
+            p2.curveTo(side * -0.6 * scale, 7.5 * scale, side * -0.8 * scale, 6 * scale, 0, 5 * scale)
+            p2.close()
+            c.setFillColorRGB(*color2)
+            c.drawPath(p2, stroke=0, fill=1)
+    c.restoreState()
+
+
+def _draw_medallion_seal(c, cx, cy, r, gold=GOLD, navy=NAVY, ink=NAVY_DARK):
+    """A more advanced 'award medal' seal: drop shadow for lift, a
+    laurel wreath in two tones of gold, a metallic-look ring with a
+    glossy highlight, a small star, and ribbon tails — closer to a
+    real diploma/medal than a flat stamp."""
+    gold_light = tuple(min(1, v + 0.16) for v in gold)
+    gold_dark = tuple(max(0, v - 0.22) for v in gold)
+
+    c.saveState()
+
+    # ---- drop shadow (soft lift off the page) ----
+    c.setFillAlpha(0.18)
+    c.setFillColorRGB(0, 0, 0)
+    c.circle(cx + 2.5, cy - 3, r + 2, stroke=0, fill=1)
+    c.setFillAlpha(1)
+
+    # ---- ribbon tails ----
+    tail_w = 13
+    for dx, twist in ((-9, 6), (9, -6)):
+        p = c.beginPath()
+        p.moveTo(cx + dx - tail_w / 2, cy - r + 6)
+        p.lineTo(cx + dx + tail_w / 2, cy - r + 6)
+        p.lineTo(cx + dx + tail_w / 2 + twist, cy - r - 34)
+        p.lineTo(cx + dx + twist, cy - r - 40)
+        p.lineTo(cx + dx - tail_w / 2 + twist, cy - r - 34)
+        p.close()
+        c.setFillColorRGB(*navy)
+        c.drawPath(p, stroke=0, fill=1)
+        # thin gold edge on each tail for a stitched/embroidered look
+        c.setStrokeColorRGB(*gold)
+        c.setLineWidth(0.6)
+        c.line(cx + dx - tail_w / 2, cy - r + 6, cx + dx + tail_w / 2 + twist, cy - r - 34)
+
+    # ---- outer metallic rings ----
+    c.setFillColorRGB(*navy)
+    c.circle(cx, cy, r, stroke=0, fill=1)
+
+    c.setStrokeColorRGB(*gold_dark)
+    c.setLineWidth(2.2)
+    c.circle(cx, cy, r - 2, stroke=1, fill=0)
+    c.setStrokeColorRGB(*gold)
+    c.setLineWidth(1.2)
+    c.circle(cx, cy, r - 5, stroke=1, fill=0)
+    c.setStrokeColorRGB(*gold_light)
+    c.setLineWidth(0.6)
+    c.circle(cx, cy, r - 8, stroke=1, fill=0)
+
+    # ---- laurel wreath, two-tone leaves, left and right arcs ----
+    leaf_r = r - 7
+    for base_angle, direction in ((205, 1), (-25, -1)):
+        for i in range(7):
+            a = base_angle + direction * i * 10
+            rad = math.radians(a)
+            lx = cx + leaf_r * math.cos(rad)
+            ly = cy + leaf_r * math.sin(rad)
+            scale = 0.58 + 0.05 * math.sin(i)
+            _draw_laurel_leaf_pair(c, lx, ly, scale, a + 90, gold_dark, gold_light)
+
+    # ---- small five-point star above the initials ----
+    star_r_out = 5.2
+    star_r_in = 2.1
+    star_cy = cy + 15
+    pts = []
+    for i in range(10):
+        ang = math.radians(-90 + i * 36)
+        rr = star_r_out if i % 2 == 0 else star_r_in
+        pts.append((cx + rr * math.cos(ang), star_cy + rr * math.sin(ang)))
+    star_path = c.beginPath()
+    star_path.moveTo(*pts[0])
+    for pt in pts[1:]:
+        star_path.lineTo(*pt)
+    star_path.close()
+    c.setFillColorRGB(*gold_light)
+    c.drawPath(star_path, stroke=0, fill=1)
+
+    # ---- glossy highlight (upper-left) to suggest curved metal ----
+    c.saveState()
+    c.setFillAlpha(0.16)
+    c.setFillColorRGB(1, 1, 1)
+    c.translate(cx, cy)
+    c.rotate(35)
+    c.ellipse(-r * 0.55, r * 0.05, r * 0.05, r * 0.62, stroke=0, fill=1)
+    c.restoreState()
+
+    # ---- center initials ----
+    c.setFillColorRGB(1, 1, 1)
+    c.setFont("Times-Bold", 14)
+    c.drawCentredString(cx, cy - 8, "AAK")
+    c.setFont("Helvetica", 5.6)
+    c.setFillColorRGB(*gold_light)
+    c.drawCentredString(cx, cy - 18, "EST. KALLOLI")
+
+    c.restoreState()
 
 
 def draw_certificate(
@@ -1145,31 +1392,32 @@ def draw_certificate(
     address_lines=None,
     name_prefix="",
     cert_no=None,
-    issue_date=None,
     logo_path="static/logo.jpg",
-    seal_path="static/seal.png",
 ):
+    """Draw one certificate onto canvas `c`.
 
-    """Draw the certificate onto an already-created canvas `c`.
-
-    Only student_name, training_type, batch_start and batch_end are
-    required — everything else has sane defaults matching the template
-    and can be overridden per call if needed.
+    student_name / training_type / batch_start / batch_end are meant to
+    come from your database (e.g. student_name=s.name, training_type=
+    s.seat, ...) — nothing here is hardcoded to a particular student.
+    The __main__ block at the bottom of this file is only a local
+    preview/test and is never executed by your Flask app.
     """
     if address_lines is None:
         address_lines = [
-            "Amruta Aarogya Kendra,",
+            "Amruta Aarogya Kendra",
             "Speciality Ayurveda Hospital",
-            "Kalloli-591224 Tq: Mudalagi",
-            "Dist: Belagavi Mob: 9742151414",
+            "Kalloli-591224, Tq: Mudalagi",
+            "Dist: Belagavi • Mob: 9742151414",
         ]
 
-    # ---- Page background ----
     c.setFillColorRGB(*CREAM)
     c.rect(0, 0, width, height, stroke=0, fill=1)
 
     outer = 18
     inner = 27
+    cx = width / 2
+
+    _draw_lotus_watermark(c, cx, height * 0.46, 150, petals=16)
 
     # ---- Bottom navy wave + gold trace line ----
     wave_h = 42
@@ -1204,41 +1452,12 @@ def draw_certificate(
     c.setLineWidth(1.8)
     c.rect(inner, inner, width - 2 * inner, height - 2 * inner, stroke=1, fill=0)
 
-    # ---- Left-edge ribbon flags (top + bottom) ----
+    # ---- Ribbon-flag corners — now symmetric on both edges ----
     bar_w = 20
-
-    c.saveState()
-    top_bar_h = 148
-    p3 = c.beginPath()
-    p3.moveTo(outer, height - outer)
-    p3.lineTo(outer + bar_w, height - outer)
-    p3.lineTo(outer + bar_w, height - outer - top_bar_h + 34)
-    p3.lineTo(outer, height - outer - top_bar_h)
-    p3.close()
-    c.setFillColorRGB(*NAVY)
-    c.drawPath(p3, stroke=0, fill=1)
-    c.setStrokeColorRGB(*GOLD)
-    c.setLineWidth(2)
-    c.line(outer - 1, height - outer - top_bar_h + 16, outer + bar_w + 1, height - outer - top_bar_h + 50)
-    c.restoreState()
-
-    c.saveState()
-    bot_bar_h = 128
-    base_y = outer + wave_h * 0.5
-    p4 = c.beginPath()
-    p4.moveTo(outer, base_y)
-    p4.lineTo(outer + bar_w, base_y)
-    p4.lineTo(outer + bar_w, base_y + bot_bar_h - 30)
-    p4.lineTo(outer, base_y + bot_bar_h)
-    p4.close()
-    c.setFillColorRGB(*NAVY)
-    c.drawPath(p4, stroke=0, fill=1)
-    c.setStrokeColorRGB(*GOLD)
-    c.setLineWidth(2)
-    c.line(outer - 1, base_y + bot_bar_h - 46, outer + bar_w + 1, base_y + bot_bar_h - 10)
-    c.restoreState()
-
-    cx = width / 2
+    _draw_ribbon_flag(c, outer, bar_w, outer, height - outer, 148, GOLD, NAVY)                      # top-left
+    _draw_ribbon_flag(c, outer, bar_w, outer, outer + wave_h * 0.5, 128, GOLD, NAVY, flip_y=True)    # bottom-left
+    _draw_ribbon_flag(c, outer, bar_w, width - outer - bar_w, height - outer, 148, GOLD, NAVY)       # top-right
+    _draw_ribbon_flag(c, outer, bar_w, width - outer - bar_w, outer + wave_h * 0.5, 128, GOLD, NAVY, flip_y=True)  # bottom-right
 
     # ---- Circular seal / logo ----
     seal_r = 46
@@ -1249,7 +1468,7 @@ def draw_certificate(
             c.drawImage(img, cx - seal_r, seal_cy - seal_r, width=seal_r * 2, height=seal_r * 2,
                         preserveAspectRatio=True, mask='auto')
         except Exception:
-            pass  # no logo on disk — certificate still renders correctly without it
+            pass
 
     # ---- Hospital name ----
     c.setFillColorRGB(*GOLD)
@@ -1261,26 +1480,43 @@ def draw_certificate(
     # ---- CERTIFICATE ----
     _draw_spaced_centered(c, "CERTIFICATE", "Times-Bold", 42, cx, height - 246, 4.5, NAVY)
 
+    c.saveState()
+    c.setStrokeColorRGB(*GOLD)
+    c.setLineWidth(1)
+    fl_y = height - 262
+    c.line(cx - 130, fl_y, cx - 14, fl_y)
+    c.line(cx + 14, fl_y, cx + 130, fl_y)
+    c.setFillColorRGB(*GOLD)
+    d = 3.2
+    p5 = c.beginPath()
+    p5.moveTo(cx - d, fl_y)
+    p5.lineTo(cx, fl_y + d)
+    p5.lineTo(cx + d, fl_y)
+    p5.lineTo(cx, fl_y - d)
+    p5.close()
+    c.drawPath(p5, stroke=0, fill=1)
+    c.restoreState()
+
     # ---- Subtitle ----
-    _draw_spaced_centered(c, f"OF {training_type.upper()}", "Helvetica-Bold", 11.5, cx, height - 272, 2.2, GOLD)
+    _draw_spaced_centered(c, f"OF {training_type.upper()}", "Times-Bold", 12, cx, height - 282, 2.4, GOLD)
 
     # ---- "This is to certify that" ----
     c.setFillColorRGB(*INK)
     c.setFont("Times-Italic", 15)
-    c.drawCentredString(cx, height - 306, "This is to certify that")
+    c.drawCentredString(cx, height - 316, "This is to certify that")
 
-    # ---- Student name ----
+    # ---- Student name (always the caller's student_name — never hardcoded) ----
     name_text = f"{name_prefix} {student_name}".strip()
     name_font = "Times-Bold"
     name_size = _fit_font(c, name_text, name_font, width - 2 * inner - 100, 30)
     c.setFillColorRGB(*NAVY_DARK)
     c.setFont(name_font, name_size)
-    c.drawCentredString(cx, height - 340, name_text)
+    c.drawCentredString(cx, height - 352, name_text)
 
     nw = c.stringWidth(name_text, name_font, name_size)
-    c.setStrokeColorRGB(*NAVY)
-    c.setLineWidth(0.8)
-    c.line(cx - nw / 2 - 24, height - 350, cx + nw / 2 + 24, height - 350)
+    c.setStrokeColorRGB(*GOLD)
+    c.setLineWidth(1)
+    c.line(cx - nw / 2 - 26, height - 363, cx + nw / 2 + 26, height - 363)
 
     # ---- Body copy ----
     body_lines = [
@@ -1294,88 +1530,54 @@ def draw_certificate(
         "Clinical skills.",
     ]
     c.setFillColorRGB(*INK)
-    c.setFont("Helvetica", 11.5)
-    y = height - 375
+    c.setFont("Times-Roman", 12)
+    y = height - 390
     for line in body_lines:
         c.drawCentredString(cx, y, line)
-        y -= 17.5
+        y -= 18.5
 
-    # ---- Footer: address block (bottom-left) ----
-    fy = 150
-    #c.setFillColorRGB(*NAVY_DARK)
-    #c.setFont("Helvetica-Bold", 11)
-    #c.drawString(inner + 22, fy + 46, doctor_name)
-    #c.setFont("Helvetica", 8.5)
-    #c.drawString(inner + 22, fy + 34, doctor_cred)
-    #c.setFont("Helvetica-Bold", 9)
-    #for i, line in enumerate(address_lines):
-        #c.drawString(inner + 22, fy + 42 - i * 11, line)
+    div_y = y - 22
+    c.saveState()
+    c.setStrokeColorRGB(*GOLD)
+    c.setLineWidth(0.8)
+    c.line(cx - 150, div_y, cx - 16, div_y)
+    c.line(cx + 16, div_y, cx + 150, div_y)
+    c.setFillColorRGB(*GOLD)
+    c.circle(cx, div_y, 3, stroke=0, fill=1)
+    c.circle(cx - 9, div_y, 1.6, stroke=0, fill=1)
+    c.circle(cx + 9, div_y, 1.6, stroke=0, fill=1)
+    c.restoreState()
 
-    # ---- Footer: signature (bottom-right) ----
-    # Signature line
+    # ---- Footer: medallion seal (left) + signature (right) ----
+    fy = 172
 
-    c.line(
-        width - 220,
-        fy,
-        width - 50,
-        fy
-    )
-    
-    c.setFont("Helvetica-Bold",10)
-    
-    c.drawCentredString(
-        width - 135,
-        fy - 15,
-        "Dr. Tukaram B Umarani"
-    )
-    
-    c.setFont("Helvetica",8)
-    
-    c.drawCentredString(
-        width - 135,
-        fy - 27,
-        "MS (Ayu)"
-    )
-    
-    c.drawCentredString(
-        width - 135,
-        fy - 41,
-        "Amruta Aarogya Kendra"
-    )
-    
-    c.drawCentredString(
-        width - 135,
-        fy - 52,
-        "Speciality Ayurveda Hospital"
-    )
-    
-    c.drawCentredString(
-        width - 135,
-        fy - 63,
-        "Kalloli-591224, Tq: Mudalagi"
-    )
-    
-    c.drawCentredString(
-        width - 135,
-        fy - 74,
-        "Dist: Belagavi • Mob: 9742151414"
-    )
+    _draw_medallion_seal(c, inner + 82, fy - 6, 40)
 
-    # ---- Optional unobtrusive certificate number (not in the original
-    # template, but useful for your own records — small, muted, corner) ----
+    c.setStrokeColorRGB(*INK)
+    c.setLineWidth(0.7)
+    c.line(width - 220, fy, width - 50, fy)
+
+    c.setFillColorRGB(*NAVY_DARK)
+    c.setFont("Times-Bold", 10.5)
+    c.drawCentredString(width - 135, fy - 15, doctor_name)
+    c.setFont("Times-Italic", 8.5)
+    c.drawCentredString(width - 135, fy - 27, doctor_cred)
+    c.setFont("Helvetica", 8)
+    for i, line in enumerate(address_lines):
+        c.drawCentredString(width - 135, fy - 40 - i * 11, line)
+
     if cert_no:
-        c.setFillColorRGB(0.55, 0.55, 0.55)
-        c.setFont("Helvetica", 7)
-        c.drawString(inner + 6, inner + 6, cert_no)
-
-        # Thin closing rule + tagline
-        c.setStrokeColorRGB(*GOLD)
-        c.setLineWidth(0.6)
-        c.line(inner + 20, inner + 14, width - inner - 20, inner + 14)
         c.setFillColorRGB(*NAVY_DARK)
-        c.setFont("Helvetica-Oblique", 8)
-        c.drawCentredString(cx, inner + 4,
-                            "This certificate is system-generated by Amrutha Aarogya Kendra Ayurvedic Hospital.")
+        c.setFont("Helvetica-Bold", 8.5)
+        c.drawString(inner + 14, 78, f"Cert. No: {cert_no}")
+
+    c.setStrokeColorRGB(*GOLD)
+    c.setLineWidth(0.7)
+    c.line(inner + 20, 68, width - inner - 20, 68)
+    c.setFillColorRGB(*NAVY_DARK)
+    c.setFont("Helvetica-Oblique", 8.5)
+    c.drawCentredString(cx, 56,
+                        "This certificate is system-generated by Amrutha Aarogya Kendra Ayurvedic Hospital.")
 
 
 # ---------------------------------------------------------------------
