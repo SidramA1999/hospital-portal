@@ -1167,97 +1167,7 @@ def _draw_ribbon_flag(c, outer, bar_w, x0, y0, height_span, gold, navy, flip_y=F
     c.restoreState()
 
 
-import random
-
-
-def _draw_paper_texture(c, x0, y0, x1, y1, seed=42, density=1400, color=INK, alpha=0.035):
-    """Very light stipple grain to simulate a paper texture — cheap but
-    effective without needing an external texture image."""
-    rnd = random.Random(seed)
-    c.saveState()
-    c.setFillAlpha(alpha)
-    c.setFillColorRGB(*color)
-    for _ in range(density):
-        x = rnd.uniform(x0, x1)
-        y = rnd.uniform(y0, y1)
-        r = rnd.uniform(0.2, 0.55)
-        c.circle(x, y, r, stroke=0, fill=1)
-    c.restoreState()
-
-
-def _draw_beveled_frame(c, x, y, w, h, thickness, gold, navy):
-    """An inset picture-frame bevel: a light 'catching the light' edge
-    on the top-left and a darker shadow edge on the bottom-right, so
-    the border reads as a carved groove rather than a flat line."""
-    gold_light = tuple(min(1, v + 0.22) for v in gold)
-    gold_dark = tuple(max(0, v - 0.28) for v in gold)
-
-    c.saveState()
-    # base frame band
-    c.setFillColorRGB(*gold)
-    c.rect(x, y, w, h, stroke=0, fill=1)
-    # carve out the inner window (cream shows back through)
-    c.setFillColorRGB(*CREAM)
-    c.rect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness, stroke=0, fill=1)
-
-    # highlight along the outer top+left edge of the band
-    c.setStrokeColorRGB(*gold_light)
-    c.setLineWidth(1.1)
-    c.line(x, y + h, x + w, y + h)
-    c.line(x, y, x, y + h)
-
-    # shadow along the outer bottom+right edge of the band
-    c.setStrokeColorRGB(*gold_dark)
-    c.setLineWidth(1.1)
-    c.line(x, y, x + w, y)
-    c.line(x + w, y, x + w, y + h)
-
-    # inner edge gets the opposite treatment (groove feels carved-in)
-    ix, iy, iw, ih = x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness
-    c.setStrokeColorRGB(*gold_dark)
-    c.setLineWidth(0.9)
-    c.line(ix, iy + ih, ix + iw, iy + ih)
-    c.line(ix, iy, ix, iy + ih)
-    c.setStrokeColorRGB(*gold_light)
-    c.line(ix, iy, ix + iw, iy)
-    c.line(ix + iw, iy, ix + iw, iy + ih)
-
-    c.setStrokeColorRGB(*navy)
-    c.setLineWidth(1.6)
-    c.rect(x + thickness, y + thickness, w - 2 * thickness, h - 2 * thickness, stroke=1, fill=0)
-    c.restoreState()
-
-
-def _draw_embossed_text_centered(c, text, font, size, cx, y, color, tracking=0, depth=0.9):
-    """Foil-stamp / engraved look: a darker offset duplicate underneath
-    the main text creates a subtle raised (or pressed-in) edge."""
-    dark = tuple(max(0, v - 0.35) for v in color)
-    light = tuple(min(1, v + 0.35) for v in color)
-    if tracking:
-        _draw_spaced_centered(c, text, font, size, cx + depth, y - depth, tracking, dark)
-        _draw_spaced_centered(c, text, font, size, cx - depth * 0.4, y + depth * 0.4, tracking, light)
-        _draw_spaced_centered(c, text, font, size, cx, y, tracking, color)
-    else:
-        c.setFont(font, size)
-        c.setFillColorRGB(*dark)
-        c.drawCentredString(cx + depth, y - depth, text)
-        c.setFillColorRGB(*light)
-        c.drawCentredString(cx - depth * 0.4, y + depth * 0.4, text)
-        c.setFillColorRGB(*color)
-        c.drawCentredString(cx, y, text)
-
-
-def _draw_card_shadow(c, x, y, w, h, blur_steps=10, max_offset=14, alpha=0.05):
-    """A soft, faked drop shadow (concentric offset rounded rects at
-    decreasing opacity) behind the certificate card, so it reads as a
-    lifted, dimensional object rather than flat page art."""
-    c.saveState()
-    for i in range(blur_steps, 0, -1):
-        off = (max_offset / blur_steps) * i
-        c.setFillAlpha(alpha)
-        c.setFillColorRGB(0, 0, 0)
-        c.roundRect(x + off * 0.4, y - off * 0.5, w, h, 10, stroke=0, fill=1)
-    c.restoreState()
+def _draw_laurel_leaf_pair(c, x, y, scale, angle, color, color2=None):
     """One pair of laurel leaves branching from the stem, used to build
     a wreath around the medallion seal. A second, lighter color on the
     leaf tips gives a two-tone, slightly dimensional look."""
@@ -1550,49 +1460,7 @@ def draw_certificate(
 
     # ---- Footer: medallion seal (left) + signature (right) ----
     fy = 172
-def _draw_laurel_leaf_pair(
-    c,
-    x,
-    y,
-    scale,
-    angle,
-    color,
-    color2=None
-):
-    c.saveState()
-    c.translate(x, y)
-    c.rotate(angle)
 
-    for side in (1, -1):
-
-        p = c.beginPath()
-
-        p.moveTo(0, 0)
-
-        p.curveTo(
-            side * 3 * scale,
-            2 * scale,
-            side * 5 * scale,
-            6 * scale,
-            0,
-            9 * scale
-        )
-
-        p.curveTo(
-            side * -1 * scale,
-            6 * scale,
-            side * -1.5 * scale,
-            2 * scale,
-            0,
-            0
-        )
-
-        p.close()
-
-        c.setFillColorRGB(*color)
-        c.drawPath(p, stroke=0, fill=1)
-
-    c.restoreState()
     _draw_medallion_seal(c, inner + 82, fy - 6, 40)
 
     c.setStrokeColorRGB(*INK)
