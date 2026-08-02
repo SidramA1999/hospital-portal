@@ -1303,21 +1303,70 @@ def draw_certificate(
     # ---- Footer: address block (bottom-left) ----
     fy = 150
     c.setFillColorRGB(*NAVY_DARK)
-    c.setFont("Helvetica-Bold", 11)
-    c.drawString(inner + 22, fy + 46, doctor_name)
-    c.setFont("Helvetica", 8.5)
-    c.drawString(inner + 22, fy + 34, doctor_cred)
+    #c.setFont("Helvetica-Bold", 11)
+    #c.drawString(inner + 22, fy + 46, doctor_name)
+    #c.setFont("Helvetica", 8.5)
+    #c.drawString(inner + 22, fy + 34, doctor_cred)
     c.setFont("Helvetica-Bold", 9)
     for i, line in enumerate(address_lines):
         c.drawString(inner + 22, fy + 42 - i * 11, line)
 
     # ---- Footer: signature (bottom-right) ----
+    # Signature line
     c.setStrokeColorRGB(*INK)
     c.setLineWidth(0.7)
-    c.line(width - inner - 170, fy - 4, width - inner - 22, fy - 4)
+    
+    c.line(
+        width - inner - 170,
+        fy - 4,
+        width - inner - 22,
+        fy - 4
+    )
+    
+    # Doctor name
     c.setFillColorRGB(*NAVY_DARK)
-    c.setFont("Helvetica", 9)
-    c.drawCentredString(width - inner - 96, fy - 16, f"{doctor_name}. {doctor_cred}")
+    
+    c.setFont("Helvetica-Bold", 9)
+    c.drawCentredString(
+        width - inner - 96,
+        fy - 18,
+        doctor_name
+    )
+    
+    # Qualification
+    c.setFont("Helvetica", 8)
+    c.drawCentredString(
+        width - inner - 96,
+        fy - 30,
+        doctor_cred
+    )
+    
+    # Hospital details
+    c.setFont("Helvetica", 7)
+    
+    c.drawCentredString(
+        width - inner - 96,
+        fy - 42,
+        "Amruta Aarogya Kendra"
+    )
+    
+    c.drawCentredString(
+        width - inner - 96,
+        fy - 52,
+        "Speciality Ayurveda Hospital"
+    )
+    
+    c.drawCentredString(
+        width - inner - 96,
+        fy - 62,
+        "Kalloli-591224 Tq: Mudalagi"
+    )
+    
+    c.drawCentredString(
+        width - inner - 96,
+        fy - 72,
+        "Dist: Belagavi Mob: 9742151414"
+    )
 
     # ---- Optional unobtrusive certificate number (not in the original
     # template, but useful for your own records — small, muted, corner) ----
