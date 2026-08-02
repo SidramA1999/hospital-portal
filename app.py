@@ -26,7 +26,7 @@ if not os.path.exists("static/uploads"):
 
 
 if not os.path.exists("static/gallery"):
-    os.makedirs("static/gallery")
+    os.makedirs("static/gallery")
 
 
 
