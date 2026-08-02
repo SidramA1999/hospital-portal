@@ -1137,7 +1137,9 @@ def draw_certificate(
     address_lines=None,
     name_prefix="",
     cert_no=None,
+    issue_date=None,
     logo_path="static/logo.jpg",
+    seal_path=None
 ):
     """Draw the certificate onto an already-created canvas `c`.
 
