@@ -856,11 +856,29 @@ def certificate(id):
                 end_fmt = batch.end_date
 
         buffer = io.BytesIO()
-        c = canvas.Canvas(buffer, pagesize=letter)
-        width, height = letter
 
+        c = canvas.Canvas(
+            buffer,
+            pagesize=letter
+        )
+        
+        width, height = letter
+        
+        draw_certificate(
+            c,
+            width,
+            height,
+            student_name=s.name,
+            training_type=s.seat or "Internship Training",
+            batch_start=start_fmt,
+            batch_end=end_fmt,
+            cert_no=f"AAK-{s.id:04d}",
+            logo_path="static/logo.jpg"
+        )
+        
         c.showPage()
         c.save()
+        
         buffer.seek(0)
 
         return send_file(
