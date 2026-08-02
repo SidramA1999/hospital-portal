@@ -1550,7 +1550,49 @@ def draw_certificate(
 
     # ---- Footer: medallion seal (left) + signature (right) ----
     fy = 172
+def _draw_laurel_leaf_pair(
+    c,
+    x,
+    y,
+    scale,
+    angle,
+    color,
+    color2=None
+):
+    c.saveState()
+    c.translate(x, y)
+    c.rotate(angle)
 
+    for side in (1, -1):
+
+        p = c.beginPath()
+
+        p.moveTo(0, 0)
+
+        p.curveTo(
+            side * 3 * scale,
+            2 * scale,
+            side * 5 * scale,
+            6 * scale,
+            0,
+            9 * scale
+        )
+
+        p.curveTo(
+            side * -1 * scale,
+            6 * scale,
+            side * -1.5 * scale,
+            2 * scale,
+            0,
+            0
+        )
+
+        p.close()
+
+        c.setFillColorRGB(*color)
+        c.drawPath(p, stroke=0, fill=1)
+
+    c.restoreState()
     _draw_medallion_seal(c, inner + 82, fy - 6, 40)
 
     c.setStrokeColorRGB(*INK)
