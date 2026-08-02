@@ -869,7 +869,7 @@ def certificate(id):
             width,
             height,
             student_name=s.name,
-            training_type=s.seat or "Internship Training",
+            training_type=s.seat or "VIDDHA ANIKARMA & PANCHAKARMA",
             batch_start=start_fmt,
             batch_end=end_fmt,
             cert_no=f"AAK-{s.id:04d}",
@@ -1309,7 +1309,7 @@ def draw_certificate(
     c.drawString(inner + 22, fy + 34, doctor_cred)
     c.setFont("Helvetica-Bold", 9)
     for i, line in enumerate(address_lines):
-        c.drawString(inner + 22, fy + 20 - i * 11, line)
+        c.drawString(inner + 22, fy + 42 - i * 11, line)
 
     # ---- Footer: signature (bottom-right) ----
     c.setStrokeColorRGB(*INK)
