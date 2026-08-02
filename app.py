@@ -24,7 +24,6 @@ import os
 if not os.path.exists("static/uploads"):
     os.makedirs("static/uploads")
 
-
 if not os.path.exists("static/gallery"):
     os.makedirs("static/gallery")
 
