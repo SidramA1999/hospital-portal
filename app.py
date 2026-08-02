@@ -1272,7 +1272,7 @@ def draw_certificate(
     # ---- Student name ----
     name_text = f"{name_prefix} {student_name}".strip()
     name_font = "Times-Bold"
-    name_size = _fit_font(c, name_text, name_font, width - 2 * inner - 100, 24)
+    name_size = _fit_font(c, name_text, name_font, width - 2 * inner - 100, 30)
     c.setFillColorRGB(*NAVY_DARK)
     c.setFont(name_font, name_size)
     c.drawCentredString(cx, height - 340, name_text)
@@ -1302,70 +1302,63 @@ def draw_certificate(
 
     # ---- Footer: address block (bottom-left) ----
     fy = 150
-    c.setFillColorRGB(*NAVY_DARK)
+    #c.setFillColorRGB(*NAVY_DARK)
     #c.setFont("Helvetica-Bold", 11)
     #c.drawString(inner + 22, fy + 46, doctor_name)
     #c.setFont("Helvetica", 8.5)
     #c.drawString(inner + 22, fy + 34, doctor_cred)
-    c.setFont("Helvetica-Bold", 9)
-    for i, line in enumerate(address_lines):
-        c.drawString(inner + 22, fy + 42 - i * 11, line)
+    #c.setFont("Helvetica-Bold", 9)
+    #for i, line in enumerate(address_lines):
+        #c.drawString(inner + 22, fy + 42 - i * 11, line)
 
     # ---- Footer: signature (bottom-right) ----
     # Signature line
-    c.setStrokeColorRGB(*INK)
-    c.setLineWidth(0.7)
-    
+
     c.line(
-        width - inner - 170,
-        fy - 4,
-        width - inner - 22,
-        fy - 4
+        width - 220,
+        fy,
+        width - 50,
+        fy
     )
     
-    # Doctor name
-    c.setFillColorRGB(*NAVY_DARK)
+    c.setFont("Helvetica-Bold",10)
     
-    c.setFont("Helvetica-Bold", 9)
     c.drawCentredString(
-        width - inner - 96,
-        fy - 18,
-        doctor_name
+        width - 135,
+        fy - 15,
+        "Dr. Tukaram B Umarani"
     )
     
-    # Qualification
-    c.setFont("Helvetica", 8)
+    c.setFont("Helvetica",8)
+    
     c.drawCentredString(
-        width - inner - 96,
-        fy - 30,
-        doctor_cred
+        width - 135,
+        fy - 27,
+        "MS (Ayu)"
     )
     
-    # Hospital details
-    c.setFont("Helvetica", 7)
-    
     c.drawCentredString(
-        width - inner - 96,
-        fy - 42,
+        width - 135,
+        fy - 41,
         "Amruta Aarogya Kendra"
     )
     
     c.drawCentredString(
-        width - inner - 96,
+        width - 135,
         fy - 52,
         "Speciality Ayurveda Hospital"
     )
     
     c.drawCentredString(
-        width - inner - 96,
-        fy - 62,
-        "Kalloli-591224 Tq: Mudalagi"
+        width - 135,
+        fy - 63,
+        "Kalloli-591224, Tq: Mudalagi"
     )
     
     c.drawCentredString(
-        width - inner - 96,
-        fy - 72,
-        "Dist: Belagavi Mob: 9742151414"
+        width - 135,
+        fy - 74,
+        "Dist: Belagavi • Mob: 9742151414"
     )
 
     # ---- Optional unobtrusive certificate number (not in the original
