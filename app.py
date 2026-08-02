@@ -1144,11 +1144,12 @@ def draw_certificate(
     hospital_line2="SPECIALITY AYURVEDA HOSPITAL, KALLOLI",
     address_lines=None,
     name_prefix="",
-    #cert_no=f"AAK-{s.id:04d}",
-    issue_date=datetime.now().strftime("%d-%b-%Y"),
+    cert_no=None,
+    issue_date=None,
     logo_path="static/logo.jpg",
     seal_path="static/seal.png",
 ):
+
     """Draw the certificate onto an already-created canvas `c`.
 
     Only student_name, training_type, batch_start and batch_end are
