@@ -869,7 +869,7 @@ def certificate(id):
             width,
             height,
             student_name=s.name,
-            training_type=s.seat or "VIDDHA ANIKARMA & PANCHAKARMA",
+            training_type=s.seat or "VIDDHA-AGNIKARMA & PANCHAKARMA",
             batch_start=start_fmt,
             batch_end=end_fmt,
             cert_no=f"AAK-{s.id:04d}",
