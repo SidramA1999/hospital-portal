@@ -873,7 +873,7 @@ def certificate(id):
             batch_start=start_fmt,
             batch_end=end_fmt,
             cert_no=f"AAK-{s.id:04d}",
-            logo_path="static/logo.jpg"
+            logo_path="static/seal.png"
         )
         
         c.showPage()
