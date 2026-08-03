@@ -1416,9 +1416,9 @@ def draw_certificate(
     c.drawCentredString(cx, height - 316, "This is to certify that")
 
     # ---- Student name (always the caller's student_name — never hardcoded) ----
-    name_text = f"{name_prefix} {student_name}".strip()
+    name_text = f"Vaidya. {student_name}".strip()
     name_font = "Times-Bold"
-    name_size = _fit_font(c, name_text, name_font, width - 2 * inner - 100, 30)
+    name_size = _fit_font(c, name_text, name_font, width - 2 * inner - 100, 27)
     c.setFillColorRGB(*NAVY_DARK)
     c.setFont(name_font, name_size)
     c.drawCentredString(cx, height - 352, name_text)
@@ -1440,11 +1440,11 @@ def draw_certificate(
         "Clinical skills.",
     ]
     c.setFillColorRGB(*INK)
-    c.setFont("Times-Roman", 12)
+    c.setFont("Times-Roman", 14)
     y = height - 390
     for line in body_lines:
         c.drawCentredString(cx, y, line)
-        y -= 18.5
+        y -= 22
 
     div_y = y - 22
     c.saveState()
