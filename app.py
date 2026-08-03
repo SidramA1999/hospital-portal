@@ -6,7 +6,7 @@ import csv
 import pandas as pd
 from reportlab.pdfgen import canvas
 from datetime import datetime
-from reportlab.lib.pagesizes import letter
+from reportlab.lib.pagesizes import A4
 import threading
 
 
@@ -859,10 +859,10 @@ def certificate(id):
 
         c = canvas.Canvas(
             buffer,
-            pagesize=letter
+            pagesize=A4
         )
         
-        width, height = letter
+        width, height = A4
         
         draw_certificate(
             c,
@@ -1371,7 +1371,7 @@ def draw_certificate(
 
     # ---- Circular seal / logo ----
     seal_r = 46
-    seal_cy = height - 100
+    seal_cy = height - 90
     if logo_path:
         try:
             img = ImageReader(logo_path)
@@ -1388,7 +1388,7 @@ def draw_certificate(
     c.drawCentredString(cx, height - 187, hospital_line2)
 
     # ---- CERTIFICATE ----
-    _draw_spaced_centered(c, "CERTIFICATE", "Times-Bold", 42, cx, height - 246, 4.5, NAVY)
+    _draw_spaced_centered(c, "CERTIFICATE", "Times-Bold", 42, cx, height - 270, 4.5, NAVY)
 
     c.saveState()
     c.setStrokeColorRGB(*GOLD)
@@ -1408,7 +1408,7 @@ def draw_certificate(
     c.restoreState()
 
     # ---- Subtitle ----
-    _draw_spaced_centered(c, f"OF {training_type.upper()}", "Times-Bold", 12, cx, height - 282, 2.4, GOLD)
+    _draw_spaced_centered(c, f"OF {training_type.upper()}", "Times-Bold", 12, cx, height - 282, 0.6, GOLD)
 
     # ---- "This is to certify that" ----
     c.setFillColorRGB(*INK)
@@ -1421,7 +1421,7 @@ def draw_certificate(
     name_size = _fit_font(c, name_text, name_font, width - 2 * inner - 100, 27)
     c.setFillColorRGB(*NAVY_DARK)
     c.setFont(name_font, name_size)
-    c.drawCentredString(cx, height - 352, name_text)
+    c.drawCentredString(cx, height - 390, name_text)
 
     nw = c.stringWidth(name_text, name_font, name_size)
     c.setStrokeColorRGB(*GOLD)
@@ -1441,7 +1441,7 @@ def draw_certificate(
     ]
     c.setFillColorRGB(*INK)
     c.setFont("Times-Roman", 14)
-    y = height - 390
+    y = height - 430
     for line in body_lines:
         c.drawCentredString(cx, y, line)
         y -= 22
