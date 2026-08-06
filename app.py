@@ -877,12 +877,13 @@ def certificate(id):
             c, width, height,
             student_name=s.name,
             trainee_photo=s.photo,
+            training_type="VIDDHA ANIKARMA & PANCHAKARMA"
             batch_start=start_fmt,
             batch_end=end_fmt,
             cert_no=f"AAK-{s.id:04d}",
-            issue_date=datetime.now().strftime("%d-%b-%Y"),
+            #issue_date=datetime.now().strftime("%d-%b-%Y"),
             logo_path="static/logo.jpg",
-            seal_path="static/seal.png",
+            #seal_path="static/seal.png",
         )
         c.showPage()
         c.save()
