@@ -1044,8 +1044,40 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
     </div>
 
     <div class="preview-wrap" id="photoPreviewWrap">
-    
-    </div>
+
+       <img
+           id="photoPreviewImgme"
+           style="
+               margin-top:10px;
+               font-weight:600;
+               color:var(--ink);
+           "
+       ></p>
+   
+       <div class="preview-actions">
+   
+           <button
+               type="button"
+               onclick="
+                 document.getElementById(
+                   'student_photo'
+                 ).click()
+               "
+           >
+               Replace
+           </button>
+   
+           <button
+               type="button"
+               class="remove"
+               onclick="removePhoto()"
+           >
+               Remove
+           </button>
+   
+       </div>
+   
+   </div>
     
 
     <!-- EDUCATION -->
@@ -1631,50 +1663,61 @@ function removeProof() {
 /* ===============================================
 Photo
 ===================================*/
-const photoInput =
-document.getElementById("student_photo");
+/* ===============================================
+   PHOTO UPLOAD PREVIEW
+=============================================== */
 
-const photoDropzone =
-document.getElementById("photoDropzone");
+const photoInput = document.getElementById("student_photo");
 
-const photoPreviewWrap =
-document.getElementById("photoPreviewWrap");
+const photoDropzone = document.getElementById("photoDropzone");
 
-const photoPreviewImg =
-document.getElementById("photoPreviewImg");
+const photoPreviewWrap = document.getElementById("photoPreviewWrap");
 
-photoDropzone.addEventListener(
-    "click",
-    () => photoInput.click()
-);
+const photoPreviewImg = document.getElementById("photoPreviewImg");
 
-photoInput.addEventListener(
-    "change",
-    () => {
+const photoFileName = document.getElementById("photoFileName");
 
-        const file = photoInput.files[0];
+photoDropzone.addEventListener("click", () => photoInput.click());
 
-        if (!file) return;
+photoInput.addEventListener("change", () => {
+    const file = photoInput.files[0];
 
-        const reader = new FileReader();
+    if (!file) return;
 
-        reader.onload = (e) => {
+    const reader = new FileReader();
 
-            photoPreviewImg.src =
-                e.target.result;
+    reader.onload = (e) => {
+        photoPreviewImg.src = e.target.result;
 
-            photoPreviewWrap.classList.add(
-                "show"
-            );
-        };
+        photoFileName.innerText = file.name;
 
-        reader.readAsDataURL(file);
-    }
-);
+        photoPreviewWrap.classList.add("show");
 
+        photoDropzone.style.display = "none";
 
+        Swal.fire({
+            icon: "success",
+            title: "Photo Uploaded",
+            text: file.name,
+            timer: 1500,
+            showConfirmButton: false
+        });
+    };
 
+    reader.readAsDataURL(file);
+});
 
+function removePhoto() {
+    photoInput.value = "";
+
+    photoPreviewWrap.classList.remove("show");
+
+    photoDropzone.style.display = "block";
+
+    photoPreviewImg.src = "";
+
+    photoFileName.innerText = "";
+}
 
 
 /* =========================================================
