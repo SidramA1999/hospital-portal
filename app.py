@@ -877,7 +877,7 @@ def certificate(id):
             c, width, height,
             student_name=s.name,
             trainee_photo=s.photo,
-            training_type="VIDDHA ANIKARMA & PANCHAKARMA"
+            training_type="VIDDHA ANIKARMA & PANCHAKARMA",
             batch_start=start_fmt,
             batch_end=end_fmt,
             cert_no=f"AAK-{s.id:04d}",
