@@ -1045,7 +1045,10 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
 
     <div class="preview-wrap" id="photoPreviewWrap">
 
-          ="Photo Preview"
+          <img
+              id="photoPreviewImg"
+              src=""
+              alt="Photo Preview"
           >
       
           <p
@@ -1061,11 +1064,7 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       
               <button
                   type="button"
-                  onclick="
-                      document.getElementById(
-                          'student_photo'
-                      ).click()
-                  "
+                  onclick="document.getElementById('student_photo').click()"
               >
                   Replace
               </button>
