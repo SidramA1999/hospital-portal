@@ -1045,39 +1045,42 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
 
     <div class="preview-wrap" id="photoPreviewWrap">
 
-       <img
-           id="photoPreviewImgme"
-           style="
-               margin-top:10px;
-               font-weight:600;
-               color:var(--ink);
-           "
-       ></p>
-   
-       <div class="preview-actions">
-   
-           <button
-               type="button"
-               onclick="
-                 document.getElementById(
-                   'student_photo'
-                 ).click()
-               "
-           >
-               Replace
-           </button>
-   
-           <button
-               type="button"
-               class="remove"
-               onclick="removePhoto()"
-           >
-               Remove
-           </button>
-   
-       </div>
-   
-   </div>
+          ="Photo Preview"
+          >
+      
+          <p
+              id="photoFileName"
+              style="
+                  margin-top:10px;
+                  font-weight:600;
+                  color:var(--ink);
+              "
+          ></p>
+      
+          <div class="preview-actions">
+      
+              <button
+                  type="button"
+                  onclick="
+                      document.getElementById(
+                          'student_photo'
+                      ).click()
+                  "
+              >
+                  Replace
+              </button>
+      
+              <button
+                  type="button"
+                  class="remove"
+                  onclick="removePhoto()"
+              >
+                  Remove
+              </button>
+      
+          </div>
+      
+      </div>
     
 
     <!-- EDUCATION -->
