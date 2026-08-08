@@ -171,8 +171,11 @@ def register():
             if photo_file.content_length and (photo_file.content_length >5 * 1024 * 1024):
                 return "Photo size exceeds 5 MB"
 
-        seat = data.get('seat')
+        seat = data.get('selected_seat')
+        if not seat:
+            return "Please select a seat"
         gender = data.get('gender')
+        #dob = data.get("dob")
 
         filename = None
         photo_filename = None
@@ -238,6 +241,7 @@ def register():
             batch_id=batch.id,
             seat=seat,
             gender=gender,
+            #selected_seat = request.form.get("selected_seat"),
             transaction_id=data.get('transaction_id'),
             payment_proof=filename,
             photo=photo_filename,
@@ -319,6 +323,33 @@ def register():
         db.session.rollback()
         print("REGISTER ERROR:", str(e))
         return f"ERROR: {str(e)}"
+
+
+#####----seat batch
+@app.route("/api/batches/<int:batch_id>/seats")
+def get_batch_seats(batch_id):
+
+    batch = Batch.query.get_or_404(batch_id)
+
+    seats = {
+        "M1": {"gender": "Male", "booked": False},
+        "M2": {"gender": "Male", "booked": False},
+        "M3": {"gender": "Male", "booked": False},
+        "F1": {"gender": "Female", "booked": False},
+        "F2": {"gender": "Female", "booked": False},
+        "F3": {"gender": "Female", "booked": False},
+    }
+
+    booked_students = Student.query.filter_by(batch_id=batch_id).all()
+
+    for student in booked_students:
+        if student.seat in seats:
+            seats[student.seat]["booked"] = True
+
+    return jsonify({
+        "batch_id": batch_id,
+        "seats": seats
+    })
 
 
 ##----------------------Batches------------------------------------------------------ 
@@ -877,13 +908,12 @@ def certificate(id):
             c, width, height,
             student_name=s.name,
             trainee_photo=s.photo,
-            training_type="VIDDHA ANIKARMA & PANCHAKARMA",
             batch_start=start_fmt,
             batch_end=end_fmt,
             cert_no=f"AAK-{s.id:04d}",
-            #issue_date=datetime.now().strftime("%d-%b-%Y"),
+            issue_date=datetime.now().strftime("%d-%b-%Y"),
             logo_path="static/logo.jpg",
-            #seal_path="static/seal.png",
+            seal_path="static/seal.png",
         )
         c.showPage()
         c.save()
