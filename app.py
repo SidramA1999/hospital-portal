@@ -340,11 +340,13 @@ def get_batch_seats(batch_id):
         "F3": {"gender": "Female", "booked": False},
     }
 
-    booked_students = Student.query.filter_by(batch_id=batch_id).all()
+    male_count = Student.query.filter_by(batch_id=batch_id,gender="Male").count()
 
-    for student in booked_students:
-        if student.seat in seats:
-            seats[student.seat]["booked"] = True
+    female_count = Student.query.filter_by(batch_id=batch_id,gender="Female").count()
+    
+    for i in range(min(male_count, 3)):seats[f"M{i+1}"]["booked"] = True
+    
+    for i in range(min(female_count, 3)):seats[f"F{i+1}"]["booked"] = True
 
     return jsonify({
         "batch_id": batch_id,
