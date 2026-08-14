@@ -397,31 +397,36 @@ def get_batch_seats(batch_id):
         "M1": {"gender": "Male", "booked": False},
         "M2": {"gender": "Male", "booked": False},
         "M3": {"gender": "Male", "booked": False},
+
         "F1": {"gender": "Female", "booked": False},
         "F2": {"gender": "Female", "booked": False},
         "F3": {"gender": "Female", "booked": False},
     }
 
-    booked_students = Student.query.filter_by(batch_id=batch_id).all()
+    booked_students = Student.query.filter_by(
+        batch_id=batch_id
+    ).all()
 
     for student in booked_students:
-        print(
-            "BOOKED:",
-            student.name,
-            "SEAT:",
-            student.seat,
-            "BATCH:",
-            student.batch_id
-        )
-    
+
         if student.seat in seats:
             seats[student.seat]["booked"] = True
-    
-    print("SEAT RESULT:", seats)
+
+    male_available = sum(
+        1 for seat in seats.values()
+        if seat["gender"] == "Male" and not seat["booked"]
+    )
+
+    female_available = sum(
+        1 for seat in seats.values()
+        if seat["gender"] == "Female" and not seat["booked"]
+    )
 
     return jsonify({
         "batch_id": batch_id,
-        "seats": seats
+        "seats": seats,
+        "male_available": male_available,
+        "female_available": female_available
     })
 
 
