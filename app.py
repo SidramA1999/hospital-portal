@@ -405,8 +405,19 @@ def get_batch_seats(batch_id):
     booked_students = Student.query.filter_by(batch_id=batch_id).all()
 
     for student in booked_students:
+        print(
+            "BOOKED:",
+            student.name,
+            "SEAT:",
+            student.seat,
+            "BATCH:",
+            student.batch_id
+        )
+    
         if student.seat in seats:
             seats[student.seat]["booked"] = True
+    
+    print("SEAT RESULT:", seats)
 
     return jsonify({
         "batch_id": batch_id,
