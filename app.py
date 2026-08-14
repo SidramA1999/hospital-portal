@@ -263,9 +263,9 @@ def register():
         application_id = f"AAK-{student.id:05d}"
 
         photo_url = (
-            f"https://amrutaarogyakendraayurvedaspecialityhospitalkalloli.up.railway.app/"
-            f"static/uploads/photos/{student.photo}"
-        )
+        "https://amrutaarogyakendraayurvedaspecialityhospitalkalloli.up.railway.app/"
+        f"static/uploads/photos/{student.photo}"
+    )
 
         email_message = f"""
         <html>
@@ -370,7 +370,14 @@ def register():
         """
 
 
-
+        threading.Thread(
+        target=send_email,
+        args=(
+            student.email,
+            "Training Application Received ✅",
+            email_message
+        )
+    ).start()
         
         return redirect(f'/success/{student.id}')
 
