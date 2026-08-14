@@ -52,6 +52,7 @@ if db_url.startswith("postgres://"):
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+print("SQLAlchemy =", SQLAlchemy)
 db = SQLAlchemy(app)
 
 
@@ -252,72 +253,126 @@ def register():
 
         db.session.add(student)
         db.session.commit()
+        session["student_id"] = student.id
+        print("Saved Student ID:", student.id)
+
+        
+        
 
         # Email
-        threading.Thread(
-            target=send_email,
-            args=(
-                student.email,
-                "Training Application Received ✅"
+        application_id = f"AAK-{student.id:05d}"
 
-                f"""
-                Dear {student.name},
+        photo_url = (
+            f"https://amrutaarogyakendraayurvedaspecialityhospitalkalloli.up.railway.app/"
+            f"static/uploads/photos/{student.photo}"
+        )
 
-                Greetings from Amrutha Aarogya Kendra Ayurvedic Hospital.
+        email_message = f"""
+        <html>
+        <body style="font-family:Arial,sans-serif;background:#f4f8f4;padding:20px;">
 
-                Thank you for applying for our Internship Program.
-                We are pleased to inform you that your application has been successfully received.
+        <div style="max-width:700px;margin:auto;background:white;padding:30px;border-radius:15px;border:1px solid #ddd;">
 
-                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-                     APPLICATION DETAILS
-                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        <h2 style="text-align:center;color:#0f3a29;">
+        🌿 Amrutha Aarogya Kendra
+        </h2>
 
-                Applicant Name      : {student.name}
-                Email Address       : {student.email}
-                Mobile Number       : {student.phone}
+        <h3 style="text-align:center;color:#cf9f45;">
+        Internship Application Received
+        </h3>
 
-                Age                 : {student.age}
-                Gender              : {student.gender}
+        <p>
+        Dear <b>{student.name}</b>,
+        </p>
 
-                College             : {student.college}
+        <p>
+        Thank you for applying for our Internship Program.
+        Your application has been successfully received.
+        </p>
 
-                Place               : {student.place}
-                District            : {student.district}
-                State               : {student.state}
-                Pincode             : {student.pincode}
+        <div style="background:#e6f7ec;padding:15px;border-radius:10px;text-align:center;">
+        <h3>Application ID</h3>
+        <h2 style="color:#0f3a29;">{application_id}</h2>
+        </div>
 
-                Selected Internship : {student.seat}
+        <br>
 
-                Transaction ID      : {student.transaction_id}
-                Payment Status      : {student.payment_status}
+        <div style="text-align:center;">
+            <img
+                src="{photo_url}"
+                alt="Student Photo"
+                width="120"
+                height="140"
+                style="
+                    width:120px;
+                    height:140px;
+                    border-radius:10px;
+                    border:3px solid #cf9f45;
+                    object-fit:cover;
+                "
+            >
+        </div>
 
-                Application Status  : Under Review
+        <br>
 
-                ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        <table width="100%" cellpadding="8" style="border-collapse:collapse;">
 
-                Your application has been forwarded to our Internship Committee for verification.
+        <tr><td><b>Applicant Name</b></td><td>{student.name}</td></tr>
+        <tr><td><b>Email Address</b></td><td>{student.email}</td></tr>
+        <tr><td><b>Mobile Number</b></td><td>{student.phone}</td></tr>
+        <tr><td><b>Age</b></td><td>{student.age}</td></tr>
+        <tr><td><b>Gender</b></td><td>{student.gender}</td></tr>
+        <tr><td><b>College</b></td><td>{student.college}</td></tr>
+        <tr><td><b>Place</b></td><td>{student.place}</td></tr>
+        <tr><td><b>District</b></td><td>{student.district}</td></tr>
+        <tr><td><b>State</b></td><td>{student.state}</td></tr>
+        <tr><td><b>Pincode</b></td><td>{student.pincode}</td></tr>
+        <tr><td><b>Selected Seat</b></td><td>{student.seat}</td></tr>
+        <tr><td><b>Transaction ID</b></td><td>{student.transaction_id}</td></tr>
+        <tr><td><b>Payment Status</b></td><td>{student.payment_status or 'Pending'}</td></tr>
+        <tr><td><b>Application Status</b></td><td>Under Review</td></tr>
 
-                Once your documents and payment are verified, you will receive another email regarding your application status.
+        </table>
 
-                Please keep this email for your records.
+        <hr>
 
-                If you have any questions, feel free to contact the Training & Internship Department.
+        <p>
+        Your application has been forwarded to our Internship Committee for verification.
+        </p>
 
-                We appreciate your interest in training with Amrutha Aarogya Kendra Ayurvedic Hospital and wish you the very best.
+        <p>
+        Once the verification process is completed, you will receive another email regarding your admission status.
+        </p>
 
-                Warm Regards,
+        <p>
+        Please save your Application ID for future reference.
+        </p>
 
-                Dr. Tukaram Umarani
-                Ayurvedacharya
+        <hr>
 
-                Training & Internship Department
-                Amrutha Aarogya Kendra Ayurvedic Hospital Kalloli
-                """
-                
-            )
-        ).start()
+        <p>
+        <b>Need Help?</b><br>
+        📞 +91 97421 51414<br>
+        📱 WhatsApp: +91 99168 03734
+        </p>
 
-        return redirect('/success')
+        <p>
+        Warm Regards,<br>
+        <b>Dr. Tukaram Umarani</b><br>
+        Ayurvedacharya<br>
+        Amrutha Aarogya Kendra Ayurvedic Hospital
+        </p>
+
+        </div>
+
+        </body>
+        </html>
+        """
+
+
+
+        
+        return redirect(f'/success/{student.id}')
 
     except Exception as e:
         db.session.rollback()
@@ -340,13 +395,11 @@ def get_batch_seats(batch_id):
         "F3": {"gender": "Female", "booked": False},
     }
 
-    male_count = Student.query.filter_by(batch_id=batch_id,gender="Male").count()
+    booked_students = Student.query.filter_by(batch_id=batch_id).all()
 
-    female_count = Student.query.filter_by(batch_id=batch_id,gender="Female").count()
-    
-    for i in range(min(male_count, 3)):seats[f"M{i+1}"]["booked"] = True
-    
-    for i in range(min(female_count, 3)):seats[f"F{i+1}"]["booked"] = True
+    for student in booked_students:
+        if student.seat in seats:
+            seats[student.seat]["booked"] = True
 
     return jsonify({
         "batch_id": batch_id,
@@ -404,9 +457,18 @@ def get_batch_seats(batch_id):
     #return render_template("register.html", batches=Batch.query.all())
 
 # ---------------- SUCCESS ----------------
-@app.route('/success')
-def success():
-    return render_template("success.html")
+@app.route("/success/<int:student_id>")
+def success(student_id):
+
+    student = Student.query.get_or_404(student_id)
+
+    application_id = f"AAK-{student.id:05d}"
+
+    return render_template(
+        "success.html",
+        student=student,
+        application_id=application_id
+    )
 
 ##------AI 
 # ✅ IMPORT
@@ -454,7 +516,7 @@ def admin():
     all_batches = Batch.query.all()
 
     batches = []
-    for b in batches:
+    for b in all_batches:
         b.filled_slots = Student.query.filter_by(
             batch_id=b.id
         ).count()
@@ -1106,10 +1168,12 @@ def send_email(to_email, subject, message):
         import smtplib
         from email.mime.text import MIMEText
 
-        sender = "amarsunadholi1415@gmail.com"       # ✅ your gmail
-        password = "mgwetuaewypxhemm"        # ✅ app password (NOT normal password)
+        import os
 
-        msg = MIMEText(message)
+        sender = os.getenv("MAIL_USERNAME")
+        password = os.getenv("MAIL_PASSWORD")        # ✅ app password (NOT normal password)
+
+        msg = MIMEText(message, "html")
         msg["Subject"] = subject
         msg["From"] = sender
         msg["To"] = to_email
@@ -1401,6 +1465,7 @@ def draw_certificate(
 # ---------------------------------------------------------------------
 # Flask route — drop-in replacement for the original /certificate/<id>
 # ---------------------------------------------------------------------
+
 
 
 
