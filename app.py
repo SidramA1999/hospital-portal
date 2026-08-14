@@ -233,8 +233,8 @@ def register():
         seat=seat
     ).first()
     
-    if existing_seat:
-        return f"Seat {seat} already booked"
+        if existing_seat:
+            return f"Seat {seat} already booked"
 
         student = Student(
             name=data.get('name'),
