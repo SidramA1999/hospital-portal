@@ -228,6 +228,13 @@ def register():
             )
         except:
             age = 0
+        existing_seat = Student.query.filter_by(
+        batch_id=batch.id,
+        seat=seat
+    ).first()
+    
+    if existing_seat:
+        return f"Seat {seat} already booked"
 
         student = Student(
             name=data.get('name'),
@@ -262,10 +269,7 @@ def register():
         # Email
         application_id = f"AAK-{student.id:05d}"
 
-        photo_url = (
-        "https://amrutaarogyakendraayurvedaspecialityhospitalkalloli.up.railway.app/"
-        f"static/uploads/photos/{student.photo}"
-    )
+        photo_url = f"https://amrutaarogyakendraayurvedaspecialityhospitalkalloli.up.railway.app/static/uploads/photos/{student.photo}"
 
         email_message = f"""
         <html>
