@@ -1507,17 +1507,36 @@ function renderSeats() {
       seat.classList.add("booked");
       seat.disabled = true;
       seat.innerHTML = `<span class="seat-number">${seatNumber}</span><i class="fa-solid fa-lock"></i>`;
-    } else if (info.gender !== gender) {
-      seat.classList.add("locked");
-      seat.disabled = true;
-      seat.innerHTML = `<span class="seat-number">${seatNumber}</span><i class="fa-solid fa-lock"></i>`;
     } else {
-      seat.classList.add("available");
-      seat.innerHTML = `<span class="seat-number">${seatNumber}</span><i class="fa-solid fa-chair"></i>`;
-      seat.addEventListener("click", () => selectSeat(seatNumber));
-      if (info.gender === "Male") maleAvailable++;
-      if (info.gender === "Female") femaleAvailable++;
-    }
+
+          // Count every free seat
+          if (info.gender === "Male") maleAvailable++;
+          if (info.gender === "Female") femaleAvailable++;
+      
+          // Lock opposite gender seats
+          if (info.gender !== gender) {
+      
+              seat.classList.add("locked");
+              seat.disabled = true;
+      
+              seat.innerHTML =
+                  `<span class="seat-number">${seatNumber}</span>
+                   <i class="fa-solid fa-lock"></i>`;
+      
+          } else {
+      
+              seat.classList.add("available");
+      
+              seat.innerHTML =
+                  `<span class="seat-number">${seatNumber}</span>
+                   <i class="fa-solid fa-chair"></i>`;
+      
+              seat.addEventListener(
+                  "click",
+                  () => selectSeat(seatNumber)
+              );
+          }
+      }
 
     if (info.gender === "Male") maleGrid.appendChild(seat);
     else femaleGrid.appendChild(seat);
