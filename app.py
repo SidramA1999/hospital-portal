@@ -396,6 +396,22 @@ def register():
 
 
 #####----seat batch
+@app.route("/debug_students")
+def debug_students():
+
+    students = Student.query.all()
+
+    return jsonify([
+        {
+            "id": s.id,
+            "name": s.name,
+            "batch_id": s.batch_id,
+            "gender": s.gender,
+            "seat": s.seat
+        }
+        for s in students
+    ])
+
 @app.route("/debug_batch/<int:batch_id>")
 def debug_batch(batch_id):
 
