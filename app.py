@@ -231,7 +231,7 @@ def register():
         existing_seat = Student.query.filter_by(
         batch_id=batch.id,
         seat=seat
-    ).first()
+            ).first()
     
         if existing_seat:
             return f"Seat {seat} already booked"
@@ -392,6 +392,23 @@ def register():
 
 
 #####----seat batch
+@app.route("/debug_batch/<int:batch_id>")
+def debug_batch(batch_id):
+
+    students = Student.query.filter_by(
+        batch_id=batch_id
+    ).all()
+
+    return jsonify([
+        {
+            "id": s.id,
+            "name": s.name,
+            "gender": s.gender,
+            "seat": s.seat
+        }
+        for s in students
+    ])
+
 @app.route("/api/batches/<int:batch_id>/seats")
 def get_batch_seats(batch_id):
 
