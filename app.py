@@ -1228,39 +1228,25 @@ from email.mime.text import MIMEText
 import smtplib
 from email.mime.text import MIMEText
 
+import resend
+import os
+
+resend.api_key = os.getenv("RESEND_API_KEY")
+
 def send_email(to_email, subject, message):
     try:
-        import os
-        import socket
-        import smtplib
-        from email.mime.text import MIMEText
 
-        sender = os.getenv("MAIL_USERNAME")
-        password = os.getenv("MAIL_PASSWORD")
-
-        print("MAIL_USERNAME =", sender)
-        print("MAIL_PASSWORD EXISTS =", bool(password))
-
-        try:
-            print("GMAIL IP =", socket.gethostbyname("smtp.gmail.com"))
-        except Exception as dns_error:
-            print("DNS ERROR =", dns_error)
-
-        msg = MIMEText(message, "html")
-        msg["Subject"] = subject
-        msg["From"] = sender
-        msg["To"] = to_email
-
-        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
-        server.starttls()
-        server.login(sender, password)
-        server.send_message(msg)
-        server.quit()
+        resend.Emails.send({
+            "from": "onboarding@resend.dev",
+            "to": [to_email],
+            "subject": subject,
+            "html": message
+        })
 
         print("✅ Email sent successfully")
 
     except Exception as e:
-        print("❌ Email failed:", repr(e))
+        print("❌ Email failed:", e)
 
 #-------------------- Certificate
 """
