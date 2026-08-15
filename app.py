@@ -1230,20 +1230,27 @@ from email.mime.text import MIMEText
 
 def send_email(to_email, subject, message):
     try:
+        import os
+        import socket
         import smtplib
         from email.mime.text import MIMEText
 
-        import os
-
         sender = os.getenv("MAIL_USERNAME")
-        password = os.getenv("MAIL_PASSWORD")        # ✅ app password (NOT normal password)
+        password = os.getenv("MAIL_PASSWORD")
+
+        print("MAIL_USERNAME =", sender)
+        print("MAIL_PASSWORD EXISTS =", bool(password))
+
+        try:
+            print("GMAIL IP =", socket.gethostbyname("smtp.gmail.com"))
+        except Exception as dns_error:
+            print("DNS ERROR =", dns_error)
 
         msg = MIMEText(message, "html")
         msg["Subject"] = subject
         msg["From"] = sender
         msg["To"] = to_email
 
-        # ✅ timeout added (important)
         server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
         server.starttls()
         server.login(sender, password)
@@ -1253,8 +1260,7 @@ def send_email(to_email, subject, message):
         print("✅ Email sent successfully")
 
     except Exception as e:
-        print("❌ Email failed:", e)
-
+        print("❌ Email failed:", repr(e))
 
 #-------------------- Certificate
 """
