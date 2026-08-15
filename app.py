@@ -8,7 +8,7 @@ from reportlab.pdfgen import canvas
 from datetime import datetime
 from reportlab.lib.pagesizes import letter
 import threading
-
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
@@ -28,6 +28,9 @@ if not os.path.exists("static/gallery"):
 # ✅ create upload folder if not exists
 if not os.path.exists("static/uploads"):
     os.makedirs("static/uploads")
+
+if not os.path.exists("static/uploads/photos"):
+    os.makedirs("static/uploads/photos")
 
 
 import os
@@ -181,12 +184,13 @@ def register():
         filename = None
         photo_filename = None
         if file and file.filename:
-            filename = file.filename
+            filename = secure_filename(file.filename)
             file.save(f"static/uploads/{filename}")
 
         if photo_file and photo_file.filename:
 
-            photo_filename = (f"photo_"f"{int(datetime.now().timestamp())}_"f"{photo_file.filename}")
+            photo_filename = (f"photo_{int(datetime.now().timestamp())}_" 
+                              f"{secure_filename(photo_file.filename)}")
             photo_file.save(f"static/uploads/photos/{photo_filename}")
 
         batch_id_str = data.get('batch_id')
@@ -620,7 +624,7 @@ def gallery_admin():
 
         file = request.files['image']
 
-        filename = file.filename
+        filename = secure_filename(file.filename)
         file.save(f"static/gallery/{filename}")
 
         img = Gallery(
@@ -1016,6 +1020,7 @@ def certificate(id):
             c, width, height,
             student_name=s.name,
             trainee_photo=s.photo,
+            training_type="Ayurvedic Internship Training",
             batch_start=start_fmt,
             batch_end=end_fmt,
             cert_no=f"AAK-{s.id:04d}",
