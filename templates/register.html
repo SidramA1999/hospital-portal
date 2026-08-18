@@ -17,82 +17,54 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
-/* =========================================================
-   1. TOKENS — "Liquid Apothecary" design system
-========================================================= */
 :root{
   --deep-1:#08261c;
   --deep-2:#0f3a29;
   --deep-3:#175136;
-
   --gold:#cf9f45;
   --gold-light:#e8c877;
   --leaf:#7fb885;
-
   --ok:#2f9e5c;
   --warn:#d98a1f;
   --danger:#c0392b;
   --ok-bg:#e6f7ec;
   --warn-bg:#fff3e0;
   --danger-bg:#fdeceb;
-
   --paper:#f2f6f2;
   --ink:#12271e;
   --ink-soft:#516557;
   --line:rgba(18,39,30,0.12);
-
   --glass-fill: rgba(255,255,255,0.62);
   --glass-fill-strong: rgba(255,255,255,0.86);
   --glass-edge-top: rgba(255,255,255,0.9);
   --glass-edge-bottom: rgba(18,39,30,0.10);
   --glass-blur: 20px;
-
   --radius-lg:28px;
   --radius-md:16px;
   --radius-sm:10px;
-
   --font-display:'Fraunces', serif;
   --font-body:'Manrope', sans-serif;
   --font-mono:'IBM Plex Mono', monospace;
-
   --shadow-soft: 0 18px 40px rgba(18,39,30,0.12);
   --shadow-lift: 0 24px 54px rgba(18,39,30,0.18);
 }
-
 body.dark{
-  --paper:#0c1e17;
-  --ink:#eef3ee;
-  --ink-soft:#a9bcae;
-  --line:rgba(255,255,255,0.12);
-  --glass-fill: rgba(255,255,255,0.07);
-  --glass-fill-strong: rgba(255,255,255,0.12);
-  --glass-edge-top: rgba(255,255,255,0.22);
-  --glass-edge-bottom: rgba(0,0,0,0.4);
+  --paper:#0c1e17; --ink:#eef3ee; --ink-soft:#a9bcae; --line:rgba(255,255,255,0.12);
+  --glass-fill: rgba(255,255,255,0.07); --glass-fill-strong: rgba(255,255,255,0.12);
+  --glass-edge-top: rgba(255,255,255,0.22); --glass-edge-bottom: rgba(0,0,0,0.4);
 }
-
 *{ box-sizing:border-box; }
 :focus-visible{ outline:2.5px solid var(--gold); outline-offset:2px; }
-
 html{ scroll-behavior:smooth; }
-
 body{
-  margin:0;
-  font-family:var(--font-body);
-  color:var(--ink);
+  margin:0; font-family:var(--font-body); color:var(--ink);
   background:
     radial-gradient(circle at 12% 0%, rgba(207,159,69,.14), transparent 40%),
     radial-gradient(circle at 88% 30%, rgba(127,184,133,.16), transparent 45%),
     var(--paper);
   transition:background .4s ease, color .4s ease;
 }
-
-@media (prefers-reduced-motion: reduce){
-  *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
-}
-
-/* =========================================================
-   2. GLASS MIXIN
-========================================================= */
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; } }
 .glass{
   position:relative;
   background:linear-gradient(160deg, var(--glass-fill-strong), var(--glass-fill));
@@ -105,290 +77,73 @@ body{
   border-right:1px solid rgba(18,39,30,0.05);
   box-shadow:var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,0.5);
 }
-.glass::before{
-  content:"";
-  position:absolute;
-  top:12px; left:20px;
-  width:52px; height:24px;
-  background:radial-gradient(ellipse at center, rgba(255,255,255,0.9), transparent 70%);
-  border-radius:50%;
-  pointer-events:none;
-  opacity:.8;
-}
+.glass::before{ content:""; position:absolute; top:12px; left:20px; width:52px; height:24px; background:radial-gradient(ellipse at center, rgba(255,255,255,0.9), transparent 70%); border-radius:50%; pointer-events:none; opacity:.8; }
 body.dark .glass::before{ opacity:.25; }
-
-/* =========================================================
-   3. NAVBAR
-========================================================= */
-.navbar{
-  position:sticky;
-  top:14px;
-  z-index:1000;
-  margin:14px auto;
-  max-width:1100px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px 18px;
-  background:linear-gradient(180deg, rgba(20,60,44,.7), rgba(10,38,28,.7));
-  backdrop-filter:blur(20px) saturate(180%);
-  -webkit-backdrop-filter:blur(20px) saturate(180%);
-  border-radius:100px;
-  border-top:1.5px solid rgba(255,255,255,.45);
-  border-bottom:1px solid rgba(0,0,0,.2);
-  box-shadow:0 16px 40px rgba(0,0,0,.25);
-}
+.navbar{ position:sticky; top:14px; z-index:1000; margin:14px auto; max-width:1100px; display:flex; justify-content:space-between; align-items:center; padding:10px 18px; background:linear-gradient(180deg, rgba(20,60,44,.7), rgba(10,38,28,.7)); backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%); border-radius:100px; border-top:1.5px solid rgba(255,255,255,.45); border-bottom:1px solid rgba(0,0,0,.2); box-shadow:0 16px 40px rgba(0,0,0,.25); }
 .logo-area{ display:flex; align-items:center; gap:10px; min-width:0; }
 .logo{ height:46px; width:46px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.4); flex-shrink:0; }
 .navtitle{ color:#fdfcf8; font-family:var(--font-display); font-weight:600; font-size:15.5px; line-height:1.15; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .navtitle span{ display:block; font-family:var(--font-body); font-size:10px; font-weight:500; letter-spacing:1.1px; text-transform:uppercase; opacity:.75; color:var(--gold-light); margin-top:2px; }
-
 .nav-links{ display:flex; align-items:center; gap:6px; }
-.nav-links a, .nav-links button{
-  text-decoration:none;
-  color:#fdfcf8;
-  padding:8px 14px;
-  border-radius:100px;
-  background:rgba(255,255,255,.10);
-  border:1px solid rgba(255,255,255,.2);
-  font-weight:600;
-  font-size:12.5px;
-  font-family:var(--font-body);
-  cursor:pointer;
-  transition:.25s;
-  white-space:nowrap;
-}
+.nav-links a, .nav-links button{ text-decoration:none; color:#fdfcf8; padding:8px 14px; border-radius:100px; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.2); font-weight:600; font-size:12.5px; font-family:var(--font-body); cursor:pointer; transition:.25s; white-space:nowrap; }
 .nav-links a:hover, .nav-links button:hover{ background:rgba(255,255,255,.2); transform:translateY(-2px); }
 .icon-btn{ width:38px; height:38px; padding:0 !important; display:flex; align-items:center; justify-content:center; }
-
 .nav-toggle{ display:none; }
-@media (max-width: 760px){
-  .nav-links.desktop-only{ display:none; }
-  .nav-toggle{ display:flex; }
-  .navtitle{ max-width:120px; }
-}
-
-.mobile-menu{
-  display:none;
-  flex-direction:column;
-  gap:8px;
-  max-width:1100px;
-  margin:0 auto 14px;
-  padding:14px;
-}
+@media (max-width: 760px){ .nav-links.desktop-only{ display:none; } .nav-toggle{ display:flex; } .navtitle{ max-width:120px; } }
+.mobile-menu{ display:none; flex-direction:column; gap:8px; max-width:1100px; margin:0 auto 14px; padding:14px; }
 .mobile-menu.open{ display:flex; }
-.mobile-menu a, .mobile-menu button{
-  color:var(--ink); text-decoration:none; font-weight:600; font-size:14px;
-  padding:10px 14px; border-radius:100px; background:rgba(255,255,255,.5); border:1px solid var(--line);
-}
-
-/* =========================================================
-   4. HERO
-========================================================= */
-.hero{
-  position:relative;
-  max-width:1100px;
-  margin:0 auto 10px;
-  padding:56px 24px 46px;
-  text-align:center;
-  overflow:hidden;
-  border-radius:32px;
-  background:
-    radial-gradient(circle at 20% 25%, rgba(207,159,69,.30), transparent 45%),
-    radial-gradient(circle at 82% 75%, rgba(127,184,133,.26), transparent 50%),
-    linear-gradient(160deg, var(--deep-1), var(--deep-2) 55%, var(--deep-3));
-}
+.mobile-menu a, .mobile-menu button{ color:var(--ink); text-decoration:none; font-weight:600; font-size:14px; padding:10px 14px; border-radius:100px; background:rgba(255,255,255,.5); border:1px solid var(--line); }
+.hero{ position:relative; max-width:1100px; margin:0 auto 10px; padding:56px 24px 46px; text-align:center; overflow:hidden; border-radius:32px; background: radial-gradient(circle at 20% 25%, rgba(207,159,69,.30), transparent 45%), radial-gradient(circle at 82% 75%, rgba(127,184,133,.26), transparent 50%), linear-gradient(160deg, var(--deep-1), var(--deep-2) 55%, var(--deep-3)); }
 .hero-icons{ position:absolute; inset:0; pointer-events:none; }
 .hero-icons i{ position:absolute; color:rgba(255,255,255,.18); font-size:22px; animation:float 8s ease-in-out infinite; }
-@keyframes float{
-  0%,100%{ transform:translateY(0) translateX(0); }
-  50%{ transform:translateY(-18px) translateX(6px); }
-}
-
-.hero-eyebrow{
-  display:inline-flex; align-items:center; gap:8px;
-  font-family:var(--font-mono);
-  font-size:11.5px; letter-spacing:2px; text-transform:uppercase;
-  color:var(--gold-light);
-  background:rgba(255,255,255,0.08);
-  border:1px solid rgba(255,255,255,0.22);
-  border-radius:100px;
-  padding:6px 16px;
-  margin-bottom:18px;
-  position:relative; z-index:2;
-}
-.hero h1{
-  position:relative; z-index:2;
-  font-family:var(--font-display);
-  font-weight:600;
-  font-size:clamp(26px, 4vw, 40px);
-  color:#fdfcf8;
-  margin:0 0 12px;
-}
-.hero p{
-  position:relative; z-index:2;
-  color:rgba(253,252,248,.82);
-  font-size:15.5px;
-  max-width:480px;
-  margin:0 auto;
-  line-height:1.6;
-}
-
-/* =========================================================
-   5. STICKY PROGRESS
-========================================================= */
-.progress-nav{
-  position:sticky;
-  top:78px;
-  z-index:900;
-  max-width:640px;
-  margin:0 auto 26px;
-  display:flex;
-  justify-content:center;
-  gap:6px;
-  padding:8px;
-  flex-wrap:wrap;
-}
-.progress-nav button{
-  border:none;
-  background:rgba(255,255,255,.5);
-  color:var(--ink-soft);
-  font-family:var(--font-body);
-  font-weight:700;
-  font-size:11.5px;
-  letter-spacing:.3px;
-  padding:8px 14px;
-  border-radius:100px;
-  cursor:pointer;
-  transition:.25s;
-  border:1px solid transparent;
-}
-.progress-nav button.active{
-  background:linear-gradient(160deg, var(--gold-light), var(--gold));
-  color:#1c2b1f;
-  box-shadow:0 6px 16px rgba(0,0,0,.15);
-}
-
-/* =========================================================
-   6. FORM LAYOUT + SECTION CARDS
-========================================================= */
+@keyframes float{ 0%,100%{ transform:translateY(0) translateX(0); } 50%{ transform:translateY(-18px) translateX(6px); } }
+.hero-eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:2px; text-transform:uppercase; color:var(--gold-light); background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.22); border-radius:100px; padding:6px 16px; margin-bottom:18px; position:relative; z-index:2; }
+.hero h1{ position:relative; z-index:2; font-family:var(--font-display); font-weight:600; font-size:clamp(26px, 4vw, 40px); color:#fdfcf8; margin:0 0 12px; }
+.hero p{ position:relative; z-index:2; color:rgba(253,252,248,.82); font-size:15.5px; max-width:480px; margin:0 auto; line-height:1.6; }
+.progress-nav{ position:sticky; top:78px; z-index:900; max-width:640px; margin:0 auto 26px; display:flex; justify-content:center; gap:6px; padding:8px; flex-wrap:wrap; }
+.progress-nav button{ border:none; background:rgba(255,255,255,.5); color:var(--ink-soft); font-family:var(--font-body); font-weight:700; font-size:11.5px; letter-spacing:.3px; padding:8px 14px; border-radius:100px; cursor:pointer; transition:.25s; border:1px solid transparent; }
+.progress-nav button.active{ background:linear-gradient(160deg, var(--gold-light), var(--gold)); color:#1c2b1f; box-shadow:0 6px 16px rgba(0,0,0,.15); }
 .container{ max-width:680px; margin:0 auto 70px; padding:0 16px; }
-
 .form-header{ text-align:center; margin-bottom:24px; }
-.form-header h2{
-  font-family:var(--font-display);
-  font-size:24px;
-  font-weight:600;
-  color:var(--deep-2);
-  margin:0 0 6px;
-}
+.form-header h2{ font-family:var(--font-display); font-size:24px; font-weight:600; color:var(--deep-2); margin:0 0 6px; }
 body.dark .form-header h2{ color:#f2f0e8; }
 .form-header p{ color:var(--ink-soft); font-size:13.5px; margin:0; }
-
-.form-card{
-  padding:30px 26px; margin-bottom:22px; scroll-margin-top:150px;
-  animation: cardIn .6s ease both;
-}
+.form-card{ padding:30px 26px; margin-bottom:22px; scroll-margin-top:150px; animation: cardIn .6s ease both; }
 .form-card:nth-of-type(1){ animation-delay:.05s; }
 .form-card:nth-of-type(2){ animation-delay:.12s; }
 .form-card:nth-of-type(3){ animation-delay:.19s; }
 .form-card:nth-of-type(4){ animation-delay:.26s; }
 .form-card:nth-of-type(5){ animation-delay:.33s; }
 @keyframes cardIn{ from{ opacity:0; transform:translateY(24px); } to{ opacity:1; transform:translateY(0); } }
-
 .card-head{ display:flex; align-items:center; gap:12px; margin-bottom:18px; padding-bottom:14px; border-bottom:1px solid var(--line); }
-.card-head .card-icon{
-  width:40px; height:40px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(160deg, var(--leaf), var(--deep-2));
-  color:#fff; font-size:16px; flex-shrink:0;
-}
+.card-head .card-icon{ width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg, var(--leaf), var(--deep-2)); color:#fff; font-size:16px; flex-shrink:0; }
 .card-head h3{ font-family:var(--font-display); font-size:17px; font-weight:600; margin:0; color:var(--ink); }
 .card-head span{ display:block; font-size:12px; color:var(--ink-soft); margin-top:2px; }
-
-/* =========================================================
-   7. FLOATING-LABEL INPUTS
-========================================================= */
 .field{ position:relative; margin-bottom:20px; }
-.field .field-icon{
-  position:absolute; left:14px; top:16px;
-  color:var(--ink-soft); font-size:14px; pointer-events:none; transition:.2s;
-}
-.field input, .field select{
-  width:100%;
-  padding:16px 14px 8px 40px;
-  border-radius:var(--radius-md);
-  border:1.5px solid var(--line);
-  background:rgba(255,255,255,.75);
-  font-family:var(--font-body);
-  font-size:14.5px;
-  color:var(--ink);
-  transition:.2s;
-}
+.field .field-icon{ position:absolute; left:14px; top:16px; color:var(--ink-soft); font-size:14px; pointer-events:none; transition:.2s; }
+.field input, .field select{ width:100%; padding:16px 14px 8px 40px; border-radius:var(--radius-md); border:1.5px solid var(--line); background:rgba(255,255,255,.75); font-family:var(--font-body); font-size:14.5px; color:var(--ink); transition:.2s; }
 body.dark .field input, body.dark .field select{ background:rgba(255,255,255,.06); color:var(--ink); }
 .field input::placeholder{ color:transparent; }
-.field label{
-  position:absolute;
-  left:40px; top:15px;
-  font-size:14.5px;
-  color:var(--ink-soft);
-  pointer-events:none;
-  transition:.18s ease;
-  background:transparent;
-}
-.field input:focus + label,
-.field input:not(:placeholder-shown) + label,
-.field select:focus ~ label,
-.field select.filled ~ label{
-  top:6px;
-  font-size:10.5px;
-  font-weight:700;
-  letter-spacing:.4px;
-  text-transform:uppercase;
-  color:var(--leaf);
-}
-.field input:focus, .field select:focus{
-  outline:none;
-  border-color:var(--leaf);
-  box-shadow:0 0 0 4px rgba(127,184,133,.18);
-}
+.field label{ position:absolute; left:40px; top:15px; font-size:14.5px; color:var(--ink-soft); pointer-events:none; transition:.18s ease; background:transparent; }
+.field input:focus + label, .field input:not(:placeholder-shown) + label, .field select:focus ~ label, .field select.filled ~ label{ top:6px; font-size:10.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; color:var(--leaf); }
+.field input:focus, .field select:focus{ outline:none; border-color:var(--leaf); box-shadow:0 0 0 4px rgba(127,184,133,.18); }
 .field input:focus + .field-icon, .field select:focus ~ .field-icon{ color:var(--leaf); }
-
 .field.valid input{ border-color:var(--ok); box-shadow:0 0 0 4px rgba(47,158,92,.14); }
 .field.invalid input{ border-color:var(--danger); box-shadow:0 0 0 4px rgba(192,57,43,.14); }
 .field .field-status{ position:absolute; right:14px; top:16px; font-size:14px; display:none; }
 .field.valid .field-status.ok{ display:block; color:var(--ok); }
 .field.invalid .field-status.err{ display:block; color:var(--danger); }
-
 .field-hint{ font-size:12px; color:var(--danger); margin-top:5px; display:none; padding-left:4px; }
 .field-hint.show{ display:block; }
-
 .req{ color:var(--danger); }
-
 .row{ display:flex; gap:12px; }
 .row .field{ flex:1; }
 @media (max-width:480px){ .row{ flex-direction:column; gap:0; } }
-
 .readonly-field input{ background:rgba(18,39,30,.05) !important; color:var(--ink-soft); font-weight:600; }
-
 .email-suggest{ display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
-.email-suggest button{
-  border:1px solid var(--line); background:rgba(255,255,255,.7); color:var(--ink-soft);
-  font-size:11px; padding:4px 10px; border-radius:100px; cursor:pointer; transition:.2s;
-}
+.email-suggest button{ border:1px solid var(--line); background:rgba(255,255,255,.7); color:var(--ink-soft); font-size:11px; padding:4px 10px; border-radius:100px; cursor:pointer; transition:.2s; }
 .email-suggest button:hover{ background:var(--leaf); color:#fff; border-color:var(--leaf); }
-
-/* =========================================================
-   8. FLATPICKR THEME
-========================================================= */
-.flatpickr-calendar{
-  border-radius:20px !important;
-  box-shadow:var(--shadow-lift) !important;
-  border:1px solid var(--line) !important;
-  font-family:var(--font-body) !important;
-  overflow:hidden;
-  animation:fpPop .18s ease;
-}
+.flatpickr-calendar{ border-radius:20px !important; box-shadow:var(--shadow-lift) !important; border:1px solid var(--line) !important; font-family:var(--font-body) !important; overflow:hidden; animation:fpPop .18s ease; }
 @keyframes fpPop{ from{ opacity:0; transform:translateY(-6px) scale(.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
 .flatpickr-months{ background:linear-gradient(160deg, var(--deep-2), var(--deep-1)); padding:8px 0; }
 .flatpickr-current-month .flatpickr-monthDropdown-months, .flatpickr-current-month input.cur-year{ color:#fff !important; font-weight:700; }
@@ -397,40 +152,12 @@ body.dark .field input, body.dark .field select{ background:rgba(255,255,255,.06
 .flatpickr-day.today{ border-color:var(--gold) !important; }
 .flatpickr-day:hover{ background:rgba(127,184,133,.2) !important; }
 .flatpickr-prev-month svg, .flatpickr-next-month svg{ fill:#fff !important; }
-
-/* =========================================================
-   9. SHOWTIME STRIP (batch picker — BookMyShow-style)
-========================================================= */
-.showtime-strip{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding:4px 2px 14px;
-  margin-bottom:6px;
-  scroll-snap-type:x proximity;
-}
+.showtime-strip{ display:flex; gap:10px; overflow-x:auto; padding:4px 2px 14px; margin-bottom:6px; scroll-snap-type:x proximity; }
 .showtime-strip::-webkit-scrollbar{ height:5px; }
 .showtime-strip::-webkit-scrollbar-thumb{ background:var(--line); border-radius:10px; }
-
-.showtime-chip{
-  scroll-snap-align:start;
-  flex-shrink:0;
-  min-width:190px;
-  padding:16px;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(255,255,255,.88);
-  cursor:pointer;
-  text-align:center;
-  transition:.25s ease;
-  box-shadow:0 10px 24px rgba(0,0,0,.08);
-}
+.showtime-chip{ scroll-snap-align:start; flex-shrink:0; min-width:190px; padding:16px; border-radius:20px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.88); cursor:pointer; text-align:center; transition:.25s ease; box-shadow:0 10px 24px rgba(0,0,0,.08); }
 .showtime-chip:hover{ transform:translateY(-4px); box-shadow:0 16px 32px rgba(0,0,0,.12); }
-.showtime-chip.selected{
-  border-color:var(--gold);
-  background:linear-gradient(160deg, rgba(232,200,119,.35), rgba(207,159,69,.15));
-  box-shadow:0 16px 30px rgba(207,159,69,.30);
-}
+.showtime-chip.selected{ border-color:var(--gold); background:linear-gradient(160deg, rgba(232,200,119,.35), rgba(207,159,69,.15)); box-shadow:0 16px 30px rgba(207,159,69,.30); }
 .showtime-chip .b-name{ font-family:var(--font-display); font-size:16px; font-weight:700; color:var(--deep-2); line-height:1.3; margin-bottom:12px; white-space:normal; }
 .showtime-chip .b-meta{ display:flex; justify-content:center; gap:14px; font-size:13px; font-weight:600; color:var(--ink-soft); margin-bottom:12px; }
 .showtime-chip .b-status{ display:block; width:100%; text-align:center; font-size:12px; font-weight:700; padding:8px; border-radius:999px; }
@@ -438,85 +165,36 @@ body.dark .field input, body.dark .field select{ background:rgba(255,255,255,.06
 .showtime-chip .b-status.low{ background:var(--warn-bg); color:var(--warn); }
 .showtime-chip .b-status.closed{ background:var(--danger-bg); color:var(--danger); }
 .showtime-chip.disabled{ opacity:.55; }
-
 .batch-fallback{ margin-top:4px; }
 .batch-fallback summary{ cursor:pointer; font-size:12px; color:var(--ink-soft); margin-bottom:8px; }
-
-/* =========================================================
-   10. SEAT MAP — BookMyShow / bus-booking style
-========================================================= */
-.seat-map{
-  display:none;
-  margin-top:20px;
-  padding:20px;
-  border-radius:22px;
-  background:rgba(255,255,255,.55);
-  border:1px solid var(--line);
-}
+.seat-map{ display:none; margin-top:20px; padding:20px; border-radius:22px; background:rgba(255,255,255,.55); border:1px solid var(--line); }
 .seat-map.show{ display:block; animation: cardIn .45s ease both; }
-
 .seat-map-hint{ text-align:center; font-size:12px; color:var(--ink-soft); margin:0 0 16px; }
 .seat-map-hint b{ color:var(--ink); }
-
 .seat-map-top{ display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:18px; flex-wrap:wrap; }
 .seat-map-top h4{ margin:0; font-family:var(--font-display); font-size:17px; color:var(--ink); display:flex; align-items:center; gap:8px; }
 .seat-map-top p{ margin:4px 0 0; color:var(--ink-soft); font-size:12.5px; }
-
-.selected-seat-badge{
-  display:flex; align-items:center; gap:7px;
-  padding:9px 14px; border-radius:999px;
-  background:var(--ok-bg); color:var(--ok);
-  font-size:12px; font-weight:700; white-space:nowrap;
-}
-
-.booking-seat-layout{
-  max-width:480px; margin:0 auto;
-  padding:20px; border-radius:24px;
-  background:linear-gradient(145deg, rgba(255,255,255,.9), rgba(242,246,242,.7));
-  border:1px solid var(--line);
-}
-
+.selected-seat-badge{ display:flex; align-items:center; gap:7px; padding:9px 14px; border-radius:999px; background:var(--ok-bg); color:var(--ok); font-size:12px; font-weight:700; white-space:nowrap; }
+.booking-seat-layout{ max-width:480px; margin:0 auto; padding:20px; border-radius:24px; background:linear-gradient(145deg, rgba(255,255,255,.9), rgba(242,246,242,.7)); border:1px solid var(--line); }
 .bus-front{ display:flex; justify-content:center; margin-bottom:20px; }
-.driver-area{
-  width:130px; padding:9px; text-align:center; border-radius:12px;
-  background:var(--deep-2); color:#fdfcf8; font-size:10px; font-weight:700; letter-spacing:.5px;
-}
+.driver-area{ width:130px; padding:9px; text-align:center; border-radius:12px; background:var(--deep-2); color:#fdfcf8; font-size:10px; font-weight:700; letter-spacing:.5px; }
 .driver-area i{ display:block; margin-bottom:3px; font-size:13px; }
-
-.seat-gender-section{
-  margin-bottom:20px; padding:15px;
-  background:rgba(255,255,255,.85); border-radius:18px; border:1px solid var(--line);
-}
+.seat-gender-section{ margin-bottom:20px; padding:15px; background:rgba(255,255,255,.85); border-radius:18px; border:1px solid var(--line); }
 .seat-section-title{ display:flex; align-items:center; gap:10px; margin-bottom:14px; }
 .seat-section-title strong{ display:block; font-size:14px; color:var(--ink); }
 .seat-section-title small{ display:block; margin-top:2px; color:var(--ink-soft); font-size:11px; }
-
 .gender-icon{ width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:11px; flex-shrink:0; }
 .gender-icon.male{ background:#eaf4ff; color:#1976d2; }
 .gender-icon.female{ background:#fff0f7; color:#d63384; }
-
 .book-seat-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(58px, 1fr)); gap:10px; }
-
-.booking-seat{
-  position:relative; min-height:58px;
-  border:1px solid var(--line); border-radius:13px;
-  background:#f8fafc; color:#344054; cursor:pointer;
-  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
-  transition:transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
-  font-family:var(--font-body);
-}
+.booking-seat{ position:relative; min-height:58px; border:1px solid var(--line); border-radius:13px; background:#f8fafc; color:#344054; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; transition:transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease; font-family:var(--font-body); }
 .booking-seat:hover:not(:disabled){ transform:translateY(-2px); box-shadow:0 7px 18px rgba(0,0,0,.10); }
 .booking-seat.available{ background:#ffffff; border-color:#cbd5e1; color:#475467; }
-.booking-seat.selected{
-  background:linear-gradient(135deg, var(--gold-light), var(--gold));
-  border-color:var(--gold); color:#1c2b1f;
-  box-shadow:0 7px 20px rgba(207,159,69,.35); transform:translateY(-2px);
-}
+.booking-seat.selected{ background:linear-gradient(135deg, var(--gold-light), var(--gold)); border-color:var(--gold); color:#1c2b1f; box-shadow:0 7px 20px rgba(207,159,69,.35); transform:translateY(-2px); }
 .booking-seat.booked{ background:#eef0f3; border-color:#e1e4e8; color:#a0a7b1; cursor:not-allowed; }
 .booking-seat.locked{ background:#f5f6f8; color:#b1b7c0; border-color:#e4e7eb; cursor:not-allowed; }
 .seat-number{ font-size:12px; font-weight:800; }
 .booking-seat i{ font-size:15px; }
-
 .seat-legend{ display:flex; justify-content:center; flex-wrap:wrap; gap:16px; margin-top:20px; font-size:11.5px; color:var(--ink-soft); }
 .seat-legend span{ display:inline-flex; align-items:center; gap:6px; }
 .seat-legend i{ width:14px; height:14px; border-radius:4px; display:inline-block; }
@@ -524,252 +202,100 @@ body.dark .field input, body.dark .field select{ background:rgba(255,255,255,.06
 .leg-selected{ background:linear-gradient(160deg, var(--gold-light), var(--gold)); }
 .leg-full{ background:#d9dde3; }
 .leg-locked{ background:#f0f1f3; }
-
-.seat-summary{
-  display:none; align-items:center; justify-content:center; gap:8px;
-  margin-top:18px; padding:14px 18px; border-radius:var(--radius-md);
-  background:var(--ok-bg); color:var(--ok); font-weight:700; font-size:13.5px; text-align:center;
-}
+.seat-summary{ display:none; align-items:center; justify-content:center; gap:8px; margin-top:18px; padding:14px 18px; border-radius:var(--radius-md); background:var(--ok-bg); color:var(--ok); font-weight:700; font-size:13.5px; text-align:center; }
 .seat-summary.show{ display:flex; }
-
-.seat-timer{
-  display:none; align-items:center; justify-content:center; gap:8px;
-  margin-top:12px; padding:10px 16px; border-radius:100px;
-  background:var(--warn-bg); color:var(--warn); font-weight:700; font-size:13px;
-}
+.seat-timer{ display:none; align-items:center; justify-content:center; gap:8px; margin-top:12px; padding:10px 16px; border-radius:100px; background:var(--warn-bg); color:var(--warn); font-weight:700; font-size:13px; }
 .seat-timer.show{ display:flex; }
-
-.seat-gender-prompt{
-  text-align:center; padding:24px; color:var(--ink-soft); font-size:13.5px;
-}
-
-@media (max-width:600px){
-  .seat-map{ padding:14px; }
-  .seat-map-top{ align-items:flex-start; flex-direction:column; }
-  .selected-seat-badge{ width:100%; justify-content:center; }
-  .booking-seat-layout{ padding:12px; }
-  .book-seat-grid{ grid-template-columns:repeat(3, 1fr); gap:8px; }
-  .booking-seat{ min-height:54px; }
-}
-
-/* =========================================================
-   11. PAYMENT
-========================================================= */
+.seat-gender-prompt{ text-align:center; padding:24px; color:var(--ink-soft); font-size:13.5px; }
+@media (max-width:600px){ .seat-map{ padding:14px; } .seat-map-top{ align-items:flex-start; flex-direction:column; } .selected-seat-badge{ width:100%; justify-content:center; } .booking-seat-layout{ padding:12px; } .book-seat-grid{ grid-template-columns:repeat(3, 1fr); gap:8px; } .booking-seat{ min-height:54px; } }
 .pay-amount{ text-align:center; font-family:var(--font-mono); font-size:26px; font-weight:600; color:var(--deep-2); margin-bottom:4px; }
 body.dark .pay-amount{ color:var(--gold-light); }
 .pay-sub{ text-align:center; color:var(--ink-soft); font-size:12.5px; margin-bottom:16px; }
-
 .pay-now-btn i{ margin-right:8px; }
-
 .qr-wrap{ display:flex; justify-content:center; margin-bottom:16px; }
-.qr-frame{
-  position:relative; padding:18px; border-radius:24px;
-  background:rgba(255,255,255,.85); box-shadow:var(--shadow-lift); overflow:hidden; transition:.3s;
-}
+.qr-frame{ position:relative; padding:18px; border-radius:24px; background:rgba(255,255,255,.85); box-shadow:var(--shadow-lift); overflow:hidden; transition:.3s; }
 .qr-frame img{ width:190px; height:190px; display:block; border-radius:10px; }
-.qr-scan{
-  position:absolute; left:18px; right:18px; height:3px;
-  background:linear-gradient(90deg, transparent, var(--leaf), transparent);
-  animation:scan 2.4s ease-in-out infinite;
-}
+.qr-scan{ position:absolute; left:18px; right:18px; height:3px; background:linear-gradient(90deg, transparent, var(--leaf), transparent); animation:scan 2.4s ease-in-out infinite; }
 @keyframes scan{ 0%{ top:18px; } 50%{ top:190px; } 100%{ top:18px; } }
-
 .qr-tap-hint{ text-align:center; font-size:11.5px; color:var(--ink-soft); margin:-10px 0 16px; }
-
-.restore-note{
-  text-align:center; font-size:12px; color:var(--leaf);
-  background:rgba(127,184,133,.12); border-radius:100px; padding:8px 14px;
-  margin:0 0 18px; display:none; align-items:center; justify-content:center; gap:8px;
-}
+.restore-note{ text-align:center; font-size:12px; color:var(--leaf); background:rgba(127,184,133,.12); border-radius:100px; padding:8px 14px; margin:0 0 18px; display:none; align-items:center; justify-content:center; gap:8px; }
 .restore-note.show{ display:flex; }
 .restore-note button{ border:none; background:none; color:var(--deep-2); font-weight:700; text-decoration:underline; cursor:pointer; font-size:12px; padding:0; }
-
-.upi-row{
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  font-family:var(--font-mono); font-size:13px; color:var(--ink-soft);
-  margin-bottom:18px; flex-wrap:wrap;
-}
-.upi-row button{
-  border:1px solid var(--line); background:rgba(255,255,255,.7); color:var(--ink);
-  padding:5px 12px; border-radius:100px; font-size:12px; cursor:pointer; font-weight:700;
-}
+.upi-row{ display:flex; align-items:center; justify-content:center; gap:8px; font-family:var(--font-mono); font-size:13px; color:var(--ink-soft); margin-bottom:18px; flex-wrap:wrap; }
+.upi-row button{ border:1px solid var(--line); background:rgba(255,255,255,.7); color:var(--ink); padding:5px 12px; border-radius:100px; font-size:12px; cursor:pointer; font-weight:700; }
 .upi-row button:hover{ background:var(--leaf); color:#fff; border-color:var(--leaf); }
-
 .pay-steps{ list-style:none; padding:0; margin:0 0 18px; counter-reset:step; }
 .pay-steps li{ counter-increment:step; display:flex; align-items:flex-start; gap:10px; font-size:13px; color:var(--ink-soft); margin-bottom:8px; }
-.pay-steps li::before{
-  content:counter(step); flex-shrink:0; width:20px; height:20px; border-radius:50%;
-  background:var(--deep-2); color:#fff; font-size:11px; font-weight:700;
-  display:flex; align-items:center; justify-content:center;
-}
-
-.secure-badge{
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  font-size:12px; font-weight:700; color:var(--ok);
-  background:var(--ok-bg); border-radius:100px; padding:8px 16px; margin-bottom:14px;
-}
-
-.trust-row{
-  display:flex; flex-wrap:wrap; justify-content:center; gap:8px;
-  margin:0 0 18px;
-}
-.trust-row span{
-  display:inline-flex; align-items:center; gap:6px;
-  font-size:11px; font-weight:700; color:var(--ink-soft);
-  background:rgba(255,255,255,.6); border:1px solid var(--line);
-  padding:6px 12px; border-radius:100px;
-}
+.pay-steps li::before{ content:counter(step); flex-shrink:0; width:20px; height:20px; border-radius:50%; background:var(--deep-2); color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.secure-badge{ display:flex; align-items:center; justify-content:center; gap:8px; font-size:12px; font-weight:700; color:var(--ok); background:var(--ok-bg); border-radius:100px; padding:8px 16px; margin-bottom:14px; }
+.trust-row{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:0 0 18px; }
+.trust-row span{ display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:var(--ink-soft); background:rgba(255,255,255,.6); border:1px solid var(--line); padding:6px 12px; border-radius:100px; }
 .trust-row span i{ color:var(--leaf); }
-
-/* =========================================================
-   11b. PAYMENT METHOD DIALOG
-========================================================= */
-.pay-dialog-overlay{
-  position:fixed; inset:0; z-index:2000; display:none;
-  align-items:center; justify-content:center; padding:18px;
-  background:rgba(8,38,28,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
-}
+.pay-dialog-overlay{ position:fixed; inset:0; z-index:2000; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(8,38,28,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
 .pay-dialog-overlay.open{ display:flex; }
 .pay-dialog{ width:100%; max-width:360px; padding:26px 24px; border-radius:var(--radius-lg); animation:dialogPop .22s ease; }
 @keyframes dialogPop{ from{ opacity:0; transform:translateY(14px) scale(.97); } to{ opacity:1; transform:translateY(0) scale(1); } }
 .pay-dialog h3{ font-family:var(--font-display); font-weight:600; font-size:18px; color:var(--ink); margin:0 0 4px; text-align:center; }
 .pay-dialog .pay-dialog-sub{ text-align:center; font-size:12.5px; color:var(--ink-soft); margin:0 0 20px; }
-
-.pay-option{
-  display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:var(--radius-md);
-  border:1.5px solid var(--line); background:rgba(255,255,255,.6); cursor:pointer; margin-bottom:10px; transition:.2s;
-}
+.pay-option{ display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:var(--radius-md); border:1.5px solid var(--line); background:rgba(255,255,255,.6); cursor:pointer; margin-bottom:10px; transition:.2s; }
 body.dark .pay-option{ background:rgba(255,255,255,.05); }
 .pay-option:hover{ border-color:var(--leaf); background:rgba(127,184,133,.08); }
-.pay-option.checked{
-  border-color:var(--gold); background:linear-gradient(160deg, rgba(232,200,119,.22), rgba(207,159,69,.08));
-  box-shadow:0 8px 20px rgba(207,159,69,.18);
-}
+.pay-option.checked{ border-color:var(--gold); background:linear-gradient(160deg, rgba(232,200,119,.22), rgba(207,159,69,.08)); box-shadow:0 8px 20px rgba(207,159,69,.18); }
 .pay-option input{ accent-color:var(--gold); width:17px; height:17px; flex-shrink:0; }
-.pay-option .po-icon{
-  width:34px; height:34px; border-radius:50%; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  background:linear-gradient(160deg, var(--leaf), var(--deep-2)); color:#fff; font-size:14px;
-}
+.pay-option .po-icon{ width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(160deg, var(--leaf), var(--deep-2)); color:#fff; font-size:14px; }
 .pay-option .po-text{ flex:1; }
 .pay-option .po-title{ font-weight:700; font-size:13.5px; color:var(--ink); }
 .pay-option .po-desc{ font-size:11.5px; color:var(--ink-soft); margin-top:1px; }
-
-.po-recommended{
-  display:inline-block; font-size:9px; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
-  color:var(--deep-2); background:linear-gradient(160deg, var(--gold-light), var(--gold));
-  padding:2px 8px; border-radius:100px; margin-left:7px; vertical-align:middle;
-}
-
-.pd-back{
-  display:inline-flex; align-items:center; gap:6px; border:none; background:none; color:var(--ink-soft);
-  font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; padding:0; margin-bottom:16px;
-}
+.po-recommended{ display:inline-block; font-size:9px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--deep-2); background:linear-gradient(160deg, var(--gold-light), var(--gold)); padding:2px 8px; border-radius:100px; margin-left:7px; vertical-align:middle; }
+.pd-back{ display:inline-flex; align-items:center; gap:6px; border:none; background:none; color:var(--ink-soft); font-family:var(--font-body); font-weight:700; font-size:12.5px; cursor:pointer; padding:0; margin-bottom:16px; }
 .pd-back:hover{ color:var(--leaf); }
-
 .pay-dialog-qr-note{ text-align:center; font-size:12px; color:var(--ink-soft); margin:2px 0 4px; }
-
 .pay-dialog-actions{ display:flex; gap:10px; margin-top:18px; }
-.pay-dialog-actions button{
-  flex:1; border:none; padding:12px; border-radius:100px;
-  font-family:var(--font-body); font-weight:700; font-size:13.5px; cursor:pointer; transition:.2s;
-}
+.pay-dialog-actions button{ flex:1; border:none; padding:12px; border-radius:100px; font-family:var(--font-body); font-weight:700; font-size:13.5px; cursor:pointer; transition:.2s; }
 .pay-dialog-actions .pd-cancel{ background:rgba(18,39,30,.08); color:var(--ink-soft); }
 body.dark .pay-dialog-actions .pd-cancel{ background:rgba(255,255,255,.1); color:var(--ink); }
 .pay-dialog-actions .pd-cancel:hover{ background:rgba(18,39,30,.14); }
-.pay-dialog-actions .pd-continue{
-  background:linear-gradient(180deg, var(--gold-light), var(--gold)); color:#1c2b1f; box-shadow:0 10px 22px rgba(207,159,69,.3);
-}
+.pay-dialog-actions .pd-continue{ background:linear-gradient(180deg, var(--gold-light), var(--gold)); color:#1c2b1f; box-shadow:0 10px 22px rgba(207,159,69,.3); }
 .pay-dialog-actions .pd-continue:hover{ transform:translateY(-2px); }
-
-/* =========================================================
-   12. UPLOAD DROPZONE
-========================================================= */
-.dropzone{
-  border:2px dashed var(--line); border-radius:var(--radius-md); padding:26px; text-align:center;
-  cursor:pointer; transition:.2s; background:rgba(255,255,255,.4);
-}
+.dropzone{ border:2px dashed var(--line); border-radius:var(--radius-md); padding:26px; text-align:center; cursor:pointer; transition:.2s; background:rgba(255,255,255,.4); }
 .dropzone.drag{ border-color:var(--leaf); background:rgba(127,184,133,.1); }
 .dropzone i{ font-size:26px; color:var(--leaf); margin-bottom:8px; display:block; }
 .dropzone p{ margin:0; font-size:13px; color:var(--ink-soft); }
 .dropzone small{ color:var(--ink-soft); font-size:11px; }
-
 .preview-wrap{ display:none; margin-top:14px; text-align:center; }
 .preview-wrap.show{ display:block; }
 .preview-wrap img{ max-width:100%; max-height:200px; border-radius:var(--radius-md); box-shadow:var(--shadow-soft); }
 .preview-actions{ margin-top:10px; display:flex; gap:8px; justify-content:center; }
-.preview-actions button{
-  border:1px solid var(--line); background:rgba(255,255,255,.7);
-  padding:6px 14px; border-radius:100px; font-size:12px; font-weight:700; cursor:pointer;
-}
+.preview-actions button{ border:1px solid var(--line); background:rgba(255,255,255,.7); padding:6px 14px; border-radius:100px; font-size:12px; font-weight:700; cursor:pointer; }
 .preview-actions button.remove{ color:var(--danger); }
-
-/* photo-specific extras */
-.photo-guidelines{
-  background:rgba(127,184,133,.1); border:1px solid rgba(127,184,133,.3);
-  border-radius:var(--radius-md); padding:14px 16px; margin-bottom:14px;
-}
+.photo-guidelines{ background:rgba(127,184,133,.1); border:1px solid rgba(127,184,133,.3); border-radius:var(--radius-md); padding:14px 16px; margin-bottom:14px; }
 .photo-guidelines p{ margin:0 0 8px; font-weight:700; font-size:12.5px; color:var(--ink); }
 .photo-guidelines ul{ margin:0; padding-left:18px; font-size:12px; color:var(--ink-soft); line-height:1.8; }
-
 .photo-actions{ display:flex; gap:10px; margin-bottom:14px; }
-.photo-actions button{
-  flex:1; padding:12px; border-radius:var(--radius-md); border:1.5px solid var(--line);
-  background:rgba(255,255,255,.6); font-weight:700; font-size:13px; color:var(--ink); cursor:pointer; transition:.2s;
-}
+.photo-actions button{ flex:1; padding:12px; border-radius:var(--radius-md); border:1.5px solid var(--line); background:rgba(255,255,255,.6); font-weight:700; font-size:13px; color:var(--ink); cursor:pointer; transition:.2s; }
 .photo-actions button:hover{ border-color:var(--leaf); background:rgba(127,184,133,.08); }
 .photo-actions button i{ margin-right:6px; }
-
-.camera-modal{
-  display:none; position:fixed; inset:0; z-index:2100;
-  align-items:center; justify-content:center; padding:18px;
-  background:rgba(8,38,28,.75); backdrop-filter:blur(6px);
-}
+.camera-modal{ display:none; position:fixed; inset:0; z-index:2100; align-items:center; justify-content:center; padding:18px; background:rgba(8,38,28,.75); backdrop-filter:blur(6px); }
 .camera-modal.open{ display:flex; }
-.camera-box{
-  width:100%; max-width:420px; padding:20px; border-radius:var(--radius-lg);
-  background:var(--paper); text-align:center;
-}
+.camera-box{ width:100%; max-width:420px; padding:20px; border-radius:var(--radius-lg); background:var(--paper); text-align:center; }
 .camera-box h4{ margin:0 0 4px; font-family:var(--font-display); color:var(--ink); }
 .camera-box p{ margin:0 0 14px; font-size:12px; color:var(--ink-soft); }
 .camera-frame{ position:relative; border-radius:var(--radius-md); overflow:hidden; background:#000; margin-bottom:14px; }
 .camera-frame video{ width:100%; display:block; max-height:340px; object-fit:cover; }
-.camera-guide{
-  position:absolute; inset:10%; border:2px dashed rgba(255,255,255,.7); border-radius:50% / 40%;
-  pointer-events:none;
-}
+.camera-guide{ position:absolute; inset:10%; border:2px dashed rgba(255,255,255,.7); border-radius:50% / 40%; pointer-events:none; }
 .camera-actions{ display:flex; gap:10px; }
-.camera-actions button{
-  flex:1; padding:12px; border-radius:100px; border:none; font-weight:700; font-size:13.5px; cursor:pointer;
-}
+.camera-actions button{ flex:1; padding:12px; border-radius:100px; border:none; font-weight:700; font-size:13.5px; cursor:pointer; }
 .camera-actions .cam-capture{ background:linear-gradient(180deg, var(--gold-light), var(--gold)); color:#1c2b1f; }
 .camera-actions .cam-cancel{ background:rgba(18,39,30,.08); color:var(--ink-soft); }
-
-/* terms */
 .terms-box{ margin:18px 0; }
 .terms-item{ display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; font-size:12.5px; color:var(--ink-soft); }
 .terms-item input{ margin-top:3px; accent-color:var(--gold); width:16px; height:16px; flex-shrink:0; }
-
-/* =========================================================
-   13. BUTTONS
-========================================================= */
-.submit-btn{
-  position:relative; overflow:hidden; width:100%; padding:16px; border:none; border-radius:100px;
-  font-family:var(--font-body); font-size:15.5px; font-weight:700; color:#1c2b1f;
-  background:linear-gradient(180deg, var(--gold-light), var(--gold));
-  box-shadow:0 14px 30px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.6);
-  transition:.25s; cursor:pointer; margin-top:6px;
-}
+.submit-btn{ position:relative; overflow:hidden; width:100%; padding:16px; border:none; border-radius:100px; font-family:var(--font-body); font-size:15.5px; font-weight:700; color:#1c2b1f; background:linear-gradient(180deg, var(--gold-light), var(--gold)); box-shadow:0 14px 30px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.6); transition:.25s; cursor:pointer; margin-top:6px; }
 .submit-btn:hover{ transform:translateY(-3px); box-shadow:0 18px 38px rgba(0,0,0,.25); }
 .submit-btn:disabled{ background:#b7bdb9; color:#666; cursor:not-allowed; transform:none; box-shadow:none; }
 .submit-btn .ripple{ position:absolute; border-radius:50%; background:rgba(255,255,255,.55); transform:scale(0); animation:rip .6s ease-out; pointer-events:none; }
 @keyframes rip{ to{ transform:scale(3); opacity:0; } }
-
 .trust-note{ text-align:center; font-size:11.5px; color:var(--ink-soft); margin-top:12px; }
-
-/* =========================================================
-   14. FOOTER
-========================================================= */
 .site-footer{ margin-top:40px; padding:40px 20px 24px; background:linear-gradient(180deg, var(--deep-2), var(--deep-1)); color:rgba(253,252,248,.85); }
 .footer-inner{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:28px; }
 @media (max-width:700px){ .footer-inner{ grid-template-columns:1fr; text-align:center; } }
@@ -779,61 +305,33 @@ body.dark .pay-dialog-actions .pd-cancel{ background:rgba(255,255,255,.1); color
 .footer-social{ display:flex; gap:10px; margin-top:10px; }
 .footer-social a{ width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center; }
 .footer-bottom{ text-align:center; font-size:11.5px; color:rgba(253,252,248,.5); margin-top:30px; padding-top:20px; border-top:1px solid rgba(255,255,255,.1); }
-
-.help-card{
-  max-width:1000px; margin:0 auto 20px; padding:16px 20px; border-radius:var(--radius-md);
-  background:rgba(255,255,255,.08); display:flex; flex-wrap:wrap; gap:16px; justify-content:center; align-items:center;
-}
+.help-card{ max-width:1000px; margin:0 auto 20px; padding:16px 20px; border-radius:var(--radius-md); background:rgba(255,255,255,.08); display:flex; flex-wrap:wrap; gap:16px; justify-content:center; align-items:center; }
 .help-card a{ color:#fdfcf8; font-size:12.5px; font-weight:600; text-decoration:none; display:flex; align-items:center; gap:6px; }
 .help-card a:hover{ color:var(--gold-light); }
-
-/* =========================================================
-   15. MOBILE STICKY SUBMIT
-========================================================= */
 .mobile-submit-bar{ display:none; }
-@media (max-width:640px){
-  .mobile-submit-bar{
-    display:block; position:fixed; bottom:0; left:0; right:0; z-index:1000;
-    padding:12px 16px; background:rgba(255,255,255,.9); backdrop-filter:blur(14px);
-    border-top:1px solid var(--line);
-  }
-  .container{ padding-bottom:80px; }
-}
+@media (max-width:640px){ .mobile-submit-bar{ display:block; position:fixed; bottom:0; left:0; right:0; z-index:1000; padding:12px 16px; background:rgba(255,255,255,.9); backdrop-filter:blur(14px); border-top:1px solid var(--line); } .container{ padding-bottom:80px; } }
 </style>
 </head>
 
 <body>
 
-<!-- Rules gate (unchanged logic) -->
 <script>
 if (sessionStorage.getItem("rulesAccepted") !== "true") {
-  Swal.fire({
-    icon: "warning",
-    title: "Access Denied",
-    text: "Please accept rules first ❌",
-  }).then(() => {
-    window.location.href = "/";
-  });
+  Swal.fire({ icon: "warning", title: "Access Denied", text: "Please accept rules first ❌" }).then(() => { window.location.href = "/"; });
 }
 </script>
 
-<!-- NAVBAR -->
 <div class="navbar glass">
   <div class="logo-area">
     <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo" alt="Hospital logo">
-    <div class="navtitle">
-      Amrutha Aarogya Kendra
-      <span>Speciality Ayurveda Hospital</span>
-    </div>
+    <div class="navtitle">Amrutha Aarogya Kendra<span>Speciality Ayurveda Hospital</span></div>
   </div>
-
   <div class="nav-links desktop-only">
     <a href="/"><i class="fa-solid fa-house"></i> Home</a>
     <a href="/#contact"><i class="fa-solid fa-phone"></i> Contact</a>
     <a href="/#faq"><i class="fa-solid fa-circle-question"></i> Help</a>
     <button class="icon-btn" id="darkToggle" aria-label="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
   </div>
-
   <button class="nav-links icon-btn" id="mobileToggle" aria-label="Open menu" style="background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2); color:#fdfcf8;">
     <i class="fa-solid fa-bars"></i>
   </button>
@@ -846,7 +344,6 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
   <button id="darkToggleMobile"><i class="fa-solid fa-moon"></i> Dark mode</button>
 </div>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-icons">
     <i class="fa-solid fa-mortar-pestle" style="top:18%; left:10%;"></i>
@@ -859,7 +356,6 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
   <p>Complete your details below to secure your seat in this batch's hands-on Ayurvedic internship.</p>
 </div>
 
-<!-- STICKY PROGRESS -->
 <nav class="progress-nav" id="progressNav" aria-label="Form sections">
   <button data-target="#sec-personal" class="active">Personal</button>
   <button data-target="#sec-education">Education</button>
@@ -883,14 +379,10 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
 
   <form id="regForm" method="POST" enctype="multipart/form-data" novalidate>
 
-    <!-- PERSONAL -->
     <section id="sec-personal" class="form-card glass">
       <div class="card-head">
         <div class="card-icon"><i class="fa-solid fa-user"></i></div>
-        <div>
-          <h3>Personal Information</h3>
-          <span>Tell us who you are</span>
-        </div>
+        <div><h3>Personal Information</h3><span>Tell us who you are</span></div>
       </div>
 
       <div class="field">
@@ -904,7 +396,7 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       <div class="row">
         <div class="field">
           <i class="fa-solid fa-cake-candles field-icon"></i>
-          <input type="text" id="dob" name= "dob" placeholder="" required autocomplete="off">
+          <input type="text" id="dob" name="dob" placeholder=" " required autocomplete="off">
           <label for="dob">Date of Birth <span class="req">*</span></label>
         </div>
         <div class="field readonly-field">
@@ -978,16 +470,11 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       </div>
     </section>
 
-    <!-- EDUCATION -->
     <section id="sec-education" class="form-card glass">
       <div class="card-head">
         <div class="card-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-        <div>
-          <h3>Educational Information</h3>
-          <span>Your college details</span>
-        </div>
+        <div><h3>Educational Information</h3><span>Your college details</span></div>
       </div>
-
       <div class="field">
         <i class="fa-solid fa-building-columns field-icon"></i>
         <input name="college" id="college" placeholder=" " required>
@@ -995,14 +482,10 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       </div>
     </section>
 
-    <!-- LOCATION -->
     <section id="sec-location" class="form-card glass">
       <div class="card-head">
         <div class="card-icon"><i class="fa-solid fa-location-dot"></i></div>
-        <div>
-          <h3>Location Details</h3>
-          <span>Where you're travelling from</span>
-        </div>
+        <div><h3>Location Details</h3><span>Where you're travelling from</span></div>
       </div>
 
       <div class="field">
@@ -1031,17 +514,12 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       </div>
     </section>
 
-    <!-- BATCH + SEAT -->
     <section id="sec-batch" class="form-card glass">
       <div class="card-head">
         <div class="card-icon"><i class="fa-solid fa-calendar-days"></i></div>
-        <div>
-          <h3>Batch &amp; Seat</h3>
-          <span>Choose your batch, then pick a seat</span>
-        </div>
+        <div><h3>Batch &amp; Seat</h3><span>Choose your batch, then pick a seat</span></div>
       </div>
 
-      <!-- "Showtimes" strip — pick a batch, like picking a show time -->
       <div class="showtime-strip" id="batchGrid" role="listbox" aria-label="Available batches"></div>
 
       <details class="batch-fallback">
@@ -1051,18 +529,14 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
           <select name="batch_id" id="batchSelect" onchange="updateSeats()" required>
             <option value="">Select Batch</option>
             {% for b in batches %}
-            <option value="{{ b.id }}" data-male="{{ b.male_left }}" data-female="{{ b.female_left }}">
-              {{ b.label }}
-            </option>
+            <option value="{{ b.id }}" data-male="{{ b.male_left }}" data-female="{{ b.female_left }}">{{ b.label }}</option>
             {% endfor %}
           </select>
           <label for="batchSelect">Batch <span class="req">*</span></label>
         </div>
       </details>
 
-      <!-- Seat map for the chosen batch — bus/BookMyShow style -->
       <div class="seat-map" id="seatMap">
-
         <div class="seat-map-top">
           <div>
             <h4><i class="fa-solid fa-couch"></i> Choose Your Seat</h4>
@@ -1077,7 +551,6 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
         <div id="seatGenderPrompt" class="seat-gender-prompt" style="display:none;">
           Select your <b>Gender</b> in Personal Information above to see your available seats.
         </div>
-
         <div id="seatLoadingNote" class="seat-gender-prompt" style="display:none;">
           <i class="fa-solid fa-spinner fa-spin"></i> Loading seats…
         </div>
@@ -1087,21 +560,14 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
             <div class="seat-gender-section">
               <div class="seat-section-title">
                 <span class="gender-icon male"><i class="fa-solid fa-mars"></i></span>
-                <div>
-                  <strong>Male Seats</strong>
-                  <small id="maleCount">–</small>
-                </div>
+                <div><strong>Male Seats</strong><small id="maleCount">–</small></div>
               </div>
               <div class="book-seat-grid" id="maleSeatGrid"></div>
             </div>
-
             <div class="seat-gender-section">
               <div class="seat-section-title">
                 <span class="gender-icon female"><i class="fa-solid fa-venus"></i></span>
-                <div>
-                  <strong>Female Seats</strong>
-                  <small id="femaleCount">–</small>
-                </div>
+                <div><strong>Female Seats</strong><small id="femaleCount">–</small></div>
               </div>
               <div class="book-seat-grid" id="femaleSeatGrid"></div>
             </div>
@@ -1123,14 +589,10 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       <p id="seatInfo" class="seat-info" style="display:none;"></p>
     </section>
 
-    <!-- PAYMENT -->
     <section id="sec-payment" class="form-card glass">
       <div class="card-head">
         <div class="card-icon"><i class="fa-solid fa-qrcode"></i></div>
-        <div>
-          <h3>Payment Details</h3>
-          <span>Scan, pay, and confirm</span>
-        </div>
+        <div><h3>Payment Details</h3><span>Scan, pay, and confirm</span></div>
       </div>
 
       <div class="pay-amount">₹1,050</div>
@@ -1193,35 +655,21 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
       </div>
 
       <div class="terms-box">
-        <label class="terms-item">
-          <input type="checkbox" class="terms-check" required>
-          I confirm that all information provided is correct.
-        </label>
-        <label class="terms-item">
-          <input type="checkbox" class="terms-check" required>
-          I understand the ₹1,000 registration fee is refundable per hospital policy.
-        </label>
-        <label class="terms-item">
-          <input type="checkbox" class="terms-check" required>
-          I agree to the hospital's training rules and policies.
-        </label>
+        <label class="terms-item"><input type="checkbox" class="terms-check" required> I confirm that all information provided is correct.</label>
+        <label class="terms-item"><input type="checkbox" class="terms-check" required> I understand the ₹1,000 registration fee is refundable per hospital policy.</label>
+        <label class="terms-item"><input type="checkbox" class="terms-check" required> I agree to the hospital's training rules and policies.</label>
       </div>
     </section>
 
-    <button id="submitBtn" class="submit-btn" type="submit" disabled>
-      ✅ Register Now
-    </button>
+    <button id="submitBtn" class="submit-btn" type="submit" disabled>✅ Register Now</button>
     <p class="trust-note">🔒 Your payment proof is reviewed manually by hospital staff.</p>
   </form>
 </div>
 
 <div class="mobile-submit-bar">
-  <button class="submit-btn" style="margin:0;" onclick="document.getElementById('submitBtn').click();">
-    ✅ Register Now
-  </button>
+  <button class="submit-btn" style="margin:0;" onclick="document.getElementById('submitBtn').click();">✅ Register Now</button>
 </div>
 
-<!-- CAMERA MODAL (selfie capture) -->
 <div class="camera-modal" id="cameraModal">
   <div class="camera-box">
     <h4>Take Your Photo</h4>
@@ -1238,10 +686,8 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
   </div>
 </div>
 
-<!-- PAYMENT METHOD DIALOG -->
 <div class="pay-dialog-overlay" id="payDialogOverlay" role="dialog" aria-modal="true" aria-labelledby="payDialogTitle">
   <div class="pay-dialog glass">
-
     <div id="payDialogSelectView">
       <h3 id="payDialogTitle">Choose Your Payment Method</h3>
       <p class="pay-dialog-sub">Select an option to continue</p>
@@ -1292,11 +738,9 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
         <button type="button" class="pd-continue" id="payDialogDone" style="flex:1;">Done, I've Paid</button>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="site-footer">
   <div class="help-card">
     <a href="tel:+919742151414"><i class="fa-solid fa-phone"></i> +91 97421 51414</a>
@@ -1330,9 +774,6 @@ if (sessionStorage.getItem("rulesAccepted") !== "true") {
 </footer>
 
 <script>
-/* =========================================================
-   DARK MODE
-========================================================= */
 function toggleDark(){
   document.body.classList.toggle("dark");
   localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
@@ -1341,14 +782,10 @@ document.getElementById("darkToggle").addEventListener("click", toggleDark);
 document.getElementById("darkToggleMobile").addEventListener("click", toggleDark);
 if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
 
-/* MOBILE MENU */
 document.getElementById("mobileToggle").addEventListener("click", () => {
   document.getElementById("mobileMenu").classList.toggle("open");
 });
 
-/* =========================================================
-   STICKY PROGRESS SCROLL-SPY
-========================================================= */
 const sections = document.querySelectorAll(".form-card");
 const navButtons = document.querySelectorAll(".progress-nav button");
 
@@ -1365,12 +802,8 @@ const spyObserver = new IntersectionObserver((entries) => {
     }
   });
 }, { threshold:0.2, rootMargin:"-140px 0px -50% 0px" });
-
 sections.forEach(s => spyObserver.observe(s));
 
-/* =========================================================
-   BATCH CHIPS (unchanged data source — b.id / b.label / male_left / female_left)
-========================================================= */
 function buildBatchCards() {
   let select = document.getElementById("batchSelect");
   let grid = document.getElementById("batchGrid");
@@ -1422,14 +855,9 @@ async function refreshSeats() {
   }
   buildBatchCards();
 }
-setInterval(refreshSeats, 20000); // less aggressive than before — real seat state now comes from the seat API on selection
+setInterval(refreshSeats, 20000);
 
-/* =========================================================
-   REAL SEAT MAP — fetched from /api/batches/<id>/seats
-   (function name `updateSeats` kept — it's still wired via
-   the fallback <select>'s onchange="updateSeats()")
-========================================================= */
-let currentSeats = null;      // last-fetched {seatNumber: {gender, booked}} for the active batch
+let currentSeats = null;
 let selectedSeat = null;
 
 function updateSeats() {
@@ -1469,7 +897,14 @@ function updateSeats() {
     });
 }
 
-document.getElementById("gender").addEventListener("change", renderSeats);
+/* FIX: changing gender after already picking a seat used to leave the
+   old (now wrong-gender) seat marked "selected" — the form looked
+   valid and let you submit a mismatched seat. Now gender change
+   clears any stale selection first. */
+document.getElementById("gender").addEventListener("change", function () {
+  resetSeatSelection();
+  renderSeats();
+});
 
 function renderSeats() {
   let layoutWrap = document.getElementById("bookingLayoutWrap");
@@ -1508,35 +943,19 @@ function renderSeats() {
       seat.disabled = true;
       seat.innerHTML = `<span class="seat-number">${seatNumber}</span><i class="fa-solid fa-lock"></i>`;
     } else {
+      if (info.gender === "Male") maleAvailable++;
+      if (info.gender === "Female") femaleAvailable++;
 
-          // Count every free seat
-          if (info.gender === "Male") maleAvailable++;
-          if (info.gender === "Female") femaleAvailable++;
-      
-          // Lock opposite gender seats
-          if (info.gender !== gender) {
-      
-              seat.classList.add("locked");
-              seat.disabled = true;
-      
-              seat.innerHTML =
-                  `<span class="seat-number">${seatNumber}</span>
-                   <i class="fa-solid fa-lock"></i>`;
-      
-          } else {
-      
-              seat.classList.add("available");
-      
-              seat.innerHTML =
-                  `<span class="seat-number">${seatNumber}</span>
-                   <i class="fa-solid fa-chair"></i>`;
-      
-              seat.addEventListener(
-                  "click",
-                  () => selectSeat(seatNumber)
-              );
-          }
+      if (info.gender !== gender) {
+        seat.classList.add("locked");
+        seat.disabled = true;
+        seat.innerHTML = `<span class="seat-number">${seatNumber}</span><i class="fa-solid fa-lock"></i>`;
+      } else {
+        seat.classList.add("available");
+        seat.innerHTML = `<span class="seat-number">${seatNumber}</span><i class="fa-solid fa-chair"></i>`;
+        seat.addEventListener("click", () => selectSeat(seatNumber));
       }
+    }
 
     if (info.gender === "Male") maleGrid.appendChild(seat);
     else femaleGrid.appendChild(seat);
@@ -1571,10 +990,6 @@ function resetSeatSelection() {
   updateSubmitState();
 }
 
-/* Soft 15-minute reminder — NOT the source of truth. The server
-   re-checks real availability at submit time (see build_seat_map /
-   the UniqueConstraint on the backend), so this is just a nudge to
-   keep users from sitting on a seat indefinitely. */
 let seatCountdown;
 function startSeatTimer() {
   clearInterval(seatCountdown);
@@ -1597,9 +1012,6 @@ function startSeatTimer() {
   }, 1000);
 }
 
-/* =========================================================
-   SUBMIT GATING — batch+seat picked, all terms checked
-========================================================= */
 function updateSubmitState() {
   let btn = document.getElementById("submitBtn");
   let hasSeat = !!document.getElementById("selectedSeat").value;
@@ -1608,9 +1020,6 @@ function updateSubmitState() {
 }
 document.querySelectorAll(".terms-check").forEach(cb => cb.addEventListener("change", updateSubmitState));
 
-/* =========================================================
-   FIELD VALIDATION HELPERS
-========================================================= */
 function markField(input, valid) {
   let field = input.closest(".field");
   if (!field) return;
@@ -1633,8 +1042,6 @@ phoneInput.addEventListener("blur", function () {
 });
 
 const emailInput = document.getElementById("email");
-const emailSuggest = document.getElementById("emailSuggest");
-
 emailInput.addEventListener("input", function () {
   this.value = this.value.toLowerCase();
   let value = this.value;
@@ -1654,9 +1061,7 @@ emailInput.addEventListener("blur", function () {
 });
 
 document.querySelectorAll("input").forEach(input => {
-  input.addEventListener("blur", function () {
-    this.value = this.value.trim();
-  });
+  input.addEventListener("blur", function () { this.value = this.value.trim(); });
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1739,9 +1144,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-/* =========================================================
-   PHOTO — gallery upload + selfie capture, sharing one preview UI
-========================================================= */
 const photoInput = document.getElementById("student_photo");
 const photoDropzone = document.getElementById("photoDropzone");
 const photoPreviewWrap = document.getElementById("photoPreviewWrap");
@@ -1779,7 +1181,6 @@ function removePhoto() {
   photoFileName.innerText = "";
 }
 
-/* ---- Selfie capture ---- */
 const cameraModal = document.getElementById("cameraModal");
 const cameraVideo = document.getElementById("cameraVideo");
 const cameraCanvas = document.getElementById("cameraCanvas");
@@ -1787,17 +1188,11 @@ let cameraStream = null;
 
 document.getElementById("takeSelfieBtn").addEventListener("click", async () => {
   try {
-    cameraStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "user" }
-    });
+    cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
     cameraVideo.srcObject = cameraStream;
     cameraModal.classList.add("open");
   } catch (err) {
-    Swal.fire({
-      icon: "error",
-      title: "Camera unavailable",
-      text: "Please allow camera access, or upload a photo from your gallery instead."
-    });
+    Swal.fire({ icon: "error", title: "Camera unavailable", text: "Please allow camera access, or upload a photo from your gallery instead." });
   }
 });
 
@@ -1833,9 +1228,6 @@ document.getElementById("cameraCaptureBtn").addEventListener("click", () => {
   }, "image/jpeg", 0.9);
 });
 
-/* =========================================================
-   PAYMENT SCREENSHOT DROPZONE (unchanged)
-========================================================= */
 const dropzone = document.getElementById("dropzone");
 const fileInput = document.getElementById("payment_proof");
 const previewWrap = document.getElementById("previewWrap");
@@ -1869,9 +1261,6 @@ function removeProof() {
   dropzone.style.display = "block";
 }
 
-/* =========================================================
-   SUBMIT BUTTON — ripple + brief loading state
-========================================================= */
 document.querySelectorAll(".submit-btn").forEach(btn => {
   btn.addEventListener("click", function (e) {
     let circle = document.createElement("span");
@@ -1891,19 +1280,10 @@ function copyUpi() {
   });
 }
 
-/* =========================================================
-   FORM DRAFT — SAVE & RESTORE
-   (selected_seat and the two file inputs are intentionally
-   NOT restored — seat availability can change while the user
-   is away, and browsers won't let JS refill file inputs anyway)
-========================================================= */
 const REG_DRAFT_KEY = "aak_registration_draft_v1";
-const REG_DRAFT_MAX_AGE_MS = 2 * 60 * 60 * 1000; // 2 hours
+const REG_DRAFT_MAX_AGE_MS = 2 * 60 * 60 * 1000;
 
-const DRAFT_FIELD_IDS = [
-  "name", "dob", "age", "gender", "email", "phone",
-  "college", "pincode", "state", "district", "place", "transaction_id"
-];
+const DRAFT_FIELD_IDS = ["name", "dob", "age", "gender", "email", "phone", "college", "pincode", "state", "district", "place", "transaction_id"];
 
 function saveFormDraft() {
   try {
@@ -1921,7 +1301,7 @@ function saveFormDraft() {
 }
 
 function clearFormDraft() {
-  try { sessionStorage.removeItem(REG_DRAFT_KEY); } catch (e) { /* ignore */ }
+  try { sessionStorage.removeItem(REG_DRAFT_KEY); } catch (e) {}
 }
 
 function restoreFormDraft() {
@@ -1946,16 +1326,14 @@ function restoreFormDraft() {
     }
   });
 
-  if (data.dobText) {
-    document.getElementById("dobText").innerText = data.dobText;
-  }
+  if (data.dobText) document.getElementById("dobText").innerText = data.dobText;
 
   if (data.batch_id) {
     let batchSelect = document.getElementById("batchSelect");
     batchSelect.value = data.batch_id;
     if (batchSelect.value === data.batch_id) {
       restoredAnything = true;
-      updateSeats(); // re-fetches live seats; user reselects a seat themselves
+      updateSeats();
     }
   }
 
@@ -1968,9 +1346,7 @@ function restoreFormDraft() {
     if (el && el.value) el.dispatchEvent(new Event("blur"));
   });
 
-  if (restoredAnything) {
-    document.getElementById("restoreNote").classList.add("show");
-  }
+  if (restoredAnything) document.getElementById("restoreNote").classList.add("show");
 }
 
 document.getElementById("clearDraftBtn").addEventListener("click", function () {
@@ -2004,9 +1380,6 @@ document.getElementById("regForm").addEventListener("submit", function (e) {
 
 document.addEventListener("DOMContentLoaded", restoreFormDraft);
 
-/* =========================================================
-   PAY NOW → PAYMENT METHOD DIALOG
-========================================================= */
 (function () {
   const UPI_LINK = "upi://pay?pa=tukaram.umarani-2@okicici&pn=Amruta Aarogya Kendra Ayurveda Speciality Hospital Kalloli&am=1050&cu=INR";
 
@@ -2021,38 +1394,18 @@ document.addEventListener("DOMContentLoaded", restoreFormDraft);
   const copyUpiModal  = document.getElementById("copyUpiModalBtn");
   const options       = document.querySelectorAll(".pay-option");
 
-  function showSelectView() {
-    qrView.style.display = "none";
-    selectView.style.display = "block";
-  }
-
-  function showQrView() {
-    selectView.style.display = "none";
-    qrView.style.display = "block";
-  }
-
-  function openDialog() {
-    showSelectView();
-    overlay.classList.add("open");
-  }
-
-  function closeDialog() {
-    overlay.classList.remove("open");
-    setTimeout(showSelectView, 200);
-  }
+  function showSelectView() { qrView.style.display = "none"; selectView.style.display = "block"; }
+  function showQrView() { selectView.style.display = "none"; qrView.style.display = "block"; }
+  function openDialog() { showSelectView(); overlay.classList.add("open"); }
+  function closeDialog() { overlay.classList.remove("open"); setTimeout(showSelectView, 200); }
 
   payNowBtn.addEventListener("click", openDialog);
   cancelBtn.addEventListener("click", closeDialog);
   doneBtn.addEventListener("click", closeDialog);
   backBtn.addEventListener("click", showSelectView);
 
-  overlay.addEventListener("click", function (e) {
-    if (e.target === overlay) closeDialog();
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && overlay.classList.contains("open")) closeDialog();
-  });
+  overlay.addEventListener("click", function (e) { if (e.target === overlay) closeDialog(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && overlay.classList.contains("open")) closeDialog(); });
 
   options.forEach(opt => {
     opt.addEventListener("click", () => {
@@ -2064,12 +1417,8 @@ document.addEventListener("DOMContentLoaded", restoreFormDraft);
   continueBtn.addEventListener("click", function () {
     let selected = document.querySelector('input[name="payMethod"]:checked').value;
     saveFormDraft();
-
-    if (selected === "app") {
-      window.location.href = UPI_LINK;
-    } else {
-      showQrView();
-    }
+    if (selected === "app") window.location.href = UPI_LINK;
+    else showQrView();
   });
 
   copyUpiModal.addEventListener("click", function () {
