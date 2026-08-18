@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registration Successful — Amrutha Aarogya Kendra</title>
 <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
-
+ 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap%22 rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+ 
 <style>
 :root{
   --deep-1:#08261c; --deep-2:#0f3a29; --deep-3:#175136;
@@ -30,7 +30,7 @@ body{
   min-height:100vh;
   padding:40px 16px;
 }
-
+ 
 .glass{
   background:linear-gradient(160deg, var(--glass-fill-strong), var(--glass-fill));
   backdrop-filter: blur(20px) saturate(160%);
@@ -40,16 +40,16 @@ body{
   border-bottom:1.5px solid rgba(18,39,30,0.1);
   box-shadow:0 20px 44px rgba(18,39,30,0.14);
 }
-
+ 
 .wrap{ max-width:520px; margin:0 auto; }
-
+ 
 .brand{ text-align:center; margin-bottom:18px; }
 .brand img{ width:52px; height:52px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.6); box-shadow:0 8px 20px rgba(0,0,0,.12); }
 .brand .bname{ font-family:var(--font-display); font-weight:600; font-size:14px; color:var(--deep-2); margin-top:8px; }
-
+ 
 .card{ padding:38px 30px; text-align:center; animation:pop .5s ease both; }
 @keyframes pop{ from{ opacity:0; transform:translateY(16px) scale(.98); } to{ opacity:1; transform:translateY(0) scale(1); } }
-
+ 
 .check-badge{
   width:74px; height:74px; margin:0 auto 18px; border-radius:50%;
   background:linear-gradient(160deg, var(--leaf), var(--deep-2));
@@ -59,17 +59,17 @@ body{
   animation:checkPop .5s cubic-bezier(.34,1.56,.64,1) .15s both;
 }
 @keyframes checkPop{ from{ transform:scale(0); } to{ transform:scale(1); } }
-
+ 
 h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(--deep-2); margin:0 0 6px; }
 .subtitle{ color:var(--ink-soft); font-size:13.5px; margin:0 0 24px; }
-
+ 
 .app-id-box{
   background:var(--ok-bg); border:1px solid rgba(47,158,92,.25);
-  border-radius:var(--radius-md); padding:18px; margin-bottom:20px;
+  border-radius:var(--radius-md); padding:18px; margin-bottom:12px;
 }
 .app-id-label{ font-size:11.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--ok); margin-bottom:6px; }
 .app-id{ font-family:var(--font-mono); font-size:24px; font-weight:600; color:var(--deep-1); letter-spacing:1px; word-break:break-word; }
-
+ 
 .info-list{ text-align:left; background:rgba(255,255,255,.5); border-radius:var(--radius-md); padding:16px 18px; margin-bottom:18px; }
 .info-row{ display:flex; justify-content:space-between; gap:12px; padding:7px 0; font-size:13.5px; border-bottom:1px solid var(--line); }
 .info-row:last-child{ border-bottom:none; }
@@ -79,17 +79,17 @@ h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(
   display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:100px;
   background:var(--warn-bg); color:var(--warn);
 }
-
+ 
 .notice{
   text-align:left; border-radius:var(--radius-md); padding:12px 16px; margin-bottom:16px;
   font-size:12.5px; line-height:1.6;
 }
 .notice.warn{ background:var(--warn-bg); border-left:4px solid var(--warn); color:#7a4d0a; }
-
+ 
 .steps{ text-align:left; margin:20px 0; }
 .steps h3{ font-family:var(--font-display); font-size:15px; color:var(--deep-2); margin:0 0 10px; }
 .steps p{ margin:8px 0; font-size:13.5px; color:var(--ink-soft); display:flex; gap:8px; align-items:flex-start; }
-
+ 
 .buttons{ margin-top:24px; display:flex; flex-direction:column; gap:10px; }
 .btn{
   display:flex; align-items:center; justify-content:center; gap:8px;
@@ -101,38 +101,40 @@ h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(
 .btn-secondary{ background:rgba(18,39,30,.06); color:var(--ink); }
 .btn-secondary:hover{ background:rgba(18,39,30,.1); }
 .btn-ghost{ background:transparent; color:var(--ink-soft); border:1px solid var(--line); }
-
+ 
+.copy-id-btn{ width:100%; margin-bottom:20px; }
+ 
 .contact{ margin-top:24px; padding-top:20px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-soft); }
 .contact a{ color:var(--deep-2); font-weight:700; text-decoration:none; }
-
+ 
 @media print{
   body{ background:#fff; padding:0; }
-  .buttons, .brand, .notice.warn:last-of-type{ display:none; }
+  .buttons, .brand, .copy-id-btn, .notice.warn:last-of-type{ display:none; }
   .card{ box-shadow:none; }
 }
 </style>
 </head>
-
+ 
 <body>
-
+ 
 <div class="wrap">
-
+ 
   <div class="brand">
-    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Hospital logo">
-    <div class="bname">Amrutha Aarogya Kendra · Speciality Ayurveda Hospital</div>
-  </div>
-
+<img src="{{ url_for('static', filename='logo.jpg') }}" alt="Hospital logo">
+<div class="bname">Amrutha Aarogya Kendra · Speciality Ayurveda Hospital</div>
+</div>
+ 
   <div class="card glass">
-
+ 
     <div class="check-badge"><i class="fa-solid fa-check"></i></div>
-
+ 
     <h2>Registration Successful</h2>
-    <p class="subtitle">Your application has been submitted successfully.</p>
-
-    <!---- PHOTO  -->
+<p class="subtitle">Your application has been submitted successfully.</p>
+ 
+    <!-- PHOTO -->
     {% if student and student.photo %}
-    <div style="text-align:center;margin-bottom:20px;">
-      <img
+<div style="text-align:center;margin-bottom:20px;">
+<img
         src="{{ url_for('static', filename='uploads/photos/' + student.photo) }}"
         alt="Student Photo"
         style="
@@ -143,137 +145,145 @@ h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(
           border:3px solid var(--gold);
           box-shadow:0 8px 20px rgba(0,0,0,.15);
         "
-      >
-    </div>
+>
+</div>
     {% endif %}
-
-
+ 
     {% if application_id %}
-    <div class="app-id-box">
-      <div class="app-id-label">Your Application ID</div>
-      <div class="app-id">{{ application_id }}</div>
-    </div>
-
-    <button
-    type="button"
-    class="btn btn-secondary"
-    onclick="copyApplicationId()">
-
-    <i class="fa-solid fa-copy"></i>
-    Copy Application ID
-  </button>
-
+<div class="app-id-box">
+<div class="app-id-label">Your Application ID</div>
+<div class="app-id" id="appIdText">{{ application_id }}</div>
+</div>
+ 
+    <button type="button" class="btn btn-secondary copy-id-btn" onclick="copyApplicationId()">
+<i class="fa-solid fa-copy"></i> Copy Application ID
+</button>
     {% endif %}
-
+ 
     {% if student %}
-    <div class="info-list">
-
+<div class="info-list">
+ 
       <div class="info-row">
-        <span class="k">Applicant</span>
-        <span class="v">{{ student.name }}</span>
-      </div>
-
+<span class="k">Applicant</span>
+<span class="v">{{ student.name }}</span>
+</div>
+ 
       {% if student.seat %}
-      <div class="info-row">
-        <span class="k">Seat</span>
-        <span class="v">{{ student.seat }}</span>
-      </div>
+<div class="info-row">
+<span class="k">Seat</span>
+<span class="v">{{ student.seat }}</span>
+</div>
       {% endif %}
-
+ 
       {% if student.transaction_id %}
-      <div class="info-row">
-        <span class="k">Transaction ID</span>
-        <span class="v">{{ student.transaction_id }}</span>
-      </div>
+<div class="info-row">
+<span class="k">Transaction ID</span>
+<span class="v">{{ student.transaction_id }}</span>
+</div>
       {% endif %}
-
+ 
       <div class="info-row">
-        <span class="k">Payment Status</span>
-        <span class="v">
-          <span class="status-pill">
+<span class="k">Payment Status</span>
+<span class="v">
+<span class="status-pill">
             {{ student.payment_status or 'Pending' }}
-          </span>
-        </span>
-      </div>
-
+</span>
+</span>
+</div>
+ 
     </div>
-
+ 
     {% if student.seat and (not student.payment_status or student.payment_status|lower == 'pending') %}
-    <div class="notice warn">
-      <i class="fa-solid fa-chair"></i>
+<div class="notice warn">
+<i class="fa-solid fa-chair"></i>
       Your selected seat <strong>{{ student.seat }}</strong>
       has been reserved and is awaiting payment verification.
-    </div>
+</div>
     {% endif %}
-
+ 
     {% endif %}
+ 
     <div class="notice warn">
-    <i class="fa-solid fa-envelope"></i>
-    A confirmation email has been sent to your registered email address.
-  </div>
-
+<i class="fa-solid fa-envelope"></i>
+      A confirmation email has been sent to your registered email address.
+</div>
+ 
     <div class="notice warn">
-      <i class="fa-solid fa-triangle-exclamation"></i>
-      <strong>Please save your Application ID.</strong> You'll need it to check your status later — it isn't emailed as a separate reminder.
-    </div>
-
+<i class="fa-solid fa-triangle-exclamation"></i>
+<strong>Please save your Application ID.</strong> You'll need it to check your status later — it isn't emailed as a separate reminder.
+</div>
+ 
     <div class="steps">
-      <h3>What happens next?</h3>
-      <p><i class="fa-solid fa-circle-check" style="color:var(--ok);"></i> Your application has been received.</p>
-      <p><i class="fa-solid fa-magnifying-glass-dollar" style="color:var(--warn);"></i> Hospital staff will verify your payment.</p>
-      <p><i class="fa-solid fa-envelope" style="color:var(--leaf);"></i> You'll get an email once verification is complete.</p>
-      <p><i class="fa-solid fa-clock" style="color:var(--ink-soft);"></i> You can check your status anytime using the button below.</p>
-    </div>
-
+<h3>What happens next?</h3>
+<p><i class="fa-solid fa-circle-check" style="color:var(--ok);"></i> Your application has been received.</p>
+<p><i class="fa-solid fa-magnifying-glass-dollar" style="color:var(--warn);"></i> Hospital staff will verify your payment.</p>
+<p><i class="fa-solid fa-envelope" style="color:var(--leaf);"></i> You'll get an email once verification is complete.</p>
+<p><i class="fa-solid fa-clock" style="color:var(--ink-soft);"></i> You can check your status anytime using the button below.</p>
+</div>
+ 
     <div class="notice warn">
-      <i class="fa-solid fa-circle-exclamation"></i>
+<i class="fa-solid fa-circle-exclamation"></i>
       Please don't submit another registration for the same batch — duplicate applications may delay verification.
-    </div>
-
+</div>
+ 
     <div class="buttons">
-      <a href="/#status" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Check Application Status</a>
-      <button type="button" class="btn btn-secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save Acknowledgement</button>
-      <a href="/" class="btn btn-ghost"><i class="fa-solid fa-house"></i> Go to Home</a>
-    </div>
-
+<a href="/#status" class="btn btn-primary"><i class="fa-solid fa-magnifying-glass"></i> Check Application Status</a>
+<button type="button" class="btn btn-secondary" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / Save Acknowledgement</button>
+<a href="/" class="btn btn-ghost"><i class="fa-solid fa-house"></i> Go to Home</a>
+</div>
+ 
     <div class="contact">
-      <p style="margin:0 0 6px;">Need help?</p>
-      <p style="margin:0;">
-        <a href="tel:+919742151414"><i class="fa-solid fa-phone"></i> +91 97421 51414</a>
-        &nbsp;·&nbsp;
-        <a href="https://wa.me/919916803734" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-      </p>
-    </div>
-
+<p style="margin:0 0 6px;">Need help?</p>
+<p style="margin:0;">
+<a href="tel:+919742151414"><i class="fa-solid fa-phone"></i> +91 97421 51414</a>
+&nbsp;·&nbsp;
+<a href="https://wa.me/919916803734" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+</p>
+</div>
+ 
   </div>
 </div>
-
+ 
 <script>
-
+/* ══ FIX: was calling navigator.clipboard.writeText() twice in a row
+   (harmless but redundant), and always showed "Copied!" even if the
+   copy silently failed (no clipboard permission, insecure context,
+   etc.) since the success message wasn't tied to the promise
+   actually resolving. Now it only confirms success when the copy
+   really happened, and falls back to a manual-select prompt if the
+   Clipboard API isn't available at all. ══ */
 function copyApplicationId() {
-
-    const id =
-      document.querySelector(".app-id").innerText;
-
-    navigator.clipboard.writeText(id);
-
-    navigator.clipboard.writeText(id);
-
-    if(window.Swal){
-        Swal.fire(
-            "Copied!",
-            "Application ID copied successfully",
-            "success"
-        );
+  const idEl = document.getElementById("appIdText");
+  const id = idEl.innerText.trim();
+ 
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(id)
+      .then(() => {
+        if (window.Swal) {
+          Swal.fire({ icon: "success", title: "Copied!", text: "Application ID copied successfully", timer: 1500, showConfirmButton: false });
+        } else {
+          alert("Application ID copied successfully");
+        }
+      })
+      .catch(() => {
+        if (window.Swal) {
+          Swal.fire({ icon: "error", title: "Couldn't copy", text: "Please select and copy the ID manually: " + id });
+        } else {
+          alert("Couldn't copy automatically. Your Application ID is: " + id);
+        }
+      });
+  } else {
+    // Very old browser / non-secure context — no Clipboard API at all
+    if (window.Swal) {
+      Swal.fire({ icon: "info", title: "Your Application ID", text: id });
+    } else {
+      alert("Your Application ID is: " + id);
     }
-    else{
-        alert("Application ID copied successfully");
-    }
+  }
 }
-
+ 
 sessionStorage.removeItem("rulesAccepted");
-
 </script>
-
+ 
 </body>
 </html>
