@@ -1249,8 +1249,8 @@ def ensure_gallery_columns():
         'thumbnail':     "VARCHAR(255)",
         'featured':      "BOOLEAN DEFAULT FALSE",
         'is_visible':    "BOOLEAN DEFAULT TRUE",
-        'display_order': "INTEGER DEFAULT FALSE",
-        'is_archived':   "BOOLEAN DEFAULT 0",
+        'display_order': "INTEGER DEFAULT 0",
+        'is_archived':   "BOOLEAN DEFAULT FALSE",
     }
     with db.engine.connect() as conn:
         for col, coltype in new_cols.items():
