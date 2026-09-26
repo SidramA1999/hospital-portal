@@ -16,98 +16,44 @@
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.min.js"></script>
 
 <style>
-/* =========================================================
-   DESIGN TOKENS — Luxury Healthcare System
-========================================================= */
 :root{
-  --primary:#0f3a29;
-  --secondary:#2d6a4f;
-  --accent:#cf9f45;
-  --bg:#f4f8f4;
-  --ink:#12271e;
-  --ink-soft:#516557;
-  --success:#52b788;
-  --danger:#e63946;
-  --warning:#ffb703;
-
-  --glass-fill: rgba(255,255,255,0.55);
-  --glass-fill-strong: rgba(255,255,255,0.75);
-  --glass-edge-top: rgba(255,255,255,0.9);
-  --glass-edge-bottom: rgba(18,39,30,0.10);
-  --glass-blur: 18px;
-
-  --radius-xl:28px;
-  --radius-lg:22px;
-  --radius-md:16px;
-  --radius-sm:12px;
-  --radius-pill:999px;
-
-  --font-display:'Fraunces', serif;
-  --font-body:'Manrope', sans-serif;
-  --font-mono:'IBM Plex Mono', monospace;
-
-  --shadow-1:0 8px 18px rgba(18,39,30,0.12);
-  --shadow-2:0 14px 34px rgba(18,39,30,0.14);
-  --shadow-3:0 24px 50px rgba(18,39,30,0.20);
-
-  --fast:.18s ease;
-  --norm:.28s ease;
-
-  --sidebar-w:248px;
-  --gap:16px;
-  --navbar-h:64px;
-  --grid:rgba(18,39,30,0.08);
-  --line:rgba(18,39,30,0.10);
-
-  --ok-bg:#d8f3dc; --ok-ink:#1b5e3a;
-  --warn-bg:#fff1d6; --warn-ink:#a15c00;
-  --danger-bg:#ffe1e1; --danger-ink:#b00020;
+  --primary:#0f3a29; --secondary:#2d6a4f; --accent:#cf9f45; --bg:#f4f8f4;
+  --ink:#12271e; --ink-soft:#516557; --success:#52b788; --danger:#e63946; --warning:#ffb703;
+  --glass-fill: rgba(255,255,255,0.55); --glass-fill-strong: rgba(255,255,255,0.75);
+  --glass-edge-top: rgba(255,255,255,0.9); --glass-edge-bottom: rgba(18,39,30,0.10); --glass-blur: 18px;
+  --radius-xl:28px; --radius-lg:22px; --radius-md:16px; --radius-sm:12px; --radius-pill:999px;
+  --font-display:'Fraunces', serif; --font-body:'Manrope', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+  --shadow-1:0 8px 18px rgba(18,39,30,0.12); --shadow-2:0 14px 34px rgba(18,39,30,0.14); --shadow-3:0 24px 50px rgba(18,39,30,0.20);
+  --fast:.18s ease; --norm:.28s ease;
+  --sidebar-w:248px; --gap:16px; --navbar-h:64px; --grid:rgba(18,39,30,0.08); --line:rgba(18,39,30,0.10);
+  --ok-bg:#d8f3dc; --ok-ink:#1b5e3a; --warn-bg:#fff1d6; --warn-ink:#a15c00; --danger-bg:#ffe1e1; --danger-ink:#b00020;
 }
-
 :root.dark{
-  --bg:#0b1310;
-  --ink:#e7efe9;
-  --ink-soft:#b5c3b8;
-  --line:rgba(231,239,233,0.10);
-  --glass-fill: rgba(20,28,24,0.55);
-  --glass-fill-strong: rgba(22,30,26,0.75);
-  --glass-edge-top: rgba(255,255,255,0.12);
-  --glass-edge-bottom: rgba(0,0,0,0.35);
+  --bg:#0b1310; --ink:#e7efe9; --ink-soft:#b5c3b8; --line:rgba(231,239,233,0.10);
+  --glass-fill: rgba(20,28,24,0.55); --glass-fill-strong: rgba(22,30,26,0.75);
+  --glass-edge-top: rgba(255,255,255,0.12); --glass-edge-bottom: rgba(0,0,0,0.35);
   --grid:rgba(231,239,233,0.10);
-  --shadow-1:0 8px 18px rgba(0,0,0,0.35);
-  --shadow-2:0 14px 34px rgba(0,0,0,0.42);
-  --shadow-3:0 24px 50px rgba(0,0,0,0.55);
-  --ok-bg:rgba(82,183,136,0.18); --ok-ink:#a9e2c7;
-  --warn-bg:rgba(255,183,3,0.16); --warn-ink:#ffd380;
+  --shadow-1:0 8px 18px rgba(0,0,0,0.35); --shadow-2:0 14px 34px rgba(0,0,0,0.42); --shadow-3:0 24px 50px rgba(0,0,0,0.55);
+  --ok-bg:rgba(82,183,136,0.18); --ok-ink:#a9e2c7; --warn-bg:rgba(255,183,3,0.16); --warn-ink:#ffd380;
   --danger-bg:rgba(230,57,70,0.16); --danger-ink:#ff9aa3;
 }
-
 *{ box-sizing:border-box; }
 html, body{ height:100%; }
 html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; }
 body{
-  margin:0;
-  font-family:var(--font-body);
-  color:var(--ink);
+  margin:0; font-family:var(--font-body); color:var(--ink);
   background:
     radial-gradient(1200px 800px at -10% -10%, rgba(207,159,69,0.10), transparent 40%),
     radial-gradient(1200px 800px at 110% 0%, rgba(127,184,133,0.16), transparent 45%),
     var(--bg);
   transition: background-color var(--norm), color var(--norm);
-  padding-left:env(safe-area-inset-left);
-  padding-right:env(safe-area-inset-right);
-  overflow-x:hidden;
-  width:100%;
+  padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right);
+  overflow-x:hidden; width:100%;
 }
 .app{ max-width:100vw; }
-/* Inputs/selects at 16px+ on touch devices stop iOS Safari from auto-zooming on focus */
-@media (max-width:980px){
-  .input, .search, select.input{ font-size:16px; }
-}
-
+@media (max-width:980px){ .input, .search, select.input{ font-size:16px; } }
 .hidden{ display:none !important; }
 .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-
 .glass{
   position:relative;
   background:linear-gradient(160deg, var(--glass-fill-strong), var(--glass-fill));
@@ -118,18 +64,13 @@ body{
   border-bottom:1.5px solid var(--glass-edge-bottom);
   box-shadow: var(--shadow-1), inset 0 1px 0 rgba(255,255,255,0.45);
 }
-
 .app{
   display:grid;
   grid-template-columns: calc(var(--sidebar-w) + var(--gap)) 1fr;
   grid-template-rows: var(--navbar-h) 1fr;
-  grid-template-areas:
-    "sidebar navbar"
-    "sidebar main";
+  grid-template-areas: "sidebar navbar" "sidebar main";
   min-height:100vh;
 }
-
-/* ============== FLOATING "POPUP" SIDEBAR ============== */
 .sidebar-slot{ grid-area: sidebar; position:relative; }
 .sidebar{
   position:sticky; top:var(--gap);
@@ -144,40 +85,33 @@ body{
   border-radius: 26px;
   border:1px solid rgba(255,255,255,0.14);
   box-shadow: var(--shadow-3), inset 0 1px 0 rgba(255,255,255,0.1);
-  z-index: 120;
-  overflow-y:auto;
+  z-index: 120; overflow-y:auto;
   transition: width var(--norm), transform var(--norm);
 }
 .sidebar .brand{ display:flex; align-items:center; gap:10px; color:#fdfcf8; padding:8px 6px 14px; border-bottom:1px solid rgba(255,255,255,0.10); }
 .sidebar .brand .logo{ width:48px; height:48px; object-fit:contain; border-radius:10px; flex-shrink:0; background:linear-gradient(160deg, var(--accent), #e8c877); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4); }
 .sidebar .brand .name{ font-family:var(--font-display); font-weight:600; font-size:15.5px; letter-spacing:.2px; line-height:1.25; }
 .sidebar .collapse-btn{ margin-left:auto; border:none; background:rgba(255,255,255,0.10); color:#fdfcf8; width:26px; height:26px; border-radius:8px; display:grid; place-items:center; cursor:pointer; flex-shrink:0; }
-
 .nav-group{ margin-top:4px; display:flex; flex-direction:column; gap:6px; }
 .nav-item{
-  display:flex; align-items:center; gap:10px;
-  color:#e8efe9; text-decoration:none;
+  display:flex; align-items:center; gap:10px; color:#e8efe9; text-decoration:none;
   padding:11px 12px; border-radius:13px; font-weight:600; font-size:13.5px;
-  transition: transform var(--fast), background var(--fast);
-  white-space:nowrap; overflow:hidden;
+  transition: transform var(--fast), background var(--fast); white-space:nowrap; overflow:hidden;
 }
 .nav-item:hover{ transform: translateX(2px); background:rgba(255,255,255,0.10); }
 .nav-item.active{ background:linear-gradient(160deg, rgba(207,159,69,0.35), rgba(207,159,69,0.14)); }
 .nav-item i{ width:17px; height:17px; flex-shrink:0; }
-
 .sidebar.collapsed{ width:76px; }
 .sidebar.collapsed .brand .name{ display:none; }
 .sidebar.collapsed .nav-item span{ display:none; }
 .sidebar.collapsed .collapse-btn{ transform: rotate(180deg); margin-left:0; }
-
 @media (max-width:980px){
   .app{ grid-template-columns: 1fr; grid-template-areas: "navbar" "main"; }
   .sidebar-slot{ display:contents; }
   .sidebar{
     position: fixed; top:0; bottom:0; left:0; margin:0; height:100vh;
     width: min(88vw, 300px); border-radius:0 26px 26px 0;
-    transform: translateX(-105%);
-    transition: transform var(--norm);
+    transform: translateX(-105%); transition: transform var(--norm);
   }
   .sidebar.open{ transform: translateX(0); }
 }
@@ -186,37 +120,18 @@ body{
   opacity:0; pointer-events:none; transition:opacity var(--norm); z-index:110;
 }
 .drawer-scrim.show{ opacity:1; pointer-events:auto; }
-
-
-/*Side bar*/
 @media (max-width:980px){
-
-  .sidebar{
-    width:85vw;
-    max-width:320px;
-  }
-
-  .sidebar .nav-item{
-    padding:14px;
-    font-size:14px;
-  }
+  .sidebar{ width:85vw; max-width:320px; }
+  .sidebar .nav-item{ padding:14px; font-size:14px; }
 }
-
-/* ============== Navbar ============== */
 .navbar{
-  grid-area: navbar;
-  position:sticky; top:0; z-index:100;
+  grid-area: navbar; position:sticky; top:0; z-index:100;
   height:auto; min-height:var(--navbar-h);
-  margin: var(--gap) var(--gap) 0 0;
-  padding:10px 18px;
+  margin: var(--gap) var(--gap) 0 0; padding:10px 18px;
   display:flex; align-items:center; gap:12px; justify-content:space-between; flex-wrap:wrap;
   background:linear-gradient(180deg, rgba(15,58,41,0.90), rgba(8,38,28,0.90));
-  backdrop-filter:blur(18px) saturate(180%);
-  -webkit-backdrop-filter:blur(18px) saturate(180%);
-  border-radius: 20px;
-  border:1px solid rgba(255,255,255,0.12);
-  box-shadow: var(--shadow-2);
-  color:#fdfcf8;
+  backdrop-filter:blur(18px) saturate(180%); -webkit-backdrop-filter:blur(18px) saturate(180%);
+  border-radius: 20px; border:1px solid rgba(255,255,255,0.12); box-shadow: var(--shadow-2); color:#fdfcf8;
 }
 @media (max-width:980px){ .navbar{ margin: var(--gap); border-radius:18px; padding:10px 14px; } }
 @media (max-width:560px){
@@ -226,7 +141,6 @@ body{
   .nav-right{ margin-left:auto; }
   .profile span{ display:none; }
 }
-
 .nav-left, .nav-right{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .nav-title{ display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-size:13px; font-weight:600; white-space:nowrap; }
 .nav-date{ font-size:12px; opacity:.85; font-family:var(--font-mono); }
@@ -243,20 +157,14 @@ body{
 .dropdown.show{ display:block; }
 .dropdown a{ color:#fdfcf8; text-decoration:none; display:flex; align-items:center; gap:8px; padding:10px; border-radius:10px; transition:background var(--fast); font-size:13.5px; }
 .dropdown a:hover{ background:rgba(255,255,255,0.10); }
-
-/* ============== Main ============== */
 .main{ grid-area: main; padding: var(--gap) var(--gap) 40px 0; max-width:1440px; width:100%; margin:0 auto; }
 @media (max-width:980px){ .main{ padding: 0 var(--gap) 40px; } }
-
 .page-section{ scroll-margin-top:96px; }
 .section-title{ font-family:var(--font-display); font-weight:600; font-size:21px; color:var(--ink); margin:26px 0 6px; display:flex; align-items:center; gap:8px; }
 .section-sub{ color:var(--ink-soft); font-size:13px; margin:0 0 14px; }
-
-/* KPI grid */
 .kpi-grid{ display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); }
 @media (max-width:480px){ .kpi-grid{ grid-template-columns: repeat(2,1fr); } }
 @media (max-width:360px){ .kpi-grid{ grid-template-columns: 1fr; } }
-
 .kpi{ position:relative; overflow:hidden; padding:15px; min-height:100px; border-radius:var(--radius-lg); background:linear-gradient(160deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55)); border:1px solid rgba(255,255,255,0.6); box-shadow: var(--shadow-1), inset 0 1px 0 rgba(255,255,255,0.5); transition: transform var(--norm), box-shadow var(--norm); }
 :root.dark .kpi{ background:linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); border-color:rgba(255,255,255,0.08); }
 .kpi::before{ content:""; position:absolute; inset:0 0 auto 0; height:3px; background:linear-gradient(90deg, var(--secondary), var(--accent)); }
@@ -267,59 +175,25 @@ body{
 .kpi .label{ font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-soft); font-weight:700; }
 .kpi .value{ font-family:var(--font-mono); font-size:clamp(18px,5vw,24px); font-weight:600; color:var(--ink); margin-top:4px; }
 .kpi .spark{ position:absolute; right:8px; bottom:8px; opacity:.5; }
-
-/* gender mini-stat card */
 .kpi-genders{ display:flex; gap:14px; margin-top:8px; }
 .kpi-gender-item{ flex:1; }
 .kpi-gender-item .g-label{ font-size:10px; text-transform:uppercase; letter-spacing:.6px; color:var(--ink-soft); font-weight:700; }
 .kpi-gender-item .g-value{ font-family:var(--font-mono); font-size:20px; font-weight:600; color:var(--ink); }
-
-/* Quick actions */
-.actions-grid{ display:grid; gap:12px; grid-template-columns: repeat(4, 1fr); }
-@media (max-width:1100px){ .actions-grid{ grid-template-columns: repeat(2,1fr); } }
-@media (max-width:560px){ .actions-grid{ grid-template-columns: 1fr; } }
+.actions-grid{ display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
 .action-card{ display:flex; align-items:center; gap:10px; padding:13px 15px; border-radius:16px; background:rgba(255,255,255,0.65); border:1px solid var(--line); box-shadow: var(--shadow-1); transition: transform var(--fast), box-shadow var(--fast); cursor:pointer; text-decoration:none; color:inherit; font-weight:700; font-size:13px; }
 :root.dark .action-card{ background:rgba(255,255,255,0.06); }
 .action-card:hover{ transform: translateY(-3px); box-shadow: var(--shadow-2); }
 .action-card .ac-icon{ width:34px; height:34px; border-radius:11px; display:grid; place-items:center; color:white; background:linear-gradient(160deg, var(--secondary), var(--primary)); flex-shrink:0; }
-
-/* Cards */
 .card{ border-radius:var(--radius-lg); background:linear-gradient(160deg, rgba(255,255,255,0.75), rgba(255,255,255,0.55)); border:1px solid rgba(255,255,255,0.6); box-shadow: var(--shadow-1), inset 0 1px 0 rgba(255,255,255,0.5); }
 :root.dark .card{ background:linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); border-color:rgba(255,255,255,0.08); }
 .card h3{ margin:0 0 10px; font-family:var(--font-display); font-weight:600; font-size:15px; color:var(--ink); display:flex; align-items:center; gap:8px; }
-
-/* ============== Compact analytics row (pie/donut focus) ============== */
-.charts-row{ display:grid; gap:14px; grid-template-columns: repeat(3, 1fr); }
+/* Auto-fit everywhere a fixed 3-col grid used to force awkward wrapping */
+.charts-row{ display:grid; gap:14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
 .charts-row .card{ padding:14px; }
 .chart-box{ position:relative; height:170px; }
 .chart-box canvas{ max-height:170px; }
-@media (max-width:900px){ .charts-row{ grid-template-columns: 1fr 1fr; } }
 @media (max-width:560px){ .charts-row{ display:grid; overflow-x:auto; grid-template-columns:1fr; scroll-snap-type:x mandatory; gap:14px; padding-bottom:6px; } .charts-row .card{ min-width:250px; scroll-snap-align:center; } }
-
-/* Monthwise chart */
-.chart-box-tall{ position:relative; height:170px; }
-.chart-box-tall canvas{ max-height:170px; }
-@media (max-width:560px){ .chart-box-tall{ height:150px; } .chart-box-tall canvas{ max-height:150px; } }
-.month-legend{ display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
-.month-chip{ display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:var(--radius-pill); background:rgba(45,106,79,0.10); font-size:12.5px; font-weight:700; color:var(--ink); cursor:pointer; border:none; font-family:inherit; }
-.month-chip.active{ background:linear-gradient(160deg, var(--secondary), var(--primary)); color:#fdfcf8; }
-:root.dark .month-chip{ background:rgba(82,183,136,0.14); }
-.month-chip .dot{ width:8px; height:8px; border-radius:50%; background:var(--secondary); flex-shrink:0; }
-.month-chip.active .dot{ background:#fdfcf8; }
-
-.month-picker-card{ margin-top:14px; }
-.month-picker-row{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-.month-picker-row label{ font-weight:700; font-size:13.5px; color:var(--ink-soft); white-space:nowrap; }
-.month-picker-row select{ flex:1 1 220px; min-width:180px; }
-.month-count-pill{ padding:6px 14px; border-radius:var(--radius-pill); background:var(--ok-bg); color:var(--ok-ink); font-weight:800; font-size:12.5px; white-space:nowrap; }
-@media (max-width:560px){ .month-picker-row{ flex-direction:column; align-items:stretch; } .month-picker-row select{ width:100%; } }
-.month-table-empty{ text-align:center; padding:30px 10px; color:var(--ink-soft); font-size:13.5px; }
-
-/* Batches */
-.batch-cards{ display:grid; gap:14px; grid-template-columns: repeat(3,1fr); }
-@media (max-width:1200px){ .batch-cards{ grid-template-columns: repeat(2,1fr); } }
-@media (max-width:680px){ .batch-cards{ grid-template-columns: 1fr; } }
-
+.batch-cards{ display:grid; gap:14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
 .batch-card{ position:relative; padding:15px; overflow:visible; }
 .batch-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
 .batch-title{ font-family:var(--font-display); font-size:15.5px; font-weight:600; flex:1 1 auto; min-width:0; padding-right:8px; word-break:break-word; }
@@ -328,14 +202,11 @@ body{
 .badge.open{ background:var(--ok-bg); color:var(--ok-ink); }
 .badge.full{ background:var(--danger-bg); color:var(--danger-ink); }
 .badge.warn{ background:var(--warn-bg); color:var(--warn-ink); }
-
 .batch-meta{ display:grid; grid-template-columns: repeat(2,1fr); gap:8px; margin:10px 0; font-size:13px; color:var(--ink-soft); }
 .batch-meta b{ font-family:var(--font-mono); color:var(--ink); }
-
 .progress-row{ display:flex; align-items:center; gap:10px; }
 .progress{ height:3px; border-radius:10px; background:rgba(18,39,30,0.10); overflow:hidden; flex:1; }
 .progress > span{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--secondary), var(--accent)); transition:width 1s ease-out; }
-
 .menu{ position:relative; flex-shrink:0; }
 .menu-btn{ border:1px solid var(--line); background:rgba(255,255,255,0.6); border-radius:10px; padding:6px 8px; cursor:pointer; }
 .menu-list{ position:absolute; right:0; top:110%; background:rgba(255,255,255,0.97); border:1px solid var(--line); border-radius:12px; box-shadow: var(--shadow-2); display:none; min-width:150px; z-index:10; overflow:hidden; max-width:calc(100vw - 40px); }
@@ -343,16 +214,11 @@ body{
 .menu-list a, .menu-list button{ display:flex; align-items:center; gap:8px; width:100%; background:none; border:none; text-align:left; padding:10px 12px; font-size:13px; cursor:pointer; color:inherit; white-space:nowrap; }
 .menu-list button:hover{ background:rgba(127,184,133,0.15); }
 .menu.open .menu-list{ display:block; }
-
-/* View Enrolled Students button */
 .view-students-btn{ margin-top:10px; width:100%; justify-content:center; }
 .view-students-btn .count-pill{ background:rgba(255,255,255,0.5); color:var(--secondary); border-radius:999px; padding:2px 10px; font-size:11.5px; font-weight:800; margin-left:6px; white-space:nowrap; }
 :root.dark .view-students-btn .count-pill{ background:rgba(255,255,255,0.14); color:#a9e2c7; }
-
 .empty-state{ padding:30px 20px; text-align:center; color:var(--ink-soft); grid-column: 1 / -1; }
 .empty-state i{ display:block; margin:0 auto 10px; width:34px; height:34px; opacity:.6; }
-
-/* Table */
 .table-wrap{ border-radius:var(--radius-lg); overflow:auto; max-height:560px; }
 .table-card{ padding:10px; }
 .table-toolbar{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:6px 6px 10px; }
@@ -366,7 +232,6 @@ body{
 .btn-gold  { background:linear-gradient(160deg, #e8c877, #cf9f45); color:#1c2b1f; }
 .btn-success{ background:linear-gradient(160deg, #52b788, #2d6a4f); color:white; }
 .btn-ghost { background:rgba(255,255,255,0.6); color:var(--ink); border:1px solid var(--line); box-shadow:none; }
-
 .table{ width:100%; border-collapse:collapse; }
 .table th{ position:sticky; top:0; z-index:1; background:linear-gradient(160deg, var(--secondary), var(--primary)); color:#fdfcf8; padding:14px 16px; text-align:left; font-size:12px; text-transform:uppercase; letter-spacing:.6px; font-weight:700; }
 .table td{ padding:12px 16px; border-bottom:1px solid var(--line); font-size:13.5px; background:rgba(255,255,255,0.60); }
@@ -374,7 +239,6 @@ body{
 .table tr:hover td{ background:rgba(127,184,133,0.14); }
 .table .row-actions{ display:flex; gap:6px; flex-wrap:wrap; }
 .table .row-actions .btn{ padding:6px 10px; font-size:12px; }
-
 @media (max-width:700px){
   .table, .table thead, .table tbody, .table th, .table td, .table tr { display:block; }
   .table thead{ display:none; }
@@ -385,41 +249,27 @@ body{
   .row-actions{ display:flex; grid-template-columns:1fr 1fr; flex-direction:column; gap:8px; }
   .row-actions .btn{ width:100%; justify-content:center; }
 }
-
 .form-field{ position:relative; display:flex; flex-direction:column; gap:6px; text-align:left; }
 .form-field label{ font-size:12.5px; font-weight:700; color:var(--ink-soft); }
 .input{ padding:12px 14px; border-radius:12px; border:1px solid var(--line); background:rgba(255,255,255,0.9); font-size:13.5px; color:var(--ink); outline:none; transition: box-shadow var(--fast), border-color var(--fast); flex:1 1 160px; }
 .input:focus{ border-color:var(--secondary); box-shadow:0 0 0 3px rgba(45,106,79,0.25); }
-
 .status{ padding:6px 10px; border-radius:999px; font-size:12px; font-weight:700; display:inline-flex; align-items:center; gap:6px; }
 .status.paid{ background:var(--ok-bg); color:var(--ok-ink); }
 .status.pending{ background:var(--danger-bg); color:var(--danger-ink); }
-
 .advanced-search{ padding:14px 18px; margin-bottom:12px; }
 .advanced-search summary{ cursor:pointer; font-weight:800; font-size:13.5px; }
-.adv-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; margin-top:12px; }
-@media (max-width:900px){ .adv-grid{ grid-template-columns: repeat(2,1fr); } }
-@media (max-width:520px){ .adv-grid{ grid-template-columns: 1fr; } }
-
+.adv-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-top:12px; }
 .form-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 @media (max-width:640px){
   .form-row{ flex-direction:column; align-items:stretch; }
   .form-row .input, .form-row .form-field{ flex:1 1 auto; width:100%; }
   .form-row .btn{ width:100%; justify-content:center; }
 }
-
 .footer{ margin:30px 0 10px; color:var(--ink-soft); font-size:12.5px; text-align:center; }
-
 :focus-visible{ outline:3px solid rgba(207,159,69,0.55); outline-offset:2px; }
-
 .mobile-only{ display:none; }
 @media (max-width:980px){ .mobile-only{ display:initial; } .searchbar{ display:none; } }
-
-@media (prefers-reduced-motion: reduce){
-  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
-}
-
-/* Student tooltip / profile popover */
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; } }
 .student-hover{ position:relative; }
 .student-name{ color:#2d6a4f; cursor:pointer; }
 .student-tooltip{
@@ -430,140 +280,89 @@ body{
   opacity:0; visibility:hidden; transform:translateY(8px);
   transition:.25s ease; text-align:left; line-height:1.7;
 }
-.student-hover:hover .student-tooltip,
-.student-tooltip.show-tooltip{ opacity:1; visibility:visible; transform:translateY(0); }
+.student-hover:hover .student-tooltip, .student-tooltip.show-tooltip{ opacity:1; visibility:visible; transform:translateY(0); }
 .student-tooltip a{ color:#2d6a4f !important; font-weight:600; text-decoration:none; display:inline-block; margin-top:6px; }
 @media (max-width:768px){
   .student-tooltip{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:90%; max-width:350px; }
   .student-hover:hover .student-tooltip{ transform:translate(-50%,-50%); }
 }
-
-/* consistent tap targets */
 .btn, .nav-icon-btn, .menu-btn, .collapse-btn{ min-height:44px; min-width:44px; }
-
-/* empty search state for whole page */
 .no-results{ text-align:center; color:var(--ink-soft); padding:40px 10px; display:none; }
 .no-results.show{ display:block; }
-
-/* =========================================================
-   EXTRA MOBILE OPTIMIZATION
-========================================================= */
-
 @media (max-width:768px){
-
-  /* Navbar */
-  .navbar{
-    padding:12px;
-    gap:10px;
-  }
-
-  .nav-left,
-  .nav-right{
-    width:100%;
-    justify-content:space-between;
-  }
-
-  .nav-title{
-    font-size:12px;
-  }
-
-  /* KPI Cards */
-  .kpi{
-    min-height:auto;
-    padding:14px;
-  }
-
-  .kpi .value{
-    font-size:20px;
-  }
-
-  .kpi-genders{
-    flex-direction:column;
-    gap:8px;
-  }
-
-  /* Batch Cards — keep the head as a row so the 3-dot menu
-     stays pinned to the right and the title truncates/wraps
-     instead of pushing the menu out of place */
-  .batch-head{
-    align-items:flex-start;
-    flex-wrap:nowrap;
-  }
-
-  .batch-meta{
-    grid-template-columns:1fr;
-  }
-
-  /* Forms */
-  form{
-    width:100%;
-  }
-
-  .input{
-    width:100%;
-  }
-
-  /* Buttons */
-  .btn{
-    width:100%;
-    justify-content:center;
-  }
-
-  /* Quick Actions */
-  .action-card{
-    width:100%;
-  }
-
-  /* Charts */
-  .chart-box{
-    height:220px;
-  }
-
-  .chart-box-tall{
-    height:260px;
-  }
-
-  /* Profile dropdown */
-  .dropdown{
-    right:10px;
-    left:10px;
-    min-width:auto;
-    width:auto;
-  }
-
-  /* Month chips */
-  .month-legend{
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    padding-bottom:8px;
-    -webkit-overflow-scrolling:touch;
-  }
-
-  .month-chip{
-    flex-shrink:0;
-  }
-
-  /* Table actions */
-  .row-actions{
-    display:flex !important;
-    flex-direction:column;
-    gap:6px;
-  }
-
-  .row-actions .btn{
-    width:100%;
-  }
-
-  /* Student tooltip */
-  .student-tooltip{
-    width:calc(100vw - 30px);
-    max-width:none;
-    left:50%;
-    top:50%;
-    transform:translate(-50%,-50%);
-  }
+  .navbar{ padding:12px; gap:10px; }
+  .nav-left, .nav-right{ width:100%; justify-content:space-between; }
+  .nav-title{ font-size:12px; }
+  .kpi{ min-height:auto; padding:14px; }
+  .kpi .value{ font-size:20px; }
+  .kpi-genders{ flex-direction:column; gap:8px; }
+  .batch-head{ align-items:flex-start; flex-wrap:nowrap; }
+  .batch-meta{ grid-template-columns:1fr; }
+  form{ width:100%; }
+  .input{ width:100%; }
+  .btn{ width:100%; justify-content:center; }
+  .action-card{ width:100%; }
+  .chart-box{ height:220px; }
+  .dropdown{ right:10px; left:10px; min-width:auto; width:auto; }
+  .row-actions{ display:flex !important; flex-direction:column; gap:6px; }
+  .row-actions .btn{ width:100%; }
+  .student-tooltip{ width:calc(100vw - 30px); max-width:none; left:50%; top:50%; transform:translate(-50%,-50%); }
 }
+.month-chip{ display:flex; align-items:center; gap:6px; padding:6px 12px; border-radius:var(--radius-pill); background:rgba(45,106,79,0.10); font-size:12.5px; font-weight:700; color:var(--ink); cursor:pointer; border:none; font-family:inherit; }
+.month-chip.active{ background:linear-gradient(160deg, var(--secondary), var(--primary)); color:#fdfcf8; }
+:root.dark .month-chip{ background:rgba(82,183,136,0.14); }
 
+/* Simplified media upload dropzone (used inside the Add Media modal) */
+.quick-dropzone{
+  border:2px dashed var(--line); border-radius:16px; padding:28px 16px; text-align:center;
+  cursor:pointer; background:rgba(45,106,79,0.05); transition:.2s;
+}
+.quick-dropzone:hover{ border-color:var(--secondary); background:rgba(45,106,79,0.09); }
+
+/* Add Student — sectioned cards instead of one flat row */
+.as-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:14px; }
+.as-full{ grid-column:1 / -1; }
+
+/* Compact category picker for the Add Media modal */
+.cat-tile-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(90px, 1fr)); gap:8px; margin-top:6px; }
+.cat-tile-btn{
+  border:1.5px solid var(--line); background:rgba(255,255,255,.7); border-radius:12px;
+  padding:12px 8px; text-align:center; cursor:pointer; font-size:11.5px; font-weight:700; color:var(--ink);
+  transition:.15s;
+}
+.cat-tile-btn:hover{ border-color:var(--secondary); }
+.cat-tile-btn.selected{ border-color:var(--accent); background:linear-gradient(160deg, rgba(232,200,119,.28), rgba(207,159,69,.12)); }
+.cat-tile-btn .cti{ font-size:20px; display:block; margin-bottom:4px; }
+.subcat-chip-row{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.subcat-chip{
+  border:1.5px solid var(--line); background:rgba(255,255,255,.7); border-radius:100px;
+  padding:6px 14px; font-size:12px; font-weight:700; cursor:pointer; color:var(--ink); transition:.15s;
+}
+.subcat-chip:hover{ border-color:var(--secondary); }
+.subcat-chip.selected{ border-color:var(--accent); background:linear-gradient(160deg, var(--accent), #e8c877); color:#1c2b1f; }
+
+/* Compact Events form/list */
+.events-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; }
+.events-row .form-field{ flex:0 1 auto; }
+.events-row input[name="eventNameInput"], #eventName{ width:220px; }
+#eventDate{ width:160px; }
+.events-list{ display:flex; flex-direction:column; gap:6px; margin-top:14px; }
+.event-chip{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:9px 14px; border-radius:12px; background:rgba(255,255,255,.6); border:1px solid var(--line); font-size:13px;
+}
+.event-chip .ec-name{ font-weight:700; }
+.event-chip .ec-date{ color:var(--ink-soft); font-family:var(--font-mono); font-size:12px; }
+.event-chip button{ border:none; background:none; color:var(--danger); cursor:pointer; font-size:14px; padding:2px 6px; }
+
+.star-toggle{
+  position:absolute; top:8px; right:8px; z-index:2;
+  width:34px; height:34px; border-radius:50%; border:none; cursor:pointer;
+  background:rgba(255,255,255,.85); font-size:17px; display:flex; align-items:center; justify-content:center;
+  box-shadow:0 4px 10px rgba(0,0,0,.18); transition:.15s;
+}
+.star-toggle:hover{ transform:scale(1.1); }
+.star-toggle.is-featured{ background:linear-gradient(160deg, var(--accent), #e8c877); }
 </style>
 </head>
 
@@ -586,16 +385,17 @@ body{
       <div class="nav-group">
         <a class="nav-item active" href="#overview"><i data-feather="grid"></i><span>Dashboard</span></a>
         <a class="nav-item" href="#students"><i data-feather="users"></i><span>Students</span></a>
+        <a class="nav-item" href="#add-student"><i data-feather="user-plus"></i><span>Add Student</span></a>
         <a class="nav-item" href="#batches"><i data-feather="calendar"></i><span>Batches</span></a>
+        <a class="nav-item" href="#media"><i data-feather="image"></i><span>Media Library</span></a>
+        <a class="nav-item" href="#certificates"><i data-feather="award"></i><span>Certificates</span></a>
         <a class="nav-item" href="#analytics"><i data-feather="bar-chart-2"></i><span>Analytics</span></a>
-        
         <a class="nav-item" href="#settings"><i data-feather="settings"></i><span>Settings</span></a>
         <a class="nav-item" href="/logout"><i data-feather="log-out"></i><span>Logout</span></a>
       </div>
     </nav>
   </div>
 
-  <!-- Navbar -->
   <header class="navbar" role="banner" aria-label="Top Navigation">
     <div class="nav-left">
       <button class="nav-icon-btn mobile-only" id="openDrawer" aria-label="Open menu"><i data-feather="menu"></i></button>
@@ -621,10 +421,8 @@ body{
     </div>
   </header>
 
-  <!-- Main -->
   <main class="main" role="main">
 
-    <!-- OVERVIEW -->
     <section class="page-section" id="overview">
       <div class="section-title">Overview</div>
       <div class="kpi-grid" aria-label="Key performance indicators">
@@ -644,22 +442,14 @@ body{
           <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
         </div>
         <div class="kpi">
-          <div class="kpi-head"><div class="icon"><i data-feather="calendar"></i></div><div class="label">Batches</div></div>
-          <div class="value" data-counter="{{ batches|length|default(0) }}">0</div>
+          <div class="kpi-head"><div class="icon"><i data-feather="award"></i></div><div class="label">Completed</div></div>
+          <div class="value" data-counter="{{ students|selectattr('completion_status','equalto','Completed')|list|length|default(0) }}">0</div>
           <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
         </div>
         <div class="kpi">
-          <div class="kpi-head"><div class="icon"><i data-feather="users"></i></div><div class="label">Gender Split</div></div>
-          <div class="kpi-genders">
-            <div class="kpi-gender-item">
-              <div class="g-label">Male</div>
-              <div class="g-value" data-counter="{{ students|selectattr('gender','equalto','Male')|list|length|default(0) }}">0</div>
-            </div>
-            <div class="kpi-gender-item">
-              <div class="g-label">Female</div>
-              <div class="g-value" data-counter="{{ students|selectattr('gender','equalto','Female')|list|length|default(0) }}">0</div>
-            </div>
-          </div>
+          <div class="kpi-head"><div class="icon"><i data-feather="calendar"></i></div><div class="label">Batches</div></div>
+          <div class="value" data-counter="{{ batches|length|default(0) }}">0</div>
+          <canvas class="spark" width="100" height="30" aria-hidden="true"></canvas>
         </div>
         <div class="kpi">
           <div class="kpi-head"><div class="icon"><i data-feather="activity"></i></div><div class="label">Remaining Seats</div></div>
@@ -669,18 +459,16 @@ body{
       </div>
     </section>
 
-    <!-- QUICK ACTIONS -->
     <section class="page-section" id="quick-actions">
       <div class="section-title">Quick Actions</div>
       <div class="actions-grid">
         <a href="/auto_batches" class="action-card" aria-label="Auto Generate Batches"><div class="ac-icon"><i data-feather="cpu"></i></div><div>Auto Generate</div></a>
         <a href="/export_excel" class="action-card" aria-label="Export Excel"><div class="ac-icon"><i data-feather="table"></i></div><div>Export Excel</div></a>
         <button class="action-card" id="refreshBtn" type="button" aria-label="Refresh Data"><div class="ac-icon"><i data-feather="refresh-cw"></i></div><div>Refresh Data</div></button>
-        <button class="action-card" id="notifyBtn" type="button" aria-label="Send Notifications"><div class="ac-icon"><i data-feather="send"></i></div><div>Send Notifications</div></button>
+        <a href="#add-student" class="action-card" aria-label="Add Student"><div class="ac-icon"><i data-feather="user-plus"></i></div><div>Add Student</div></a>
       </div>
     </section>
 
-    <!-- ANALYTICS -->
     <section class="page-section" id="analytics">
       <div class="section-title">Analytics</div>
       <div class="charts-row">
@@ -699,8 +487,6 @@ body{
       </div>
     </section>
 
-
-    <!-- CREATE BATCH -->
     <section class="page-section" id="create-batch">
       <div class="section-title">Create Batch</div>
       <div class="card glass" style="padding:10px;">
@@ -713,7 +499,6 @@ body{
       </div>
     </section>
 
-    <!-- BULK UPLOAD -->
     <section class="page-section" id="bulk-upload">
       <div class="section-title">Bulk Upload</div>
       <div class="card glass" style="padding:18px;">
@@ -724,7 +509,6 @@ body{
       </div>
     </section>
 
-    <!-- BATCHES -->
     <section class="page-section" id="batches">
       <div class="section-title">Batches</div>
       <p class="section-sub">Manage active and upcoming training batches.</p>
@@ -789,9 +573,233 @@ body{
       </div>
     </section>
 
-    <!-- STUDENTS -->
+    <!-- ADD STUDENT MANUALLY (walk-ins / overflow beyond a full batch) -->
+    <section class="page-section" id="add-student">
+      <div class="section-title">Add Student to Batch</div>
+      <p class="section-sub">For walk-in or extra trainees who show up even after a batch is already full online. They get their own seat label (e.g. MX1, FX1) so they never collide with the normal seats.</p>
+
+      <form action="/admin/add_student" method="POST" id="addStudentForm">
+
+        <div class="card glass" style="padding:18px; margin-bottom:14px;">
+          <h3 style="margin-bottom:14px;"><i data-feather="user"></i> Personal Details</h3>
+          <div class="as-grid">
+            <div class="form-field as-full"><label>Full Name</label><input type="text" name="name" class="input" required></div>
+            <div class="form-field"><label>Date of Birth</label><input type="date" name="dob" id="asDob" class="input" required></div>
+            <div class="form-field"><label>Age (auto-calculated)</label><input type="text" id="asAge" class="input" readonly placeholder="—" style="background:rgba(18,39,30,.05); color:var(--ink-soft); font-weight:700;"></div>
+            <div class="form-field">
+              <label>Gender</label>
+              <select name="gender" class="input" required>
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card glass" style="padding:18px; margin-bottom:14px;">
+          <h3 style="margin-bottom:14px;"><i data-feather="phone"></i> Contact</h3>
+          <div class="as-grid">
+            <div class="form-field"><label>Email</label><input type="email" name="email" class="input"></div>
+            <div class="form-field"><label>Phone</label><input type="text" name="phone" class="input"></div>
+          </div>
+        </div>
+
+        <div class="card glass" style="padding:18px; margin-bottom:14px;">
+          <h3 style="margin-bottom:14px;"><i data-feather="book-open"></i> Education</h3>
+          <div class="as-grid">
+            <div class="form-field as-full"><label>College</label><input type="text" name="college" class="input"></div>
+          </div>
+        </div>
+
+        <div class="card glass" style="padding:18px; margin-bottom:16px;">
+          <h3 style="margin-bottom:14px;"><i data-feather="calendar"></i> Batch &amp; Payment</h3>
+          <div class="as-grid">
+            <div class="form-field">
+              <label>Batch (any, even full ones)</label>
+              <select name="batch_id" class="input" required>
+                <option value="">Select batch</option>
+                {% for b in batches|default([]) %}
+                <option value="{{ b.id }}">{{ b.start_display|default(b.start_date, true) }} → {{ b.end_display|default(b.end_date, true) }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-field">
+              <label>Payment Status</label>
+              <select name="payment_status" class="input">
+                <option value="Pending">Pending</option>
+                <option value="Paid">Paid</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-green" type="submit"><i data-feather="user-plus"></i> Add Student</button>
+      </form>
+    </section>
+
+    <!-- MEDIA LIBRARY -->
+    <section class="page-section" id="media">
+      <div class="section-title">Media Library</div>
+      <p class="section-sub">Manage gallery photos, videos, categories and events.</p>
+
+      <div class="card glass" style="padding:14px 18px; margin-bottom:14px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="month-chip active" data-media-filter="all" type="button">All</button>
+            <button class="month-chip" data-media-filter="photo" type="button">Photos</button>
+            <button class="month-chip" data-media-filter="video" type="button">Videos</button>
+            <button class="month-chip" data-media-filter="featured" type="button">Featured</button>
+            <button class="month-chip" data-media-filter="archived" type="button">Archived</button>
+          </div>
+          <button class="btn btn-green" type="button" onclick="openAddMediaModal()"><i data-feather="plus"></i> Add Media</button>
+        </div>
+      </div>
+
+      <div class="batch-cards" id="mediaGrid">
+        {% for m in media|default([]) %}
+        <div class="batch-card card glass"
+             data-type="{{ m.media_type }}"
+             data-featured="{{ 'yes' if m.featured else 'no' }}"
+             data-archived="{{ 'yes' if m.is_archived else 'no' }}"
+             data-uncat="{{ 'yes' if not (m.category and m.category in taxonomy) else 'no' }}">
+
+          <div style="border-radius:14px; overflow:hidden; margin:-15px -15px 10px; position:relative; aspect-ratio:4/3; background:#e8efe9;">
+            {% if m.media_type in ('video', 'youtube') %}
+              <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,.35); color:white; font-size:30px; z-index:1;">
+                <i data-feather="play-circle"></i>
+              </div>
+            {% endif %}
+            {% if m.media_type == 'youtube' %}
+              <div style="width:100%; height:100%; background:#111;"></div>
+            {% else %}
+              <img src="{{ url_for('static', filename='gallery/' + (m.thumbnail or m.image or '')) }}"
+                   style="width:100%; height:100%; object-fit:cover;" alt="{{ m.title }}">
+            {% endif %}
+
+            <!-- Featured is now a single visible star tap — not buried
+                 in a menu, and not a decision forced at upload time -->
+            <button type="button" class="star-toggle {{ 'is-featured' if m.featured else '' }}"
+                    onclick="toggleMediaField({{ m.id }}, 'featured')" title="Show on homepage">
+              {{ '⭐' if m.featured else '☆' }}
+            </button>
+          </div>
+
+          {% if not (m.category and m.category in taxonomy) %}
+          <div class="badge full" style="margin-bottom:8px; display:inline-flex;">
+            ⚠️ Not in gallery — needs a category
+          </div>
+          {% endif %}
+
+          <div class="batch-head">
+            <div class="batch-title" style="font-size:14px;">{{ m.title }}</div>
+            <div class="menu">
+              <button class="menu-btn" aria-haspopup="true" type="button"><i data-feather="more-horizontal"></i></button>
+              <div class="menu-list">
+                <button type="button" onclick="openCategorizeModal({{ m.id }}, '{{ m.category or '' }}', '{{ m.subcategory or '' }}')">🏷️ Set Category</button>
+                <button type="button" onclick="toggleMediaField({{ m.id }}, 'visible')">{{ '🙈 Hide' if m.is_visible else '👁 Show' }}</button>
+                <button type="button" onclick="toggleMediaField({{ m.id }}, 'archive')">{{ '📤 Unarchive' if m.is_archived else '📦 Archive' }}</button>
+                <button type="button" onclick="deleteMedia({{ m.id }})"><i data-feather="trash-2"></i> Delete</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="badges">
+            <span class="badge {{ 'open' if m.is_visible else 'warn' }}">{{ '👁 Visible' if m.is_visible else '🙈 Hidden' }}</span>
+            {% if m.category and m.category in taxonomy %}
+              <span class="badge warn">{{ taxonomy[m.category].icon }} {{ taxonomy[m.category].label }}{% if m.subcategory %} · {{ m.subcategory }}{% endif %}</span>
+            {% endif %}
+          </div>
+
+          <div class="batch-meta">
+            {% if m.batch_ref %}<div>Batch: <b>{{ m.batch_ref.start_date }}</b></div>{% endif %}
+            {% if m.event_ref %}<div>Event: <b>{{ m.event_ref.name }}</b></div>{% endif %}
+          </div>
+        </div>
+        {% else %}
+        <div class="empty-state card glass">
+          <i data-feather="image"></i>
+          No media yet — click "Add Media" above to upload your first photo or video.
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Categories removed as an admin-editable list — the hospital's
+           category structure (Hospital / Doctors / Panchakarma /
+           Internship / Events, each with fixed subcategories) is now
+           built into the upload flow itself. Nothing to manage here. -->
+
+      <div class="section-title" style="margin-top:30px;">Events</div>
+      <p class="section-sub">Optional tags you can link a photo to later — not a public filter.</p>
+      <div class="card glass" style="padding:16px;">
+        <form id="addEventForm" class="events-row" style="margin-bottom:14px;">
+          <div class="form-field"><label>Event Name</label><input type="text" class="input" id="eventName" placeholder="e.g. Annual Day" required></div>
+          <div class="form-field"><label>Date</label><input type="date" class="input" id="eventDate"></div>
+          <button class="btn btn-blue" type="submit"><i data-feather="plus"></i> Add</button>
+        </form>
+        <div class="events-list">
+          {% for e in events|default([]) %}
+          <div class="event-chip">
+            <span><span class="ec-name">🎤 {{ e.name }}</span> <span class="ec-date">{{ e.event_date or 'no date' }}</span> <span class="ec-date">· {{ e.media|length }} photos</span></span>
+            <button type="button" onclick="deleteEvent({{ e.id }})" title="Delete">✕</button>
+          </div>
+          {% else %}
+          <span style="color:var(--ink-soft); font-size:13px;">No events yet.</span>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Hidden option templates + taxonomy data used by the Add Media modal's JS -->
+    <template id="batchOptionsTpl">
+      <option value="">None</option>
+      {% for b in batches|default([]) %}<option value="{{ b.id }}">{{ b.start_display|default(b.start_date, true) }} → {{ b.end_display|default(b.end_date, true) }}</option>{% endfor %}
+    </template>
+    <template id="eventOptionsTpl">
+      <option value="">None</option>
+      {% for e in events|default([]) %}<option value="{{ e.id }}">{{ e.name }}</option>{% endfor %}
+    </template>
+    <script id="galleryTaxonomyData" type="application/json">{{ taxonomy_json|safe }}</script>
+
+    <!-- CERTIFICATE TOOLS -->
+    <section class="page-section" id="certificates">
+      <div class="section-title">Certificates</div>
+      <p class="section-sub">
+        Certificates auto-generate the moment you click <b>Complete</b> on a paid student in the Students table below —
+        no separate approval step needed. Use the tools here only for trainees who never went through online registration.
+      </p>
+
+      <div class="card glass" style="padding:18px; margin-bottom:16px;">
+        <h3><i data-feather="file-text"></i> Blank Template</h3>
+        <p style="font-size:13px; color:var(--ink-soft); margin:0 0 12px;">A printable certificate with name/dates left blank, for filling in by hand.</p>
+        <a href="/certificate/blank" target="_blank" class="btn btn-ghost"><i data-feather="download"></i> Download Blank Template</a>
+      </div>
+
+      <div class="card glass" style="padding:18px;">
+        <h3><i data-feather="user-check"></i> Quick Certificate (no student record needed)</h3>
+        <p style="font-size:13px; color:var(--ink-soft); margin:0 0 12px;">For trainers, guest faculty, or anyone outside the normal registration system — just type a name.</p>
+        <form action="/admin/quick_certificate" method="POST" target="_blank" class="form-row">
+          <div class="form-field"><label>Name</label><input type="text" name="name" class="input" required style="min-width:200px;"></div>
+          <div class="form-field"><label>Training / Role</label><input type="text" name="training_type" class="input" placeholder="Ayurvedic Internship Training" style="min-width:220px;"></div>
+          <div class="form-field"><label>From</label><input type="text" name="batch_start" class="input" placeholder="e.g. 01-Jul-2026" style="max-width:150px;"></div>
+          <div class="form-field"><label>To</label><input type="text" name="batch_end" class="input" placeholder="e.g. 31-Jul-2026" style="max-width:150px;"></div>
+          <button class="btn btn-gold" type="submit" style="align-self:flex-end;"><i data-feather="award"></i> Generate Certificate</button>
+        </form>
+      </div>
+    </section>
+
     <section class="page-section" id="students">
       <div class="section-title">Students</div>
+
+      <div class="card glass" style="padding:14px 18px; margin-bottom:14px;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="month-chip active" data-student-filter="all" type="button">All</button>
+          <button class="month-chip" data-student-filter="pending" type="button">⏳ Pending Verification</button>
+          <button class="month-chip" data-student-filter="paid" type="button">✅ Verified</button>
+          <button class="month-chip" data-student-filter="completed" type="button">🎓 Completed</button>
+          <button class="month-chip" data-student-filter="cert-ready" type="button">📄 Certificate Ready</button>
+        </div>
+      </div>
 
       <details class="card glass advanced-search">
         <summary>Advanced Search &amp; Filters</summary>
@@ -825,6 +833,7 @@ body{
                     data-name="{{ s.name|default('—') }}"
                     data-gender="{{ s.gender|default('') }}"
                     data-status="{{ s.payment_status|default('') }}"
+                    data-completion="{{ s.completion_status|default('') }}"
                     data-batch-label="{% for b in batches %}{% if b.id == s.batch_id %}{{ b.start_display }} → {{ b.end_display }}{% endif %}{% endfor %}"
                     onclick="window.open('/student/{{ s.id }}','_blank')" style="cursor:pointer;">
                   <td data-label="Name" class="student-hover">
@@ -835,6 +844,7 @@ body{
                       📱 {{ s.phone|default('—') }}<br>
                       🎓 {{ s.college|default('—') }}<br>
                       👤 {{ s.gender|default('—') }}<br>
+                      💺 {{ s.seat|default('—') }}<br>
                       💳 {{ s.payment_status|default('—') }}<br>
                       <a href="/student/{{ s.id }}" onclick="event.stopPropagation();">View Full Profile →</a>
                     </div>
@@ -843,11 +853,20 @@ body{
                   <td data-label="Gender">{% if s.gender == "Male" %}Male{% else %}Female{% endif %}</td>
                   <td data-label="Status">
                     {% if s.payment_status == "Paid" %}<span class="status paid">Paid</span>{% else %}<span class="status pending">Pending</span>{% endif %}
+                    {% if s.completion_status == "Completed" %}<span class="status paid" style="margin-left:4px;">🎓 Completed</span>{% endif %}
                   </td>
                   <td data-label="Actions" class="row-actions" onclick="event.stopPropagation();">
-                    <button type="button" onclick="markPaid({{ s.id|default(0) }})" class="btn btn-green">✅ Verify</button>
+                    {% if s.payment_status == "Paid" %}
+                      <button type="button" class="btn btn-ghost" disabled title="Already verified">✅ Verified</button>
+                    {% else %}
+                      <button type="button" onclick="markPaid({{ s.id|default(0) }})" class="btn btn-green">✅ Verify</button>
+                    {% endif %}
                     <button type="button" onclick="deleteStudent({{ s.id|default(0) }})" class="btn btn-red">🗑 Reject/Delete</button>
-                    <button type="button" onclick="fetch('/mark_completed/{{ s.id }}').then(()=>location.reload())" class="btn btn-success">✅ Complete</button>
+                    {% if s.completion_status == "Completed" %}
+                      <button type="button" class="btn btn-ghost" disabled title="Already marked complete">🎓 Completed</button>
+                    {% else %}
+                      <button type="button" onclick="markCompleted({{ s.id|default(0) }}, {{ 'true' if s.payment_status == 'Paid' else 'false' }})" class="btn btn-success">🎓 Complete</button>
+                    {% endif %}
                     <button type="button" onclick="window.location='/certificate/{{ s.id|default(0) }}'" class="btn btn-gold">📄 Cert</button>
                   </td>
                 </tr>
@@ -869,7 +888,6 @@ body{
 <script>
 feather.replace();
 
-/* Date/time */
 (function initDateTime(){
   const el = document.getElementById('dateTime');
   function tick(){
@@ -881,7 +899,6 @@ feather.replace();
   tick(); setInterval(tick, 15000);
 })();
 
-/* Dark mode */
 (function darkMode(){
   const root = document.documentElement;
   if(localStorage.getItem('aaktheme') === 'dark'){ root.classList.add('dark'); }
@@ -891,7 +908,23 @@ feather.replace();
   });
 })();
 
-/* Sidebar popup drawer + desktop collapse */
+/* Add Student — DOB drives Age, same "one source of truth" pattern
+   used on the public registration form. Age is never typed directly. */
+(function dobAge(){
+  const dobEl = document.getElementById('asDob');
+  const ageEl = document.getElementById('asAge');
+  if (!dobEl || !ageEl) return;
+  dobEl.addEventListener('change', function(){
+    if (!this.value) { ageEl.value = ''; return; }
+    const dob = new Date(this.value);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+    ageEl.value = age >= 0 ? age + ' yrs' : '';
+  });
+})();
+
 (function sidebarBehavior(){
   const sidebar = document.getElementById('sidebar');
   const scrim = document.getElementById('drawerScrim');
@@ -914,7 +947,6 @@ feather.replace();
   if(collapseBtn){
     collapseBtn.addEventListener('click', function(){ sidebar.classList.toggle('collapsed'); });
   }
-  /* close drawer on nav click (mobile) */
   document.querySelectorAll('.nav-item').forEach(function(a){
     a.addEventListener('click', closeDrawer);
   });
@@ -923,7 +955,6 @@ feather.replace();
   });
 })();
 
-/* Profile menu */
 (function profileMenu(){
   const btn = document.getElementById('profileBtn');
   const menu = document.getElementById('profileMenu');
@@ -936,7 +967,6 @@ feather.replace();
   });
 })();
 
-/* KPI counters + sparklines */
 (function kpis(){
   document.querySelectorAll('[data-counter]').forEach(function(el){
     const target = parseInt(el.getAttribute('data-counter'), 10) || 0;
@@ -972,7 +1002,6 @@ feather.replace();
   });
 })();
 
-/* Fill batch occupancy bars */
 (function fillProgress(){
   document.querySelectorAll('.progress > span[data-progress]').forEach(function(el){
     const pct = Math.max(0, Math.min(100, parseFloat(el.getAttribute('data-progress')) || 0));
@@ -980,7 +1009,6 @@ feather.replace();
   });
 })();
 
-/* Notifications */
 document.getElementById('notifBtn').addEventListener('click', function(){
   Swal.fire({
     title: 'Notifications',
@@ -995,7 +1023,6 @@ document.getElementById('notifBtn').addEventListener('click', function(){
   });
 });
 
-/* Batch card dropdown menus */
 document.querySelectorAll('.menu').forEach(function(m){
   const btn = m.querySelector('.menu-btn');
   btn.addEventListener('click', function(e){
@@ -1008,7 +1035,6 @@ document.addEventListener('click', function(){
   document.querySelectorAll('.menu.open').forEach(function(m){ m.classList.remove('open'); });
 });
 
-/* Remaining seats, computed from rendered batch cards */
 (function remainingSeats(){
   const cards = document.querySelectorAll('[data-batch-id]');
   let total = 0, found = false;
@@ -1022,16 +1048,32 @@ document.addEventListener('click', function(){
   if(el) el.textContent = found ? total : '—';
 })();
 
-/* Search: basic + advanced filters (students table only) */
+/* =========================================================
+   STUDENTS TABLE: search + advanced filters + status tabs
+   combined into one filter pass (previously the search box
+   and a status tab would have fought over row.style.display)
+========================================================= */
 const table = document.getElementById('table');
 const simpleSearch = document.getElementById('search');
+let currentStudentTab = 'all';
+
+function matchesTab(row){
+  const status = row.getAttribute('data-status');
+  const completion = row.getAttribute('data-completion');
+  if (currentStudentTab === 'pending') return status === 'Pending';
+  if (currentStudentTab === 'paid') return status === 'Paid';
+  if (currentStudentTab === 'completed') return completion === 'Completed';
+  if (currentStudentTab === 'cert-ready') return status === 'Paid' && completion === 'Completed';
+  return true;
+}
+
 function filterTable(){
   const query = (simpleSearch.value || '').toLowerCase();
   const adv = {};
   document.querySelectorAll('.adv').forEach(function(i){ adv[i.dataset.key] = (i.value || '').toLowerCase(); });
-  table.querySelectorAll('tbody tr').forEach(function(row){
+  table.querySelectorAll('tbody tr[data-id]').forEach(function(row){
     const text = row.innerText.toLowerCase();
-    let show = text.includes(query);
+    let show = text.includes(query) && matchesTab(row);
     Object.keys(adv).forEach(function(key){ if(adv[key]) show = show && text.includes(adv[key]); });
     row.style.display = show ? '' : 'none';
   });
@@ -1043,10 +1085,21 @@ document.querySelectorAll('.adv').forEach(function(i){ i.addEventListener('input
 document.getElementById('tableReset').addEventListener('click', function(){
   simpleSearch.value = '';
   document.querySelectorAll('.adv').forEach(function(i){ i.value = ''; });
+  document.querySelectorAll('[data-student-filter]').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-student-filter="all"]').classList.add('active');
+  currentStudentTab = 'all';
   filterTable();
 });
 
-/* Visible-row helper shared by CSV + PDF export */
+document.querySelectorAll('[data-student-filter]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('[data-student-filter]').forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    currentStudentTab = this.dataset.studentFilter;
+    filterTable();
+  });
+});
+
 function getVisibleRowsData(){
   return Array.from(table.querySelectorAll('tbody tr'))
     .filter(function(r){ return r.style.display !== 'none' && r.querySelectorAll('td').length >= 4; })
@@ -1059,7 +1112,6 @@ function getVisibleRowsData(){
     });
 }
 
-/* Export CSV */
 document.getElementById('tableExportCsv').addEventListener('click', function(){
   const data = getVisibleRowsData();
   const lines = ['Name,Batch,Gender,Status'].concat(data.map(function(r){
@@ -1072,7 +1124,6 @@ document.getElementById('tableExportCsv').addEventListener('click', function(){
   a.click();
 });
 
-/* Export PDF (client-side, jsPDF + autotable) */
 document.getElementById('tableExportPdf').addEventListener('click', function(){
   const data = getVisibleRowsData();
   if(!data.length){
@@ -1097,7 +1148,6 @@ document.getElementById('tableExportPdf').addEventListener('click', function(){
   doc.save('Amruta-Arogya-Kendra-Trainees.pdf');
 });
 
-/* Student name tap-to-open tooltip (mobile-friendly, click to toggle) */
 document.querySelectorAll('.student-name').forEach(function(el){
   el.addEventListener('click', function(e){
     e.stopPropagation();
@@ -1112,7 +1162,6 @@ document.addEventListener('click', function(e){
   }
 });
 
-/* Global search: filters whole page-sections, shows "no results" state */
 document.getElementById('globalSearch').addEventListener('input', function(){
   const q = this.value.toLowerCase().trim();
   const sections = document.querySelectorAll('.page-section');
@@ -1125,7 +1174,6 @@ document.getElementById('globalSearch').addEventListener('input', function(){
   document.getElementById('noResults').classList.toggle('show', !anyVisible);
 });
 
-/* mark_Paid / deleteStudent / deleteBatch — same endpoints */
 window.markPaid = function(id){
   Swal.fire({ title: 'Mark as Paid?', icon: 'question', showCancelButton: true, confirmButtonColor: '#2d6a4f', confirmButtonText: 'Yes, mark paid' })
     .then(function(result){
@@ -1135,6 +1183,32 @@ window.markPaid = function(id){
       }
     });
 };
+
+/* ============== Complete → auto-generate certificate ==============
+   Marking a student "Completed" also auto-approves them server-side
+   (see /mark_completed). If they're already Paid, the certificate is
+   ready immediately, so we open it in a new tab right away instead of
+   making the admin hunt for a separate Cert button afterward. */
+window.markCompleted = function(id, alreadyPaid){
+  Swal.fire({ title: 'Mark training as completed?', icon: 'question', showCancelButton: true, confirmButtonColor: '#2d6a4f', confirmButtonText: 'Yes, complete' })
+    .then(function(result){
+      if(!result.isConfirmed) return;
+      Swal.fire({title:'Processing...', didOpen:function(){ Swal.showLoading(); }, allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false});
+      fetch('/mark_completed/' + id).then(function(){
+        if (alreadyPaid) {
+          return Swal.fire('Completed! 🎓', 'Opening the certificate now…', 'success').then(function(){
+            window.open('/certificate/' + id, '_blank');
+            location.reload();
+          });
+        } else {
+          return Swal.fire('Completed! 🎓', 'Verify their payment to enable the certificate download.', 'info').then(function(){
+            location.reload();
+          });
+        }
+      });
+    });
+};
+
 window.deleteStudent = function(id){
   let timerInterval;
   Swal.fire({
@@ -1164,7 +1238,6 @@ window.deleteBatch = function(id){
     });
 };
 
-/* Edit batch modal — same endpoint: /edit_batch/<id>/<start>/<end>/<capacity> */
 window.openEditBatchModal = function(id){
   Swal.fire({
     title: 'Edit Batch',
@@ -1192,17 +1265,8 @@ window.openEditBatchModal = function(id){
   });
 };
 
-/* Quick actions (front-end only placeholders) */
 document.getElementById('refreshBtn').addEventListener('click', function(){ location.reload(); });
-document.getElementById('notifyBtn').addEventListener('click', function(){
-  Swal.fire('Send Notifications', 'Connect this action to your messaging integration.', 'info');
-});
 
-/* ================= View Enrolled Students popup (per batch) =================
-   Shows only students the admin has accepted — i.e. payment_status === "Paid" —
-   pulled straight from the hidden data-* attributes already on the students table rows.
-   Split into separate Male / Female groups, each with its own count.
-   Also stamps a live "M · F" count badge onto each "View Enrolled Students" button. */
 (function enrolledStudentsPopup(){
   function getAccepted(batchId){
     const rows = Array.from(document.querySelectorAll('#table tbody tr[data-batch]'))
@@ -1243,7 +1307,6 @@ document.getElementById('notifyBtn').addEventListener('click', function(){
     const batchId = card.getAttribute('data-batch-id');
     const initial = getAccepted(batchId);
 
-    // live "M · F" count badge on the button itself
     const pill = document.createElement('span');
     pill.className = 'count-pill';
     pill.textContent = '♂ ' + initial.male.length + '  ♀ ' + initial.female.length;
@@ -1277,7 +1340,6 @@ document.getElementById('notifyBtn').addEventListener('click', function(){
   });
 })();
 
-/* ================= Charts: pie/donut-first, compact ================= */
 const totalStudents = {{ students|length|default(0) }};
 const paidStudents = {{ students|selectattr('payment_status','equalto','Paid')|list|length|default(0) }};
 const pendingStudents = {{ students|selectattr('payment_status','equalto','Pending')|list|length|default(0) }};
@@ -1320,6 +1382,230 @@ new Chart(document.getElementById('chartPayment').getContext('2d'), {
   });
 })();
 
+/* ============== MEDIA LIBRARY — simplified upload flow ==============
+   Previously: pick type from a dropdown FIRST, then a raw file input,
+   plus every option shown at once. Now: drop/click a file — the type
+   (photo vs video) is auto-detected from the file itself — title is
+   auto-filled from the filename, and category/batch/event/order are
+   tucked under a collapsed "More options" so the common case is just
+   "pick a file, confirm the title, upload". */
+const GALLERY_TAXONOMY = JSON.parse(document.getElementById('galleryTaxonomyData').textContent);
+let selectedCategory = null;
+let selectedSubcategory = null;
+
+function openAddMediaModal(){
+  selectedCategory = null;
+  selectedSubcategory = null;
+
+  const categoryTilesHtml = Object.entries(GALLERY_TAXONOMY).map(([key, cat]) => `
+    <button type="button" class="cat-tile-btn" data-cat="${key}">
+      <span class="cti">${cat.icon}</span>${cat.label}
+    </button>
+  `).join('');
+
+  Swal.fire({
+    title: 'Add Media',
+    width: 480,
+    html: `
+      <div class="quick-dropzone" id="quickDropzone">
+        <div style="font-size:28px; color:var(--secondary); margin-bottom:8px;"><i data-feather="upload-cloud"></i></div>
+        <div id="quickDropzoneText" style="font-weight:700; font-size:13.5px; color:var(--ink);">Click or drag a photo / video here</div>
+        <div style="font-size:11.5px; color:var(--ink-soft); margin-top:4px;">We'll detect photo vs video automatically</div>
+        <input type="file" id="m-file" accept="image/*,video/*" style="display:none;">
+      </div>
+
+      <div id="quickPreviewWrap" style="display:none; margin-top:12px; text-align:center;">
+        <img id="quickPreviewImg" style="max-height:130px; border-radius:12px; display:none;">
+        <div id="quickPreviewVideoLabel" style="display:none; font-size:13px; color:var(--ink-soft);">🎬 Video selected</div>
+      </div>
+
+      <div class="form-field" style="margin-top:14px; text-align:left;">
+        <label>Title</label>
+        <input type="text" id="m-title" class="input" placeholder="e.g. Panchakarma Practical" required>
+      </div>
+
+      <button type="button" id="quickYoutubeToggle" style="background:none; border:none; color:var(--secondary); font-size:12.5px; font-weight:700; cursor:pointer; margin-top:10px; padding:0;">
+        ▶ Or paste a YouTube link instead
+      </button>
+      <div class="form-field" id="m-url-wrap" style="margin-top:8px; display:none; text-align:left;">
+        <label>YouTube URL</label>
+        <input type="text" id="m-url" class="input" placeholder="https://youtube.com/watch?v=...">
+      </div>
+
+      <div class="form-field" style="margin-top:14px; text-align:left;">
+        <label>Where does this belong?</label>
+        <div class="cat-tile-grid" id="catTileGrid">${categoryTilesHtml}</div>
+        <div class="subcat-chip-row" id="subcatChipRow" style="display:none;"></div>
+      </div>
+
+      <details style="margin-top:14px; text-align:left;">
+        <summary style="cursor:pointer; font-weight:700; font-size:12.5px; color:var(--ink-soft);">Link to a batch or event (optional)</summary>
+        <div class="form-field" style="margin-top:10px;"><label>Batch</label><select id="m-batch" class="input">${document.getElementById('batchOptionsTpl').innerHTML}</select></div>
+        <div class="form-field" style="margin-top:8px;"><label>Event</label><select id="m-event" class="input">${document.getElementById('eventOptionsTpl').innerHTML}</select></div>
+      </details>
+    `,
+    showCancelButton: true,
+    confirmButtonText: 'Upload',
+    confirmButtonColor: '#2d6a4f',
+    didOpen: () => {
+      if (window.feather) feather.replace();
+
+      const dz = document.getElementById('quickDropzone');
+      const fileInput = document.getElementById('m-file');
+      const titleInput = document.getElementById('m-title');
+      const previewWrap = document.getElementById('quickPreviewWrap');
+      const previewImg = document.getElementById('quickPreviewImg');
+      const previewVideoLabel = document.getElementById('quickPreviewVideoLabel');
+      const urlWrap = document.getElementById('m-url-wrap');
+
+      dz.addEventListener('click', () => fileInput.click());
+      ['dragenter', 'dragover'].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); dz.style.borderColor = 'var(--secondary)'; }));
+      ['dragleave', 'drop'].forEach(evt => dz.addEventListener(evt, e => { e.preventDefault(); dz.style.borderColor = 'var(--line)'; }));
+      dz.addEventListener('drop', e => {
+        if (e.dataTransfer.files.length) {
+          fileInput.files = e.dataTransfer.files;
+          fileInput.dispatchEvent(new Event('change'));
+        }
+      });
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+
+        if (!titleInput.value.trim()) {
+          titleInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+        }
+
+        document.getElementById('quickDropzoneText').textContent = file.name;
+        previewWrap.style.display = 'block';
+
+        if (file.type.startsWith('video/')) {
+          previewImg.style.display = 'none';
+          previewVideoLabel.style.display = 'block';
+        } else {
+          previewVideoLabel.style.display = 'none';
+          const reader = new FileReader();
+          reader.onload = e => {
+            previewImg.src = e.target.result;
+            previewImg.style.display = 'inline-block';
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      document.getElementById('quickYoutubeToggle').addEventListener('click', () => {
+        const showingUrl = urlWrap.style.display === 'block';
+        urlWrap.style.display = showingUrl ? 'none' : 'block';
+        dz.style.display = showingUrl ? 'block' : 'none';
+        previewWrap.style.display = 'none';
+      });
+
+      // Category tile -> reveal that category's fixed subcategory chips
+      document.querySelectorAll('#catTileGrid .cat-tile-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#catTileGrid .cat-tile-btn').forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          selectedCategory = btn.dataset.cat;
+          selectedSubcategory = null;
+
+          const subs = GALLERY_TAXONOMY[selectedCategory].subcategories;
+          const row = document.getElementById('subcatChipRow');
+          row.innerHTML = subs.map(s => `<button type="button" class="subcat-chip" data-sub="${s}">${s}</button>`).join('');
+          row.style.display = 'flex';
+
+          row.querySelectorAll('.subcat-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+              row.querySelectorAll('.subcat-chip').forEach(c => c.classList.remove('selected'));
+              chip.classList.add('selected');
+              selectedSubcategory = chip.dataset.sub;
+            });
+          });
+        });
+      });
+    },
+    preConfirm: () => {
+      const title = document.getElementById('m-title').value.trim();
+      if (!title) { Swal.showValidationMessage('Please give it a title'); return false; }
+      if (!selectedCategory) { Swal.showValidationMessage('Please pick where this belongs'); return false; }
+
+      const urlWrap = document.getElementById('m-url-wrap');
+      const usingYoutube = urlWrap.style.display === 'block';
+
+      const fd = new FormData();
+      fd.append('title', title);
+      fd.append('category', selectedCategory);
+      fd.append('subcategory', selectedSubcategory || '');
+      fd.append('batch_id', document.getElementById('m-batch').value);
+      fd.append('event_id', document.getElementById('m-event').value);
+
+      if (usingYoutube) {
+        const url = document.getElementById('m-url').value.trim();
+        if (!url) { Swal.showValidationMessage('Please paste a YouTube URL'); return false; }
+        fd.append('media_type', 'youtube');
+        fd.append('external_url', url);
+      } else {
+        const fileEl = document.getElementById('m-file');
+        if (!fileEl.files[0]) { Swal.showValidationMessage('Please choose a photo or video'); return false; }
+        const isVideo = fileEl.files[0].type.startsWith('video/');
+        fd.append('media_type', isVideo ? 'video' : 'photo');
+        fd.append('file', fileEl.files[0]);
+      }
+      return fd;
+    }
+  }).then(result => {
+    if (!result.isConfirmed) return;
+    Swal.fire({ title:'Uploading...', didOpen:() => Swal.showLoading(), allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false });
+    fetch('/admin/media/add', { method:'POST', body: result.value })
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'success') {
+          Swal.fire('Added!', '', 'success').then(() => location.reload());
+        } else {
+          Swal.fire('Error', data.message || 'Something went wrong', 'error');
+        }
+      })
+      .catch(() => Swal.fire('Error', 'Upload failed', 'error'));
+  });
+}
+
+function toggleMediaField(id, field){
+  fetch(`/admin/media/toggle/${id}/${field}`).then(() => location.reload());
+}
+
+function deleteMedia(id){
+  Swal.fire({ title:'Delete this media?', icon:'warning', showCancelButton:true, confirmButtonColor:'#d62839', confirmButtonText:'Delete' })
+    .then(r => { if (r.isConfirmed) fetch(`/admin/media/delete/${id}`).then(() => location.reload()); });
+}
+
+document.getElementById('addEventForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const fd = new FormData();
+  fd.append('name', document.getElementById('eventName').value);
+  fd.append('event_date', document.getElementById('eventDate').value);
+  fetch('/admin/events/add', { method:'POST', body: fd }).then(() => location.reload());
+});
+
+function deleteEvent(id){
+  Swal.fire({ title:'Delete event?', icon:'warning', showCancelButton:true, confirmButtonColor:'#d62839' })
+    .then(r => { if (r.isConfirmed) fetch(`/admin/events/delete/${id}`).then(() => location.reload()); });
+}
+
+document.querySelectorAll('[data-media-filter]').forEach(btn => {
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('[data-media-filter]').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    const filter = this.dataset.mediaFilter;
+    document.querySelectorAll('#mediaGrid .batch-card').forEach(card => {
+      let show;
+      if (filter === 'photo') show = card.dataset.type === 'photo';
+      else if (filter === 'video') show = card.dataset.type === 'video' || card.dataset.type === 'youtube';
+      else if (filter === 'featured') show = card.dataset.featured === 'yes';
+      else if (filter === 'archived') show = card.dataset.archived === 'yes';
+      else show = card.dataset.archived !== 'yes';
+      card.style.display = show ? '' : 'none';
+    });
+  });
+});
 </script>
 
 </body>
