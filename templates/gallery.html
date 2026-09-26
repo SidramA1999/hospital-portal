@@ -1,18 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery — Amrutha Aarogya Kendra Speciality Ayurvedic Hospital</title>
+<link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style>
-.gallery-card{
-    border-radius:20px;
-    overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-    transition:.3s;
+:root{
+  --deep-1:#08261c; --deep-2:#0f3a29; --deep-3:#175136;
+  --gold:#cf9f45; --gold-light:#e8c877; --leaf:#7fb885;
+  --paper:#f6f3ea; --ink:#12271e; --ink-soft:#3c5548;
+  --glass-fill: rgba(255,255,255,0.10); --glass-fill-strong: rgba(255,255,255,0.16);
+  --glass-edge-top: rgba(255,255,255,0.55); --glass-edge-bottom: rgba(0,0,0,0.18); --glass-blur:22px;
+  --radius-lg:28px; --radius-md:20px; --radius-sm:14px;
+  --font-display:'Fraunces', serif; --font-body:'Manrope', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{ box-sizing:border-box; }
+body{ margin:0; font-family:var(--font-body); background:var(--paper); color:var(--ink); }
+
+.glass{
+  position:relative;
+  background:linear-gradient(180deg, var(--glass-fill-strong), var(--glass-fill));
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  border-radius:var(--radius-lg);
+  border-top:1.5px solid var(--glass-edge-top);
+  border-left:1px solid rgba(255,255,255,0.28);
+  border-bottom:1.5px solid var(--glass-edge-bottom);
+  border-right:1px solid rgba(0,0,0,0.08);
+  box-shadow:0 18px 45px rgba(6,20,14,0.28), inset 0 1px 0 rgba(255,255,255,0.35);
 }
 
-.gallery-card:hover{
-    transform:translateY(-8px);
+.navbar{
+  position:sticky; top:14px; z-index:1000; margin:14px auto; max-width:1180px;
+  display:flex; justify-content:space-between; align-items:center; padding:10px 22px;
+  background:linear-gradient(180deg, rgba(20,60,44,.65), rgba(10,38,28,.65));
+  backdrop-filter:blur(20px) saturate(180%); -webkit-backdrop-filter:blur(20px) saturate(180%);
+  border-radius:100px; border-top:1.5px solid rgba(255,255,255,.45); border-bottom:1px solid rgba(0,0,0,.2);
+  box-shadow:0 16px 40px rgba(0,0,0,.25);
+}
+.logo-area{ display:flex; align-items:center; gap:12px; }
+.logo{ width:48px; height:48px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,.4); }
+.navtitle{ color:#fdfcf8; font-family:var(--font-display); font-weight:600; font-size:16px; line-height:1.15; }
+.navtitle span{ display:block; font-family:var(--font-body); font-size:10.5px; font-weight:500; letter-spacing:1.2px; text-transform:uppercase; opacity:.75; color:var(--gold-light); margin-top:2px; }
+.home-btn{
+  text-decoration:none; color:#fdfcf8; padding:9px 18px; border-radius:100px;
+  background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.2); font-weight:600; font-size:13px; transition:.25s;
+}
+.home-btn:hover{ background:rgba(255,255,255,.18); transform:translateY(-2px); }
+
+.gallery-header{ text-align:center; padding:56px 20px 10px; }
+.gallery-header .eyebrow{
+  display:inline-block; font-family:var(--font-mono); font-size:11.5px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:10px;
+}
+.gallery-header h1{ font-family:var(--font-display); font-weight:600; font-size:clamp(28px,4vw,40px); margin:0 0 8px; color:var(--ink); }
+.gallery-header p{ color:var(--ink-soft); font-size:15px; max-width:520px; margin:0 auto; }
+
+.category-menu{
+  max-width:1000px; margin:36px auto 0; padding:0 20px;
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px;
+}
+.category-tile{
+  text-decoration:none; color:inherit;
+  padding:26px 18px; border-radius:var(--radius-md); text-align:center;
+  background:rgba(255,255,255,.6); border:1px solid rgba(18,39,30,0.08);
+  box-shadow:0 10px 26px rgba(6,20,14,0.10); transition:.3s; cursor:pointer;
+}
+.category-tile:hover, .category-tile.active{ transform:translateY(-4px); box-shadow:0 16px 34px rgba(6,20,14,0.18); border-color:var(--gold); }
+.category-tile .ct-icon{ font-size:32px; display:block; margin-bottom:10px; }
+.category-tile .ct-label{ font-family:var(--font-display); font-weight:600; font-size:14.5px; color:var(--ink); }
+.category-tile .ct-count{ font-family:var(--font-mono); font-size:11px; color:var(--ink-soft); margin-top:4px; }
+
+.category-section{ max-width:1000px; margin:60px auto 0; padding:0 20px; scroll-margin-top:110px; }
+.category-section-head{ text-align:center; margin-bottom:28px; }
+.category-section-head .cs-icon{ font-size:34px; display:block; margin-bottom:6px; }
+.category-section-head h2{ font-family:var(--font-display); font-weight:600; font-size:26px; margin:0; color:var(--ink); }
+
+.subcategory-block{ margin-bottom:36px; }
+.subcategory-title{
+  font-family:var(--font-body); font-weight:800; font-size:12.5px; letter-spacing:1px; text-transform:uppercase;
+  color:var(--leaf); margin:0 0 14px; padding-bottom:8px; border-bottom:1px solid rgba(18,39,30,0.1);
 }
 
-.gallery-card img{
-    width:100%;
-    height:250px;
-    object-fit:cover;
+.media-grid{
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:16px;
 }
+.g-item{
+  position:relative; border-radius:var(--radius-md); overflow:hidden; cursor:pointer;
+  aspect-ratio:4/3; background:#e8efe9; box-shadow:0 8px 20px rgba(6,20,14,0.10); transition:.3s;
+}
+.g-item:hover{ transform:translateY(-4px); box-shadow:0 16px 30px rgba(6,20,14,0.18); }
+.g-item img{ width:100%; height:100%; object-fit:cover; display:block; transition:.4s; }
+.g-item:hover img{ transform:scale(1.06); }
+.g-item .play-badge{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.25); color:#fff; font-size:30px;
+}
+.g-item .g-caption{
+  position:absolute; left:0; right:0; bottom:0; padding:10px 12px 9px;
+  background:linear-gradient(0deg, rgba(8,38,28,.82), transparent);
+  color:#fdfcf8; font-size:12.5px; font-weight:700;
+}
+
+.empty-gallery{ text-align:center; padding:70px 20px; color:var(--ink-soft); }
+
+.lightbox{
+  display:none; position:fixed; inset:0; z-index:3000;
+  background:rgba(6,20,14,0.92); align-items:center; justify-content:center; padding:20px;
+}
+.lightbox.open{ display:flex; }
+.lightbox-inner{ max-width:800px; width:100%; }
+.lightbox-media{ width:100%; max-height:60vh; border-radius:var(--radius-md); overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center; }
+.lightbox-media img, .lightbox-media iframe{ width:100%; height:100%; max-height:60vh; object-fit:contain; border:0; }
+.lightbox-info{ padding:18px 6px 0; color:#fdfcf8; }
+.lightbox-info h3{ font-family:var(--font-display); margin:0 0 4px; font-size:19px; }
+.lightbox-info .meta{ font-size:12.5px; color:var(--gold-light); margin-bottom:8px; }
+.lightbox-nav{ display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+.lightbox-nav button{
+  background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); color:#fdfcf8;
+  width:42px; height:42px; border-radius:50%; cursor:pointer; font-size:16px;
+}
+.lightbox-nav .counter{ color:rgba(253,252,248,.7); font-family:var(--font-mono); font-size:12.5px; }
+.lightbox-close{
+  position:absolute; top:20px; right:24px; background:none; border:none; color:#fdfcf8; font-size:26px; cursor:pointer;
+}
+
+.footer{ text-align:center; background:var(--deep-1); padding:20px; color:rgba(253,252,248,0.6); font-size:12.5px; margin-top:60px; }
 </style>
+</head>
+
+<body>
+
+<div class="navbar glass">
+  <div class="logo-area">
+    <img src="{{ url_for('static', filename='logo.jpg') }}" class="logo" alt="Hospital logo">
+    <div class="navtitle">Amrutha Aarogya Kendra<span>Speciality Ayurveda Hospital</span></div>
+  </div>
+  <a href="/" class="home-btn">🏠 Home</a>
+</div>
+
+<div class="gallery-header">
+  <span class="eyebrow">Kalloli · Belagavi</span>
+  <h1>Explore Our Hospital</h1>
+  <p>Pick a category below to browse — no filters, just pictures.</p>
+</div>
+
+{% if grouped and grouped|length > 0 %}
+
+  <div class="category-menu">
+    {% for key, cat in grouped.items() %}
+    <a href="#cat-{{ key }}" class="category-tile" data-jump="{{ key }}">
+      <span class="ct-icon">{{ cat.icon }}</span>
+      <span class="ct-label">{{ cat.label }}</span>
+      <span class="ct-count">{{ cat.subs.values()|map('length')|sum }} items</span>
+    </a>
+    {% endfor %}
+  </div>
+
+  {% for key, cat in grouped.items() %}
+  <div class="category-section" id="cat-{{ key }}">
+    <div class="category-section-head">
+      <span class="cs-icon">{{ cat.icon }}</span>
+      <h2>{{ cat.label }}</h2>
+    </div>
+
+    {% for sub_name, items in cat.subs.items() %}
+    <div class="subcategory-block">
+      <div class="subcategory-title">{{ sub_name }}</div>
+      <div class="media-grid">
+        {% for m in items %}
+        <div class="g-item"
+             data-title="{{ m.title }}"
+             data-type="{{ m.media_type }}"
+             data-src="{% if m.media_type == 'youtube' %}{{ m.external_url }}{% else %}{{ url_for('static', filename='gallery/' + (m.image or '')) }}{% endif %}"
+             data-meta="{{ cat.label }} · {{ sub_name }}{% if m.batch_ref %} · {{ m.batch_ref.start_date }}{% endif %}{% if m.event_ref %} · {{ m.event_ref.name }}{% endif %}">
+          {% if m.media_type in ('video', 'youtube') %}
+            <div class="play-badge"><i class="fa-solid fa-circle-play"></i></div>
+          {% endif %}
+          <img src="{{ url_for('static', filename='gallery/' + (m.thumbnail or m.image or '')) }}" alt="{{ m.title }}" loading="lazy">
+          <div class="g-caption">{{ m.title }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+{% else %}
+  <div class="empty-gallery">No photos here yet — check back soon.</div>
+{% endif %}
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <div class="lightbox-inner">
+    <div class="lightbox-media" id="lightboxMedia"></div>
+    <div class="lightbox-info">
+      <h3 id="lightboxTitle"></h3>
+      <div class="meta" id="lightboxMeta"></div>
+    </div>
+    <div class="lightbox-nav">
+      <button type="button" id="lightboxPrev">‹</button>
+      <span class="counter" id="lightboxCounter"></span>
+      <button type="button" id="lightboxNext">›</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer">© 2026 Amrutha Aarogya Kendra Ayurveda Speciality Hospital</div>
+
+<script>
+document.querySelectorAll('.category-tile').forEach(tile => {
+  tile.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('cat-' + tile.dataset.jump).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+const items = Array.from(document.querySelectorAll('.g-item'));
+let currentIndex = 0;
+
+const lightbox = document.getElementById('lightbox');
+const lbMedia = document.getElementById('lightboxMedia');
+const lbTitle = document.getElementById('lightboxTitle');
+const lbMeta = document.getElementById('lightboxMeta');
+const lbCounter = document.getElementById('lightboxCounter');
+
+function youtubeEmbedUrl(url){
+  const match = url.match(/(?:youtu\.be\/|v=)([\w-]{11})/);
+  const id = match ? match[1] : '';
+  return `https://www.youtube.com/embed/${id}`;
+}
+
+function openLightbox(index){
+  currentIndex = index;
+  renderLightbox();
+  lightbox.classList.add('open');
+}
+
+function renderLightbox(){
+  const el = items[currentIndex];
+  if (!el) return;
+  const type = el.dataset.type;
+  const src = el.dataset.src;
+
+  if (type === 'youtube') {
+    lbMedia.innerHTML = `<iframe src="${youtubeEmbedUrl(src)}" allowfullscreen></iframe>`;
+  } else if (type === 'video') {
+    lbMedia.innerHTML = `<video src="${src}" controls style="max-height:60vh; width:100%;"></video>`;
+  } else {
+    lbMedia.innerHTML = `<img src="${src}" alt="${el.dataset.title}">`;
+  }
+
+  lbTitle.textContent = el.dataset.title;
+  lbMeta.textContent = el.dataset.meta;
+  lbCounter.textContent = `${currentIndex + 1} / ${items.length}`;
+}
+
+items.forEach((el, i) => el.addEventListener('click', () => openLightbox(i)));
+
+document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('open'));
+lightbox.addEventListener('click', e => { if (e.target === lightbox) lightbox.classList.remove('open'); });
+
+document.getElementById('lightboxPrev').addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + items.length) % items.length;
+  renderLightbox();
+});
+document.getElementById('lightboxNext').addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % items.length;
+  renderLightbox();
+});
+
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('open')) return;
+  if (e.key === 'Escape') lightbox.classList.remove('open');
+  if (e.key === 'ArrowLeft') document.getElementById('lightboxPrev').click();
+  if (e.key === 'ArrowRight') document.getElementById('lightboxNext').click();
+});
+</script>
+
+</body>
+</html>
