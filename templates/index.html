@@ -30,6 +30,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
@@ -376,9 +377,6 @@ body{
 
 /* =========================================================
    WAVE TRANSITION
-   Bridges the hero's dark liquid background into the
-   physician section using the same tincture/gold material,
-   instead of a hard section edge.
 ========================================================= */
 .wave-divider{
   display:block;
@@ -392,8 +390,6 @@ body{
 
 /* =========================================================
    MEET THE PHYSICIAN + HOSPITAL STATS
-   Reuses the existing vial/glass vocabulary rather than
-   introducing new visual language.
 ========================================================= */
 .physician-section{
   position:relative;
@@ -696,11 +692,7 @@ body{
 
    
 /* =========================================================
-   APOTHECARY VIALS — signature element
-   The three program-info cards (and the physician stats
-   above) are rendered as frosted glass vials with a rising
-   tincture fill, echoing real dispensary bottles rather than
-   decorative glassmorphism.
+   APOTHECARY VIALS
 ========================================================= */
 .cards{
   display:flex;
@@ -774,8 +766,63 @@ body{
 }
 
 /* =========================================================
-   GALLERY SLIDER
+   FEATURED GALLERY GRID (admin-curated, via Media Library)
+   Replaces the old hardcoded 8-image slider. Auto-fit so it
+   looks intentional whether there's 1 photo or a dozen —
+   never a lopsided single column stretched full-width, and
+   never a cramped forced grid on mobile.
 ========================================================= */
+.featured-grid{
+  max-width:1000px;
+  margin:34px auto 0;
+  padding:0 20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+  gap:18px;
+}
+.featured-item{
+  position:relative;
+  aspect-ratio:4/3;
+  border-radius:var(--radius-md);
+  overflow:hidden;
+  box-shadow:0 14px 32px rgba(6,20,14,0.16);
+  transition:.4s;
+  text-decoration:none;
+  display:block;
+}
+.featured-item:hover{ transform:translateY(-6px); box-shadow:0 22px 44px rgba(6,20,14,0.26); }
+.featured-item img{ width:100%; height:100%; object-fit:cover; display:block; transition:.5s; }
+.featured-item:hover img{ transform:scale(1.08); }
+.featured-item .fi-label{
+  position:absolute; left:0; right:0; bottom:0;
+  padding:14px 14px 12px;
+  background:linear-gradient(0deg, rgba(8,38,28,.88), transparent);
+  color:#fdfcf8; font-family:var(--font-body); font-weight:700; font-size:13px;
+  text-align:left;
+}
+.featured-item .fi-play{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.28); color:#fff; font-size:30px; z-index:1;
+}
+
+.view-gallery-link{
+  display:inline-block;
+  margin-top:28px;
+  color:var(--deep-2);
+  font-weight:700;
+  font-size:14px;
+  text-decoration:none;
+  border-bottom:2px solid var(--gold);
+  padding-bottom:2px;
+  transition:.25s;
+}
+.view-gallery-link:hover{ color:var(--terracotta-jar); transform:translateY(-1px); display:inline-block; }
+
+body.dark-mode .featured-item{ box-shadow:0 14px 32px rgba(0,0,0,0.4); }
+body.dark-mode .view-gallery-link{ color:var(--gold-light); }
+
+/* Legacy slider — kept only as the automatic fallback shown
+   before you've uploaded anything via Admin → Media Library */
 .slider{ margin-top:20px; }
 .slider-frame{
   display:inline-block;
@@ -1240,14 +1287,36 @@ body.dark-mode .credential-pills span{ background:rgba(255,255,255,0.08); color:
   <button onclick="openRules()" class="apply-btn" style="margin-top:34px;">Register Now</button>
 </div>
 
-<!-- GALLERY -->
-<div class="section">
+<!-- GALLERY — now pulls real uploads from Admin → Media Library.
+     Shows your Featured photos first; if you haven't marked anything
+     Featured yet, falls back to your most recent visible uploads;
+     if you haven't uploaded anything at all yet, falls back to the
+     original static slider so the section is never empty. -->
+<div class="section fade">
   <h2>Explore the Hospital</h2>
-  <div class="slider">
-    <div class="slider-frame glass">
-      <img id="slide" src="/static/img1.jpg">
+  <p>Clinical training, Panchakarma practice, and hospital life — in pictures.</p>
+
+  {% if featured_media and featured_media|length > 0 %}
+    <div class="featured-grid">
+      {% for m in featured_media %}
+      <a href="/gallery" class="featured-item">
+        {% if m.media_type in ('video', 'youtube') %}
+          <div class="fi-play"><i class="fa-solid fa-circle-play"></i></div>
+        {% endif %}
+        <img src="{{ url_for('static', filename='gallery/' + (m.thumbnail or m.image or '')) }}" alt="{{ m.title }}" loading="lazy">
+        <div class="fi-label">{{ m.title }}</div>
+      </a>
+      {% endfor %}
     </div>
-  </div>
+    <a href="/gallery" class="view-gallery-link">View Full Gallery →</a>
+
+  {% else %}
+    <div class="slider">
+      <div class="slider-frame glass">
+        <img id="slide" src="/static/img1.jpg">
+      </div>
+    </div>
+  {% endif %}
 </div>
 
 <!-- FAQ -->
@@ -1374,16 +1443,19 @@ function revealOnScroll(){
 window.addEventListener('scroll', revealOnScroll);
 window.addEventListener('DOMContentLoaded', revealOnScroll);
 
-/* IMAGE SLIDER */
-let images = [
-  "/static/img1.jpg","/static/img2.jpg","/static/img3.jpg","/static/img4.jpg",
-  "/static/img5.jpg","/static/img6.jpg","/static/img7.jpg","/static/img8.jpg"
-];
-let i = 0;
-setInterval(() => {
-  i = (i + 1) % images.length;
-  document.getElementById("slide").src = images[i];
-}, 3000);
+/* IMAGE SLIDER — only runs when the fallback slider is actually
+   present in the page (i.e. no uploaded media yet) */
+if (document.getElementById('slide')) {
+  let images = [
+    "/static/img1.jpg","/static/img2.jpg","/static/img3.jpg","/static/img4.jpg",
+    "/static/img5.jpg","/static/img6.jpg","/static/img7.jpg","/static/img8.jpg"
+  ];
+  let i = 0;
+  setInterval(() => {
+    i = (i + 1) % images.length;
+    document.getElementById("slide").src = images[i];
+  }, 3000);
+}
 </script>
 
 <!-- ============ Physician stats: count-up + vial fill on scroll into view ============ -->
