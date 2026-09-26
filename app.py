@@ -1250,7 +1250,7 @@ def ensure_gallery_columns():
         'featured':      "BOOLEAN DEFAULT FALSE",
         'is_visible':    "BOOLEAN DEFAULT TRUE",
         'display_order': "INTEGER DEFAULT FALSE",
-        'is_archived':   "BOOLEAN DEFAULT FASLE",
+        'is_archived':   "BOOLEAN DEFAULT 0",
     }
     with db.engine.connect() as conn:
         for col, coltype in new_cols.items():
