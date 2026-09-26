@@ -141,7 +141,7 @@ h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(
     <div class="check-badge"><i class="fa-solid fa-check"></i></div>
 
     <h2>Registration Successful</h2>
-    <p class="subtitle">Your application has been submitted successfully.</p>
+    <p class="subtitle">Your application has been received and your seat has been reserved successfully.</p>
 
     <!-- PHOTO -->
     {% if student and student.photo %}
@@ -173,27 +173,66 @@ h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(
     {% endif %}
 
     {% if batch_start and batch_end %}
-    <div class="batch-card">
-      <div class="batch-card-label"><i class="fa-solid fa-calendar-days"></i> Your Batch</div>
-      <div class="batch-card-dates">{{ batch_start }} → {{ batch_end }}</div>
-      <div class="batch-card-grid">
-        <div>
-          <span class="bcg-label">Reporting Date</span>
-          <span class="bcg-value">{{ reporting_date or batch_start }}</span>
-        </div>
-        <div>
-          <span class="bcg-label">Location</span>
-          <span class="bcg-value">Amruta Aarogya Kendra, Kalloli</span>
-        </div>
-      </div>
+<div class="batch-card">
+
+  <div class="batch-card-label">
+    <i class="fa-solid fa-calendar-days"></i>
+    Training Batch Details
+  </div>
+
+  <div class="batch-card-dates">
+    {{ batch_start }} → {{ batch_end }}
+  </div>
+
+  <div class="batch-card-grid">
+
+    <div>
+      <span class="bcg-label">Seat Number</span>
+      <span class="bcg-value">
+        {{ student.seat if student and student.seat else 'TBA' }}
+      </span>
     </div>
-    {% endif %}
+
+    <div>
+      <span class="bcg-label">Duration</span>
+      <span class="bcg-value">
+        {{ duration_days or 30 }} Days
+      </span>
+    </div>
+
+    <div>
+      <span class="bcg-label">Reporting Date</span>
+      <span class="bcg-value">
+        {{ reporting_date or batch_start }}
+      </span>
+    </div>
+
+    <div>
+      <span class="bcg-label">Reporting Time</span>
+      <span class="bcg-value">
+        09:00 AM
+      </span>
+    </div>
+
+    <div style="grid-column:1/-1;">
+      <span class="bcg-label">Venue</span>
+      <span class="bcg-value">
+        Amrutha Aarogya Kendra<br>
+        Speciality Ayurveda Hospital<br>
+        Kalloli, Belagavi
+      </span>
+    </div>
+
+  </div>
+
+</div>
+{% endif %}
 
     {% if student %}
     <div class="info-list">
 
       <div class="info-row">
-        <span class="k">Applicant</span>
+        <span class="k">Applicant Name</span>
         <span class="v">{{ student.name }}</span>
       </div>
 
@@ -203,6 +242,20 @@ h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(
         <span class="v">{{ student.seat }}</span>
       </div>
       {% endif %}
+
+      {% if student.email %}
+<div class="info-row">
+  <span class="k">Email</span>
+  <span class="v">{{ student.email }}</span>
+</div>
+{% endif %}
+
+{% if student.phone %}
+<div class="info-row">
+  <span class="k">Phone</span>
+  <span class="v">{{ student.phone }}</span>
+</div>
+{% endif %}
 
       {% if student.transaction_id %}
       <div class="info-row">
@@ -225,8 +278,10 @@ h2{ font-family:var(--font-display); font-weight:600; font-size:24px; color:var(
     {% if student.seat and (not student.payment_status or student.payment_status|lower == 'pending') %}
     <div class="notice warn">
       <i class="fa-solid fa-chair"></i>
-      Your selected seat <strong>{{ student.seat }}</strong>
-      has been reserved and is awaiting payment verification.
+      Your seat <strong>{{ student.seat }}</strong>
+      has been reserved for the batch
+      <strong>{{ batch_start }} → {{ batch_end }}</strong>
+      and is awaiting payment verification.
     </div>
     {% endif %}
 
