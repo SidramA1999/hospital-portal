@@ -529,10 +529,14 @@ def success(student_id):
     application_id = f"AAK-{student.id:05d}"
 
     return render_template(
-        "success.html",
-        student=student,
-        application_id=application_id
-    )
+    "success.html",
+    student=student,
+    application_id=application_id,
+    batch_start=batch_start_fmt,
+    batch_end=batch_end_fmt,
+    reporting_date=batch_start_fmt,
+    duration_days=duration_days,
+)
 
 ##------AI 
 # ✅ IMPORT
