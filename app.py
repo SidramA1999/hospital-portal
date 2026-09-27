@@ -1556,17 +1556,37 @@ def draw_certificate(
 
     if trainee_photo:
         try:
-            trainee_img = ImageReader(f"static/uploads/photos/{trainee_photo}")
-            c.drawImage(trainee_img, photo_x, photo_y, width=photo_w, height=photo_h,
-                        preserveAspectRatio=True, mask='auto')
+    
+            photo_path = os.path.join(
+                app.root_path,
+                "static",
+                "uploads",
+                "photos",
+                trainee_photo
+            )
+    
+            print("PHOTO PATH:", photo_path)
+            print("PHOTO EXISTS:", os.path.exists(photo_path))
+    
+            if os.path.exists(photo_path):
+    
+                trainee_img = ImageReader(photo_path)
+    
+                c.drawImage(
+                    trainee_img,
+                    photo_x,
+                    photo_y,
+                    width=photo_w,
+                    height=photo_h,
+                    preserveAspectRatio=True,
+                    mask='auto'
+                )
+    
+            else:
+                print("PHOTO NOT FOUND:", photo_path)
+    
         except Exception as e:
             print("Photo Error:", e)
-
-        try:
-            seal = ImageReader(seal_path)
-            c.drawImage(seal, photo_x + photo_w - 32, photo_y - 8, width=64, height=64, mask='auto')
-        except Exception as e:
-            print("Seal Error:", e)
     else:
         # No trainee photo on file (blank template / quick certificate) —
         # show the seal alone, centered in the same column, instead of
