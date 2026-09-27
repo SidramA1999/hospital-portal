@@ -1581,21 +1581,43 @@ def draw_certificate(
             print("PHOTO EXISTS:", os.path.exists(photo_path))
     
             if os.path.exists(photo_path):
+
+    trainee_img = ImageReader(photo_path)
+
+    c.drawImage(
+        trainee_img,
+        photo_x,
+        photo_y,
+        width=photo_w,
+        height=photo_h,
+        preserveAspectRatio=True,
+        mask='auto'
+    )
+
+    # Draw seal over photo
+    seal_full_path = os.path.join(
+        app.root_path,
+        "static",
+        "seal.png"
+    )
+
+    if os.path.exists(seal_full_path):
+
+            seal = ImageReader(seal_full_path)
     
-                trainee_img = ImageReader(photo_path)
+            seal_size = 60
     
-                c.drawImage(
-                    trainee_img,
-                    photo_x,
-                    photo_y,
-                    width=photo_w,
-                    height=photo_h,
-                    preserveAspectRatio=True,
-                    mask='auto'
-                )
+            c.drawImage(
+                seal,
+                photo_x + photo_w - 25,
+                photo_y - 5,
+                width=seal_size,
+                height=seal_size,
+                mask='auto'
+            )
     
-            else:
-                print("PHOTO NOT FOUND:", photo_path)
+    else:
+        print("PHOTO NOT FOUND:", photo_path)
     
         except Exception as e:
             print("Photo Error:", e)
