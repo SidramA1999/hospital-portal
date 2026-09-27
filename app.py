@@ -857,6 +857,7 @@ def mark_paid(id):
     s = db.session.get(Student, id)
     if s:
         s.payment_status = "Paid"
+        s.application_status = "Approved"
         db.session.commit()
 
         threading.Thread(
