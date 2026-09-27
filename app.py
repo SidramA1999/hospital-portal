@@ -1005,15 +1005,23 @@ def export_excel():
 @app.route('/certificate/<int:id>')
 def certificate(id):
     s = db.session.get(Student, id)
-    with app.app_context():
-        s = Student.query.get(52)
-        print("PHOTO FIELD:", s.photo)
+
     if s is None:
         return "Student not found", 404
+    
+    print("ID:", s.id)
+    print("NAME:", s.name)
+    print("PHOTO FIELD:", s.photo)
+    print("APP STATUS:", s.application_status)
+    print("PAY STATUS:", s.payment_status)
+    print("COMP STATUS:", s.completion_status)
+    
     if s.application_status != "Approved":
         return "Certificate available only for approved trainees"
+    
     if s.payment_status != "Paid":
         return "Payment not completed"
+    
     if s.completion_status != "Completed":
         return "Training not completed"
 
