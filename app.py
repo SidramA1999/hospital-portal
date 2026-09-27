@@ -1007,7 +1007,7 @@ def certificate(id):
     s = db.session.get(Student, id)
     with app.app_context():
         s = Student.query.get(52)
-        print("PHOTO FIELD:", s.photo) where to check this
+        print("PHOTO FIELD:", s.photo)
     if s is None:
         return "Student not found", 404
     if s.application_status != "Approved":
