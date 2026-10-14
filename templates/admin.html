@@ -509,17 +509,19 @@ body{
       </div>
     </section>
 
-    <div class="section-title">Batches</div>
+    <section class="page-section" id="batches">
 
-<div style="margin-bottom:15px;">
-  <select id="batchViewFilter" class="input" style="max-width:240px;">
-    <option value="current">Current Batches</option>
-    <option value="archived">Archived Batches</option>
-    <option value="all">All Batches</option>
-  </select>
-</div>
+  <div class="section-title">Batches</div>
 
-<p class="section-sub">Manage active and upcoming training batches.</p>
+  <div style="margin-bottom:15px;">
+    <select id="batchViewFilter" class="input" style="max-width:240px;">
+      <option value="current">Current Batches</option>
+      <option value="archived">Archived Batches</option>
+      <option value="all">All Batches</option>
+    </select>
+  </div>
+
+  <p class="section-sub">Manage active and upcoming training batches.</p>
 
       <div class="batch-cards">
         {% set batch_list = batches|default([]) %}
