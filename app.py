@@ -513,8 +513,7 @@ def admin():
     for b in all_batches:
         try:
             end_date = datetime.strptime(b.end_date, "%Y-%m-%d")
-            if end_date < today:
-                continue
+            b.is_archived_batch = end_date < today
             b.start_display = datetime.strptime(b.start_date, "%Y-%m-%d").strftime("%d-%b-%Y")
             b.end_display = datetime.strptime(b.end_date, "%Y-%m-%d").strftime("%d-%b-%Y")
             batches.append(b)
