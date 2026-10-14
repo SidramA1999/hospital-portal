@@ -509,9 +509,17 @@ body{
       </div>
     </section>
 
-    <section class="page-section" id="batches">
-      <div class="section-title">Batches</div>
-      <p class="section-sub">Manage active and upcoming training batches.</p>
+    <div class="section-title">Batches</div>
+
+<div style="margin-bottom:15px;">
+  <select id="batchViewFilter" class="input" style="max-width:240px;">
+    <option value="current">Current Batches</option>
+    <option value="archived">Archived Batches</option>
+    <option value="all">All Batches</option>
+  </select>
+</div>
+
+<p class="section-sub">Manage active and upcoming training batches.</p>
 
       <div class="batch-cards">
         {% set batch_list = batches|default([]) %}
@@ -520,7 +528,7 @@ body{
           {% set filled = (b.filled_slots|default(0)) or 0 %}
           {% set remaining = (cap - filled) if cap > 0 else 0 %}
           {% set pct = ((filled / cap * 100) | round(0, 'floor')) if cap > 0 else 0 %}
-          <div class="batch-card card glass" data-batch-id="{{ b.id|default('') }}" data-start="{{ b.start_date|default(b.start_display, true) }}">
+          <div class="batch-card card glass" data-batch-id="{{ b.id|default('') }}" data-start="{{ b.start_date|default(b.start_display, true) }}" data-archived="{{ 'yes' if b.is_archived_batch else 'no' }}">
             <div class="batch-head">
               <div class="batch-title">{{ b.start_display|default('—') }} → {{ b.end_display|default('—') }}</div>
               <div class="menu">
@@ -1606,6 +1614,39 @@ document.querySelectorAll('[data-media-filter]').forEach(btn => {
     });
   });
 });
+
+  (function batchViewFilter(){
+
+  const filter = document.getElementById('batchViewFilter');
+
+  if (!filter) return;
+
+  function applyFilter(){
+
+    document.querySelectorAll('.batch-card[data-archived]').forEach(card => {
+
+      const archived = card.dataset.archived === 'yes';
+
+      if (filter.value === 'current') {
+        card.style.display = archived ? 'none' : '';
+      }
+      else if (filter.value === 'archived') {
+        card.style.display = archived ? '' : 'none';
+      }
+      else {
+        card.style.display = '';
+      }
+
+    });
+
+  }
+
+  filter.addEventListener('change', applyFilter);
+
+  applyFilter();
+
+})();
+  
 </script>
 
 </body>
