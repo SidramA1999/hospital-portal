@@ -444,12 +444,9 @@ male_available = max(
     batch.male_capacity - male_count
 )
 
-female_available = max(
-    0,
-    batch.female_capacity - female_count
-)
+female_available = max(0,batch.female_capacity - female_count)
 
-    return jsonify({
+return jsonify({
         "batch_id": batch_id,
         "seats": seats,
         "male_available": male_available,
