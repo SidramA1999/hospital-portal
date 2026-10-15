@@ -846,14 +846,37 @@ def add_batch():
 
     return redirect('/admin')
 
-@app.route('/edit_batch/<int:id>/<start>/<end>/<int:cap>')
-def edit_batch(id, start, end, cap):
-    b = Batch.query.get(id)
-    if b:
-        b.start_date = start
-        b.end_date = end
-        b.capacity = cap
-        db.session.commit()
+@app.route('/edit_batch', methods=['POST'])
+def edit_batch():
+
+    if not session.get('admin'):
+        return "Unauthorized", 401
+
+    batch_id = request.form.get('id')
+
+    batch = Batch.query.get(batch_id)
+
+    if not batch:
+        return "Batch not found", 404
+
+    batch.start_date = request.form.get('start_date')
+    batch.end_date = request.form.get('end_date')
+
+    batch.male_capacity = int(
+        request.form.get('male_capacity', 0)
+    )
+
+    batch.female_capacity = int(
+        request.form.get('female_capacity', 0)
+    )
+
+    batch.capacity = (
+        batch.male_capacity +
+        batch.female_capacity
+    )
+
+    db.session.commit()
+
     return "updated"
 
 
