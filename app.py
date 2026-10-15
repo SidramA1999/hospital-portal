@@ -797,7 +797,7 @@ def seat_status():
     for b in batches:
         male_count = Student.query.filter_by(batch_id=b.id, gender="Male").count()
         female_count = Student.query.filter_by(batch_id=b.id, gender="Female").count()
-        data[b.id] = {"male_left": 3 - male_count, "female_left": 3 - female_count}
+        data[b.id] = {"b.male_capacity - male_count, "female_left": b.female_capacity - female_count}
     return jsonify(data)
 
 
@@ -1311,42 +1311,58 @@ def ensure_gallery_columns():
         conn.commit()
 
 
+def ensure_batch_columns():
+
+    inspector = inspect(db.engine)
+
+    existing_cols = {
+        c['name']
+        for c in inspector.get_columns('batch')
+    }
+
+    with db.engine.connect() as conn:
+
+        if 'male_capacity' not in existing_cols:
+            conn.execute(
+                text(
+                    "ALTER TABLE batch ADD COLUMN male_capacity INTEGER DEFAULT 3"
+                )
+            )
+
+        if 'female_capacity' not in existing_cols:
+            conn.execute(
+                text(
+                    "ALTER TABLE batch ADD COLUMN female_capacity INTEGER DEFAULT 3"
+                )
+            )
+
+        conn.commit()
+
+
 def ensure_student_columns():
-    def ensure_batch_columns():
-    
-        inspector = inspect(db.engine)
-    
-        existing_cols = {
-            c['name']
-            for c in inspector.get_columns('batch')
-        }
-    
-        with db.engine.connect() as conn:
-    
-            if 'male_capacity' not in existing_cols:
-                conn.execute(
-                    text(
-                        "ALTER TABLE batch ADD COLUMN male_capacity INTEGER DEFAULT 3"
-                    )
-                )
-    
-            if 'female_capacity' not in existing_cols:
-                conn.execute(
-                    text(
-                        "ALTER TABLE batch ADD COLUMN female_capacity INTEGER DEFAULT 3"
-                    )
-                )
-    
-            conn.commit()
 
     """Same reasoning as ensure_gallery_columns — the `dob` column is new
     on an existing `student` table, so it needs an explicit ALTER TABLE
-    rather than relying on db.create_all()."""
+    rather than relying on db.create_all().
+    """
+
     inspector = inspect(db.engine)
-    existing_cols = {c['name'] for c in inspector.get_columns('student')}
+
+    existing_cols = {
+        c['name']
+        for c in inspector.get_columns('student')
+    }
+
     if 'dob' not in existing_cols:
+
         with db.engine.connect() as conn:
-            conn.execute(text("ALTER TABLE student ADD COLUMN dob VARCHAR(20)"))
+
+            conn.execute(
+                text(
+                    "ALTER TABLE student ADD COLUMN dob VARCHAR(20)"
+                )
+            )
+
             conn.commit()
 
 
