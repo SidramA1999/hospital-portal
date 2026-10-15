@@ -504,7 +504,7 @@ def admin():
         return redirect('/login')
 
     today = datetime.today()
-    all_batches = Batch.query.all()
+    all_batches = Batch.query.order_by(Batch.start_date.desc()).all()
 
     batches = []
     for b in all_batches:
