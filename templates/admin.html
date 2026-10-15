@@ -1319,14 +1319,33 @@ window.openEditBatchModal = function(id){
     preConfirm: function(){
       const start = document.getElementById('swal-start').value;
       const end = document.getElementById('swal-end').value;
-      const cap = document.getElementById('swal-cap').value;
+      const male = document.getElementById('swal-male').value;
+      const female = document.getElementById('swal-female').value;
+      
+      return {
+        start,
+        end,
+        male,
+        female
+      };
       if(!start || !end || !cap){ Swal.showValidationMessage('Please fill all fields'); return false; }
       return {start: start, end: end, cap: cap};
     }
   }).then(function(r){
     if(!r.isConfirmed) return;
     Swal.fire({title:'Updating...', didOpen:function(){ Swal.showLoading(); }, allowOutsideClick:false, allowEscapeKey:false, showConfirmButton:false});
-    fetch('/edit_batch/' + id + '/' + r.value.start + '/' + r.value.end + '/' + r.value.cap)
+    const fd = new FormData();
+
+    fd.append('id', id);
+    fd.append('start_date', r.value.start);
+    fd.append('end_date', r.value.end);
+    fd.append('male_capacity', r.value.male);
+    fd.append('female_capacity', r.value.female);
+    
+    fetch('/edit_batch', {
+        method: 'POST',
+        body: fd
+    })
       .then(function(){ return Swal.fire('Batch updated successfully', '', 'success'); })
       .then(function(){ location.reload(); });
   });
