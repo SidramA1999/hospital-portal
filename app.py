@@ -797,7 +797,9 @@ def seat_status():
     for b in batches:
         male_count = Student.query.filter_by(batch_id=b.id, gender="Male").count()
         female_count = Student.query.filter_by(batch_id=b.id, gender="Female").count()
-        data[b.id] = {"b.male_capacity - male_count, "female_left": b.female_capacity - female_count}
+        data[b.id] = {
+        "male_left": b.male_capacity - male_count,
+        "female_left": b.female_capacity - female_count}
     return jsonify(data)
 
 
@@ -1211,7 +1213,7 @@ def create_initial_batches():
         start1 = f"{year}-{month:02d}-01"
         end1 = f"{year}-{month:02d}-{last_day}"
         if not Batch.query.filter_by(start_date=start1).first():
-            db.session.add(Batch(start_date=start1, end_date=end1, capacity=6, filled_slots=0))
+            db.session.add(Batch(start_date=start1,end_date=end1,male_capacity=3,female_capacity=3,capacity=6,filled_slots=0))
 
         if month == 12:
             next_month, next_year = 1, year + 1
@@ -1257,11 +1259,11 @@ def prepare_batches():
         female_count = Student.query.filter_by(batch_id=b.id, gender="Female").count()
 
         result.append({
-            "id": b.id,
-            "label": f"{start.strftime('%d %b')} → {end.strftime('%d %b')}",
-            "male_left": max(0, 3 - male_count),
-            "female_left": max(0, 3 - female_count)
-        })
+        "id": b.id,
+        "label": f"{start.strftime('%d %b')} → {end.strftime('%d %b')}",
+        "male_left": max(0, b.male_capacity - male_count),
+        "female_left": max(0, b.female_capacity - female_count)
+    })
 
     return result
 
