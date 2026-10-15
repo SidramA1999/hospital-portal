@@ -1226,7 +1226,7 @@ def create_initial_batches():
         start2 = f"{year}-{month:02d}-15"
         end2 = f"{next_year}-{next_month:02d}-14"
         if not Batch.query.filter_by(start_date=start2).first():
-            db.session.add(Batch(start_date=start2, end_date=end2, capacity=6, filled_slots=0))
+            db.session.add(Batch(start_date=start2, end_date=end2, male_capacity=3,female_capacity=3, capacity=6, filled_slots=0))
 
     db.session.commit()
 
