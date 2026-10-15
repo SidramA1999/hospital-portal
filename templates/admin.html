@@ -512,13 +512,41 @@ body{
     <section class="page-section" id="batches">
 
   <div class="section-title">Batches</div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;">
+ 
+  <select id="yearFilter" class="input" style="max-width:180px;">
+    <option value="all">All Years</option>
+ 
+    {% set years = [] %}
+    {% for b in batches %}
+      {% set yr = b.start_date[:4] %}
+      {% if yr not in years %}
+        {% set _ = years.append(yr) %}
+        <option value="{{ yr }}">{{ yr }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+ 
+  <select id="monthFilter" class="input" style="max-width:180px;">
+    <option value="all">All Months</option>
+    <option value="01">January</option>
+    <option value="02">February</option>
+    <option value="03">March</option>
+    <option value="04">April</option>
+    <option value="05">May</option>
+    <option value="06">June</option>
+    <option value="07">July</option>
+    <option value="08">August</option>
+    <option value="09">September</option>
+    <option value="10">October</option>
+    <option value="11">November</option>
+    <option value="12">December</option>
+  </select>
+ 
+</div>
 
   <div style="margin-bottom:15px;">
-    <select id="batchViewFilter" class="input" style="max-width:240px;">
-      <option value="current">Current Batches</option>
-      <option value="archived">Archived Batches</option>
-      <option value="all">All Batches</option>
-    </select>
+  
   </div>
 
   <p class="section-sub">Manage active and upcoming training batches.</p>
@@ -530,7 +558,7 @@ body{
           {% set filled = (b.filled_slots|default(0)) or 0 %}
           {% set remaining = (cap - filled) if cap > 0 else 0 %}
           {% set pct = ((filled / cap * 100) | round(0, 'floor')) if cap > 0 else 0 %}
-          <div class="batch-card card glass" data-batch-id="{{ b.id|default('') }}" data-start="{{ b.start_date|default(b.start_display, true) }}" data-archived="{{ 'yes' if b.is_archived_batch else 'no' }}">
+          <div class="batch-card card glass"data-batch-id="{{ b.id|default('') }}"data-year="{{ b.start_date[:4] }}"data-month="{{ b.start_date[5:7] }}">
             <div class="batch-head">
               <div class="batch-title">{{ b.start_display|default('—') }} → {{ b.end_display|default('—') }}</div>
               <div class="menu">
@@ -1617,36 +1645,42 @@ document.querySelectorAll('[data-media-filter]').forEach(btn => {
   });
 });
 
-  (function batchViewFilter(){
-
-  const filter = document.getElementById('batchViewFilter');
-
-  if (!filter) return;
-
-  function applyFilter(){
-
-    document.querySelectorAll('.batch-card[data-archived]').forEach(card => {
-
-      const archived = card.dataset.archived === 'yes';
-
-      if (filter.value === 'current') {
-        card.style.display = archived ? 'none' : '';
-      }
-      else if (filter.value === 'archived') {
-        card.style.display = archived ? '' : 'none';
-      }
-      else {
-        card.style.display = '';
-      }
-
+  (function(){
+ 
+  const yearFilter = document.getElementById('yearFilter');
+  const monthFilter = document.getElementById('monthFilter');
+ 
+  if (!yearFilter || !monthFilter) return;
+ 
+  function applyFilters(){
+ 
+    document.querySelectorAll('.batch-card').forEach(card => {
+ 
+      const year = card.dataset.year;
+      const month = card.dataset.month;
+ 
+      const yearMatch =
+        yearFilter.value === 'all' ||
+        year === yearFilter.value;
+ 
+      const monthMatch =
+        monthFilter.value === 'all' ||
+        month === monthFilter.value;
+ 
+      card.style.display =
+        (yearMatch && monthMatch)
+          ? ''
+          : 'none';
+ 
     });
-
+ 
   }
-
-  filter.addEventListener('change', applyFilter);
-
-  applyFilter();
-
+ 
+  yearFilter.addEventListener('change', applyFilters);
+  monthFilter.addEventListener('change', applyFilters);
+ 
+  applyFilters();
+ 
 })();
   
 </script>
