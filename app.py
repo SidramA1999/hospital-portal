@@ -1327,8 +1327,8 @@ with app.app_context():
     ensure_gallery_category_remap()
     ensure_student_columns()
 
-    if not Batch.query.first():
-        create_initial_batches()
+    #if not Batch.query.first():
+    create_initial_batches()
 
 
 import resend
