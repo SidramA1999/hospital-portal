@@ -410,9 +410,9 @@ def debug_batch(batch_id):
         for s in students
     ])
 
-
 @app.route("/api/batches/<int:batch_id>/seats")
 def get_batch_seats(batch_id):
+
     batch = Batch.query.get_or_404(batch_id)
 
     seats = {
@@ -425,28 +425,32 @@ def get_batch_seats(batch_id):
     }
 
     booked_students = Student.query.filter_by(batch_id=batch_id).all()
+
     for student in booked_students:
         if student.seat in seats:
             seats[student.seat]["booked"] = True
 
     male_count = Student.query.filter_by(
-    batch_id=batch_id,
-    gender="Male"
-).count()
+        batch_id=batch_id,
+        gender="Male"
+    ).count()
 
-female_count = Student.query.filter_by(
-    batch_id=batch_id,
-    gender="Female"
-).count()
+    female_count = Student.query.filter_by(
+        batch_id=batch_id,
+        gender="Female"
+    ).count()
 
-male_available = max(
-    0,
-    batch.male_capacity - male_count
-)
+    male_available = max(
+        0,
+        batch.male_capacity - male_count
+    )
 
-female_available = max(0,batch.female_capacity - female_count)
+    female_available = max(
+        0,
+        batch.female_capacity - female_count
+    )
 
-return jsonify({
+    return jsonify({
         "batch_id": batch_id,
         "seats": seats,
         "male_available": male_available,
