@@ -273,9 +273,10 @@ def register():
         male_count = Student.query.filter_by(batch_id=batch.id, gender="Male").count()
         female_count = Student.query.filter_by(batch_id=batch.id, gender="Female").count()
 
-        if gender == "Male" and male_count >= 3:
+        if gender == "Male" and male_count >= batch.male_capacity:
             return "No seats available for Male"
-        if gender == "Female" and female_count >= 3:
+        
+        if gender == "Female" and female_count >= batch.female_capacity:
             return "No seats available for Female"
 
         try:
@@ -428,8 +429,25 @@ def get_batch_seats(batch_id):
         if student.seat in seats:
             seats[student.seat]["booked"] = True
 
-    male_available = sum(1 for s in seats.values() if s["gender"] == "Male" and not s["booked"])
-    female_available = sum(1 for s in seats.values() if s["gender"] == "Female" and not s["booked"])
+    male_count = Student.query.filter_by(
+    batch_id=batch_id,
+    gender="Male"
+).count()
+
+female_count = Student.query.filter_by(
+    batch_id=batch_id,
+    gender="Female"
+).count()
+
+male_available = max(
+    0,
+    batch.male_capacity - male_count
+)
+
+female_available = max(
+    0,
+    batch.female_capacity - female_count
+)
 
     return jsonify({
         "batch_id": batch_id,
@@ -801,7 +819,20 @@ def add_batch():
         except Exception:
             continue
 
-    new_batch = Batch(start_date=start, end_date=end, capacity=int(request.form['capacity']), filled_slots=0)
+    male_capacity = int(request.form['male_capacity'])
+female_capacity = int(request.form['female_capacity'])
+
+new_batch = Batch(
+    start_date=start,
+    end_date=end,
+
+    male_capacity=male_capacity,
+    female_capacity=female_capacity,
+
+    capacity=male_capacity + female_capacity,
+
+    filled_slots=0
+)
     db.session.add(new_batch)
     db.session.commit()
     return redirect('/admin')
