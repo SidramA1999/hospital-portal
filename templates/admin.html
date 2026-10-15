@@ -493,7 +493,27 @@ body{
         <form action="/add_batch" method="POST" class="form-row">
           <div class="form-field"><label for="f-start">Start date</label><input id="f-start" type="date" name="start_date" required class="input" aria-label="Start date"></div>
           <div class="form-field"><label for="f-end">End date</label><input id="f-end" type="date" name="end_date" required class="input" aria-label="End date"></div>
-          <div class="form-field"><label for="f-cap">Capacity</label><input id="f-cap" type="number" name="capacity" placeholder="e.g. 30" required class="input" aria-label="Capacity"></div>
+          <div class="form-field">
+    <label for="f-male">Male Seats</label>
+    <input
+        id="f-male"
+        type="number"
+        name="male_capacity"
+        value="3"
+        required
+        class="input">
+</div>
+
+<div class="form-field">
+    <label for="f-female">Female Seats</label>
+    <input
+        id="f-female"
+        type="number"
+        name="female_capacity"
+        value="3"
+        required
+        class="input">
+</div>
           <button class="btn btn-blue" type="submit" style="align-self:flex-end;"><i data-feather="plus"></i> Add Batch</button>
         </form>
       </div>
@@ -590,6 +610,15 @@ body{
 
             <div class="batch-meta">
               <div>Slots: <b>{{ filled }}</b> / {{ cap }}</div>
+              <div>
+    Male:
+    <b>{{ b.male_capacity }}</b>
+</div>
+
+<div>
+    Female:
+    <b>{{ b.female_capacity }}</b>
+</div>
               <div>Remaining: <b>{{ remaining }}</b></div>
             </div>
 
