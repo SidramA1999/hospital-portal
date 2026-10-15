@@ -415,14 +415,17 @@ def get_batch_seats(batch_id):
 
     batch = Batch.query.get_or_404(batch_id)
 
-    seats = {
-        "M1": {"gender": "Male", "booked": False},
-        "M2": {"gender": "Male", "booked": False},
-        "M3": {"gender": "Male", "booked": False},
-        "F1": {"gender": "Female", "booked": False},
-        "F2": {"gender": "Female", "booked": False},
-        "F3": {"gender": "Female", "booked": False},
-    }
+    seats = {}
+    for i in range(1, batch.male_capacity + 1):
+        seats[f"M{i}"] = {
+            "gender": "Male",
+            "booked": False
+        }
+    for i in range(1, batch.female_capacity + 1):
+        seats[f"F{i}"] = {
+            "gender": "Female",
+            "booked": False
+        }
 
     booked_students = Student.query.filter_by(batch_id=batch_id).all()
 
