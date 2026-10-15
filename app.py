@@ -129,10 +129,17 @@ class Gallery(db.Model):
 
 class Batch(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     start_date = db.Column(db.String(20))
     end_date = db.Column(db.String(20))
-    capacity = db.Column(db.Integer, default=3)
+
+    male_capacity = db.Column(db.Integer, default=3)
+    female_capacity = db.Column(db.Integer, default=3)
+
+    capacity = db.Column(db.Integer, default=6)
+
     filled_slots = db.Column(db.Integer, default=0)
+
     is_active = db.Column(db.Boolean, default=True)
 
 
@@ -1271,6 +1278,33 @@ def ensure_gallery_columns():
 
 
 def ensure_student_columns():
+def ensure_batch_columns():
+
+    inspector = inspect(db.engine)
+
+    existing_cols = {
+        c['name']
+        for c in inspector.get_columns('batch')
+    }
+
+    with db.engine.connect() as conn:
+
+        if 'male_capacity' not in existing_cols:
+            conn.execute(
+                text(
+                    "ALTER TABLE batch ADD COLUMN male_capacity INTEGER DEFAULT 3"
+                )
+            )
+
+        if 'female_capacity' not in existing_cols:
+            conn.execute(
+                text(
+                    "ALTER TABLE batch ADD COLUMN female_capacity INTEGER DEFAULT 3"
+                )
+            )
+
+        conn.commit()
+
     """Same reasoning as ensure_gallery_columns — the `dob` column is new
     on an existing `student` table, so it needs an explicit ALTER TABLE
     rather than relying on db.create_all()."""
@@ -1323,11 +1357,12 @@ def ensure_gallery_category_remap():
 
 with app.app_context():
     db.create_all()
+
     ensure_gallery_columns()
     ensure_gallery_category_remap()
     ensure_student_columns()
+    ensure_batch_columns()
 
-    #if not Batch.query.first():
     create_initial_batches()
 
 
