@@ -1312,32 +1312,32 @@ def ensure_gallery_columns():
 
 
 def ensure_student_columns():
-def ensure_batch_columns():
-
-    inspector = inspect(db.engine)
-
-    existing_cols = {
-        c['name']
-        for c in inspector.get_columns('batch')
-    }
-
-    with db.engine.connect() as conn:
-
-        if 'male_capacity' not in existing_cols:
-            conn.execute(
-                text(
-                    "ALTER TABLE batch ADD COLUMN male_capacity INTEGER DEFAULT 3"
+    def ensure_batch_columns():
+    
+        inspector = inspect(db.engine)
+    
+        existing_cols = {
+            c['name']
+            for c in inspector.get_columns('batch')
+        }
+    
+        with db.engine.connect() as conn:
+    
+            if 'male_capacity' not in existing_cols:
+                conn.execute(
+                    text(
+                        "ALTER TABLE batch ADD COLUMN male_capacity INTEGER DEFAULT 3"
+                    )
                 )
-            )
-
-        if 'female_capacity' not in existing_cols:
-            conn.execute(
-                text(
-                    "ALTER TABLE batch ADD COLUMN female_capacity INTEGER DEFAULT 3"
+    
+            if 'female_capacity' not in existing_cols:
+                conn.execute(
+                    text(
+                        "ALTER TABLE batch ADD COLUMN female_capacity INTEGER DEFAULT 3"
+                    )
                 )
-            )
-
-        conn.commit()
+    
+            conn.commit()
 
     """Same reasoning as ensure_gallery_columns — the `dob` column is new
     on an existing `student` table, so it needs an explicit ALTER TABLE
