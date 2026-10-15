@@ -803,11 +803,13 @@ def seat_status():
 
 @app.route('/add_batch', methods=['POST'])
 def add_batch():
+
     if not session.get('admin'):
         return redirect('/login')
 
     start = request.form['start_date']
     end = request.form['end_date']
+
     start_date = datetime.strptime(start, "%Y-%m-%d")
     end_date = datetime.strptime(end, "%Y-%m-%d")
 
@@ -815,29 +817,29 @@ def add_batch():
         try:
             b_start = datetime.strptime(b.start_date, "%Y-%m-%d")
             b_end = datetime.strptime(b.end_date, "%Y-%m-%d")
+
             if not (end_date <= b_start or start_date >= b_end):
                 return "❌ Overlapping batch not allowed"
+
         except Exception:
             continue
 
     male_capacity = int(request.form['male_capacity'])
-female_capacity = int(request.form['female_capacity'])
+    female_capacity = int(request.form['female_capacity'])
 
-new_batch = Batch(
-    start_date=start,
-    end_date=end,
+    new_batch = Batch(
+        start_date=start,
+        end_date=end,
+        male_capacity=male_capacity,
+        female_capacity=female_capacity,
+        capacity=male_capacity + female_capacity,
+        filled_slots=0
+    )
 
-    male_capacity=male_capacity,
-    female_capacity=female_capacity,
-
-    capacity=male_capacity + female_capacity,
-
-    filled_slots=0
-)
     db.session.add(new_batch)
     db.session.commit()
-    return redirect('/admin')
 
+    return redirect('/admin')
 
 @app.route('/edit_batch/<int:id>/<start>/<end>/<int:cap>')
 def edit_batch(id, start, end, cap):
